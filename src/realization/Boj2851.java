@@ -33,8 +33,6 @@ public class Boj2851 {
 			// 총 점수에 현재 점수를 더함
 			totalPoint += currentPoint;
 
-			System.out.println(i + "currentPoint : " + currentPoint + " " + "currentDistance : " + currentDistance
-					+ " totalPoint : " + totalPoint);
 		}
 
 		br.close();
