@@ -1,4 +1,4 @@
-package boj2017_06_23;
+package realization;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

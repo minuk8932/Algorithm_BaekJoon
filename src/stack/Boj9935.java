@@ -1,4 +1,4 @@
-package boj2017_06_23;
+package stack;
 
 import java.io.BufferedReader;
 import java.io.IOException;
