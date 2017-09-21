@@ -1,4 +1,4 @@
-package Floyd_Washall;
+package bandwidth_first_serch;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
