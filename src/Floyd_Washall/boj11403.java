@@ -23,10 +23,16 @@ public class boj11403 {
 			}
 		}
 		
+		
+		
 		for(int v = 0; v < N; v++){
 			for(int s = 0; s < N; s++){
-				for(int e = 0; e < N; e++){
-					map[s][e] = Math.min(0, map[s][v] + map[v][e]);
+				if(map[s][v] == 1){
+					for(int e = 0; e < N; e++){
+						if(map[v][e] == 1){
+							map[s][e] = 1;
+						}
+					}
 				}
 			}
 		}
