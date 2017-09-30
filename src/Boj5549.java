@@ -1,82 +1,69 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Boj5549 {
 	private static final String SPACE = " ";
 	private static final String NEW_LINE = "\n";
-
-	public static void main(String[] args) throws Exception {
+	
+	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), SPACE);
-		StringBuilder sb = new StringBuilder();
-
-		int M = Integer.parseInt(st.nextToken()) + 1;
-		int N = Integer.parseInt(st.nextToken()) + 1;
+		
+		int M = Integer.parseInt(st.nextToken());
+		int N = Integer.parseInt(st.nextToken());
+		
 		int K = Integer.parseInt(br.readLine());
-
-		int mapsJ = 0;
-		int mapsI = 0;
-		int mapsO = 0;
-
-		int[][] totalJ = new int[M][N];
-		int[][] totalI = new int[M][N];
-		int[][] totalO = new int[M][N];
-
-		for (int row = 1; row < M; row++) {
-			String lines = br.readLine();
-
-			for (int col = 1; col < N; col++) {
-
-				switch (lines.charAt(col - 1)) {
-
-				case 'J':
-					mapsJ++;
-					totalJ[row][col] += mapsJ;
-
-					totalO[row][col] += mapsO;
-					totalI[row][col] += mapsI;
-					break;
-
-				case 'I':
-					mapsI++;
-					totalI[row][col] += mapsI;
-
-					totalJ[row][col] += mapsJ;
-					totalO[row][col] += mapsO;
-					break;
-
-				case 'O':
-					mapsO++;
-					totalO[row][col] += mapsO;
-
-					totalJ[row][col] += mapsJ;
-					totalI[row][col] += mapsI;
-					break;
-				}
-
+		
+		int jungle = 0, ocean = 0, ice = 0;
+		
+		char[][] area = new char[M][N];
+		
+		for(int i = 0; i < M; i++){
+			area[i] = br.readLine().toCharArray();
+		}
+		
+		int[][] map = new int[K][K];
+		int[][] ans = new int[3][K];
+		
+		for(int i = 0; i < K; i++){
+			st = new StringTokenizer(br.readLine(), SPACE);
+			for(int j = 0; j < K; j++){
+				map[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
-
-		while (K-- > 0) {
-
-			st = new StringTokenizer(br.readLine(), SPACE);
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			int c = Integer.parseInt(st.nextToken());
-			int d = Integer.parseInt(st.nextToken());
-
-			int J = 0;
-			int O = 0;
-			int I = 0;
-
-			sb.append(J).append(SPACE).append(O).append(SPACE).append(I).append(NEW_LINE);
-
-		}
-
-		br.close();
-
-		System.out.println(sb.toString());
+		 
+		StringBuilder sb = new StringBuilder();
+		
+//		for(int i = 0; i < K; i++){
+//			ice = 0;
+//			jungle = 0;
+//			ocean = 0;
+//			for(int j = 1; j < K; j = j+2){
+//				
+//				switch(area[map[i][j - 1]][map[i][j]]){
+//					case 'I':
+//						
+//						ice++;
+//						break;
+//						
+//					case 'J':
+//						
+//						jungle++;
+//						break;
+//						
+//					case 'O':
+//						
+//						ocean++;
+//						break;
+//				}
+//			}
+//			sb.append(jungle).append(SPACE).append(ocean).append(SPACE).append(ice).append(NEW_LINE);
+//		}
+		
+		
+		
 	}
 
 }

@@ -1,11 +1,9 @@
 package Floyd_Washall;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class boj11403 {
+public class Boj11403 {
 	private static final String SPACE = " ";
 	private static final String NEW_LINE = "\n";
 	

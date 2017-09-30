@@ -14,35 +14,25 @@ public class Boj1764 {
 		StringTokenizer st = new StringTokenizer(br.readLine(), SPACE);
 		int N = Integer.parseInt(st.nextToken()); // didn't hear
 		int M = Integer.parseInt(st.nextToken()); // didn't see
-
 		
-		String[] all = new String[N + M];
-
-		for (int i = 0; i < all.length; i++) {
-			all[i] = br.readLine();
+		String[] hear = new String[N];
+		String[] see = new String[M];
+		
+		for(int i = 0; i < N; i++){
+			hear[i] = br.readLine();
 		}
-
-		ArrayList<String> unSH = new ArrayList<>();
-
-		for (int i = 0; i < N; i++) {
-			if (all[i].charAt(0) == all[i + N].charAt(0)) {
-				if (all[i].equals(all[i + N])) {
-					unSH.add(all[i]);
+		for(int i = 0; i < M; i++){
+			see[i] = br.readLine();	
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < N; i++){
+			for(int j = 0; j < M; j++){
+				if(hear[i].equals(see[j])){
+					sb.append(hear[i]).append(NEW_LINE);
 				}
 			}
 		}
-
-		int size = unSH.size();
-
-		Collections.sort(unSH);
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(size).append(NEW_LINE);
-
-		for (int i = 0; i < size; i++) {
-			sb.append(unSH.get(i)).append(NEW_LINE);
-		}
 		System.out.println(sb.toString());
-
 	}
 }

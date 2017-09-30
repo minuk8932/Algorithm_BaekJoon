@@ -4,12 +4,17 @@ import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+/*
+ * 		ArrayList로 구현해야함.
+ * 		... 아직 부족하
+ */
+
 public class Boj1753 {
 	private static final String SPACE = " ";
 	private static final String INF = "INF";
 	private static final String NEW_LINE = "\n";
 	
-	private static final int LIMIT =  300_001;
+	private static final int LIMIT =  20_001;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,55 +22,55 @@ public class Boj1753 {
 		
 		int A = Integer.parseInt(st.nextToken());
 		int E = Integer.parseInt(st.nextToken());
-		
-		br = new BufferedReader(new InputStreamReader(System.in));
 		int K = Integer.parseInt(br.readLine());
 		
 		int[][] matrix = new int[A+1][A+1];
+		int[] cost = new int[E];
 		
 		for(int i = 0; i < A+1; i++){
-			for(int j = 0; j < A+1; j++){
-				if(i == j){
-					matrix[i][j] = 0;
-				}
-				else{
-					matrix[i][j] = LIMIT;
-				}
-			}
+			Arrays.fill(matrix[i], LIMIT);
+			cost[i] = LIMIT;
 		}
 		
-		matrix[0][0] = LIMIT;
-		
-		while(E-- > 0){
+		for(int i = 0; i < E; i++){
 			st = new StringTokenizer(br.readLine(), SPACE);
-			int start = Integer.parseInt(st.nextToken());
-			int end = Integer.parseInt(st.nextToken());
-			int val = Integer.parseInt(st.nextToken());
+			int u = Integer.parseInt(st.nextToken());
+			int v = Integer.parseInt(st.nextToken());
+			int w = Integer.parseInt(st.nextToken());
 			
-			matrix[start][end] = val;
+			matrix[u][v] = Math.min(w, matrix[u][v]);	
 			
 		}
 		br.close();
 		
+		matrix[K][K] = 0;
+		cost[K] = 0;		
 		
-		for(int v = 1; v < A + 1; v++){
-			for(int s = 1; s < A + 1; s++){
-				for(int e = 1; e < A+1; e++){
-					matrix[s][e] = Math.min(matrix[s][e], matrix[s][v] + matrix[v][e]);
+		PriorityQueue<Integer> pq = new PriorityQueue<>();
+		
+		pq.offer(K);
+		
+		while(!pq.isEmpty()){
+			int current = pq.poll();
+			
+			for(int next = 1; next < A+1; next++){
+				if(cost[next] > matrix[current][next] + cost[current]){
+					cost[next] = matrix[current][next] + cost[current];
+					
+					pq.offer(next);
 				}
 			}
 		}
 		
 		StringBuilder sb = new StringBuilder();
-		
-		for(int i = 1; i < A+1; i++){
-			if(matrix[K][i] >= LIMIT){
-				sb.append(INF).append(NEW_LINE);
+		for(int res = 1; res < E; res++){
+			if(cost[res] <= 10){
+				sb.append(cost[res]).append(NEW_LINE);
 			}
 			else{
-				sb.append(matrix[K][i]).append(NEW_LINE);
+				sb.append(INF).append(NEW_LINE);
 			}
-		}		
+		}
 		System.out.println(sb.toString());
 	}
 
