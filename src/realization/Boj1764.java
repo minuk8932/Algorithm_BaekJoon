@@ -1,6 +1,8 @@
+package realization;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.StringTokenizer;
 
@@ -15,24 +17,24 @@ public class Boj1764 {
 		int N = Integer.parseInt(st.nextToken()); // didn't hear
 		int M = Integer.parseInt(st.nextToken()); // didn't see
 		
-		String[] hear = new String[N];
-		String[] see = new String[M];
+		String[] notSH = new String[N+M];
 		
-		for(int i = 0; i < N; i++){
-			hear[i] = br.readLine();
+		for(int i = 0; i < N + M; i++){
+			notSH[i] = br.readLine();
+			
 		}
-		for(int i = 0; i < M; i++){
-			see[i] = br.readLine();	
-		}
+		Arrays.sort(notSH);
+		
+		int cnt = 0;
 		
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < N; i++){
-			for(int j = 0; j < M; j++){
-				if(hear[i].equals(see[j])){
-					sb.append(hear[i]).append(NEW_LINE);
-				}
+		for(int i = 1; i < N + M; i++){
+			if(notSH[i].equals(notSH[i - 1])){
+				sb.append(notSH[i]).append(NEW_LINE);
+				cnt++;
 			}
 		}
+		System.out.println(cnt);
 		System.out.println(sb.toString());
 	}
 }
