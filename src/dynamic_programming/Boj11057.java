@@ -29,13 +29,13 @@ public class Boj11057 {
 				else{
 					dp[i][j] = (dp[i][j - 1] + (dp[i][0] - dp[i - 1][j - 1]))% MOD;
 					
-					if(dp[i][j] <= MOD){
+					if(dp[i][j] <= MOD){				// 1) Modulation 도중 위의 식으로 인한 음수 발생 시, 상수 MOD를 더해 양수로 바꿔줌
 						dp[i][j] = MOD + dp[i][j];
 					}
 				}
 			}
 		}
 		
-		System.out.println(dp[N][9] % MOD);
+		System.out.println(dp[N][9] % MOD);		// 1)에서 최종 값에 MOD가 더해지면 상수 10007보다 큰 수가 나오므로 다시한번 Modulation
 	}
 }
