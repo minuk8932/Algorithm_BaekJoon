@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 
 /*
  * 		ArrayList로 구현해야함.
- * 		... 아직 부족하
+ * 		
  */
 
 public class Boj1753 {

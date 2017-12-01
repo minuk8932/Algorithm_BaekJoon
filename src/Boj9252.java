@@ -32,6 +32,7 @@ public class Boj9252 {
 		}
 
 		int[] max = new int[lengC + 1];
+		
 		int[] idx = new int[lengS + 1];
 		int cnt = 0;
 		max[lengC] = dp[lengC][lengS];
@@ -65,11 +66,6 @@ public class Boj9252 {
 		}
 		
 		System.out.println(cnt);
-		if(cnt != 0){
-			System.out.println(sb.toString());
-		}
-		else{
-			System.out.println("");
-		}
+		System.out.println(sb.toString());
 	}
 }
