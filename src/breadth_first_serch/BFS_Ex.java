@@ -1,4 +1,4 @@
-package bandwidth_first_serch;
+package breadth_first_serch;
 
 import java.util.LinkedList;
 import java.util.Queue;

@@ -11,66 +11,79 @@ import java.util.StringTokenizer;
 
 public class Boj1753 {
 	private static final String SPACE = " ";
-	private static final String INF = "INF";
+	private static final String NO_WAY = "INF";
 	private static final String NEW_LINE = "\n";
-	
-	private static final int LIMIT =  20_001;
-	
-	public static void main(String[] args) throws Exception{
+
+	private static final int LIMIT = 20_001;
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), SPACE);
-		
-		int A = Integer.parseInt(st.nextToken());
-		int E = Integer.parseInt(st.nextToken());
-		int K = Integer.parseInt(br.readLine());
-		
-		int[][] matrix = new int[A+1][A+1];
-		int[] cost = new int[E];
-		
-		for(int i = 0; i < A+1; i++){
-			Arrays.fill(matrix[i], LIMIT);
-			cost[i] = LIMIT;
+
+		int V = Integer.parseInt(st.nextToken()); // node
+		int E = Integer.parseInt(st.nextToken()); // edge
+		int K = Integer.parseInt(br.readLine()); // start
+
+		int tmp = E;
+
+		int[][] path = new int[E + 1][E + 1];
+		int[][] cost = new int[E + 1][E + 1];
+
+		for (int i = 1; i < E + 1; i++) {
+			Arrays.fill(path[i], LIMIT);
+			Arrays.fill(cost[i], LIMIT);
 		}
-		
-		for(int i = 0; i < E; i++){
+
+		while (tmp-- > 0) {
 			st = new StringTokenizer(br.readLine(), SPACE);
-			int u = Integer.parseInt(st.nextToken());
-			int v = Integer.parseInt(st.nextToken());
-			int w = Integer.parseInt(st.nextToken());
-			
-			matrix[u][v] = Math.min(w, matrix[u][v]);	
-			
+
+			int start = Integer.parseInt(st.nextToken());
+			int end = Integer.parseInt(st.nextToken());
+			int val = Integer.parseInt(st.nextToken());
+
+			path[start][end] = Math.min(val, path[start][end]);
 		}
 		br.close();
-		
-		matrix[K][K] = 0;
-		cost[K] = 0;		
-		
+
+		for (int i = 1; i < E + 1; i++) {
+			path[i][i] = 0;
+		}
+
 		PriorityQueue<Integer> pq = new PriorityQueue<>();
-		
+
 		pq.offer(K);
-		
-		while(!pq.isEmpty()){
+
+		while (!pq.isEmpty()) {
 			int current = pq.poll();
-			
-			for(int next = 1; next < A+1; next++){
-				if(cost[next] > matrix[current][next] + cost[current]){
-					cost[next] = matrix[current][next] + cost[current];
-					
+
+			for (int next = 1; next < E + 1; next++) {
+				if (cost[K][next] < path[current][next] + cost[K][next]) {
+					cost[K][next] = path[current][next] + cost[K][next];
+
 					pq.offer(next);
+
 				}
 			}
 		}
-		
-		StringBuilder sb = new StringBuilder();
-		for(int res = 1; res < E; res++){
-			if(cost[res] <= 10){
-				sb.append(cost[res]).append(NEW_LINE);
+
+		for (int i = 1; i < E + 1; i++) {
+			for (int j = 1; j < E + 1; j++) {
+				System.out.print(cost[i][j] + "\t");
 			}
-			else{
-				sb.append(INF).append(NEW_LINE);
+			System.out.println();
+		}
+
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 1; i < V + 1; i++) {
+			if (path[K][i] == LIMIT) {
+				sb.append(NO_WAY).append(NEW_LINE);
+			}
+			else {
+				sb.append(path[K][i]).append(NEW_LINE);
 			}
 		}
+
 		System.out.println(sb.toString());
 	}
 

@@ -28,13 +28,13 @@ public class Boj2146 {
 		}
 		
 		int min = Integer.MAX_VALUE;
-		boolean[][] isVisited = new boolean[N+1][N+1];
+		int[][] isVisited = new int[N+1][N+1];
 		
 		for(int row = 1; row < N + 1; row++){
 			for(int col = 1; col < N + 1; col++){
-				if(!isVisited[row][col]){
+				if(isVisited[row][col] == 0){
 					
-					isVisited[row][col] = true;
+					isVisited[row][col] = 1;
 					
 					Queue<Point> queue = new LinkedList<>();
 					queue.offer(new Point(row, col));
@@ -46,19 +46,11 @@ public class Boj2146 {
 							int nextRow = current.row + DIRECTION[ROW];
 							int nextCol = current.col +DIRECTION[COL];
 							
-							if(nextRow > 0 && nextRow < N + 1 && nextCol > 0 && nextCol < N+1){
-								if(!isVisited[nextRow][nextCol]){
-									isVisited[nextRow][nextCol] = true;
+							if(nextRow > 0 && nextRow < N + 1 && nextCol > 0 && nextCol < N + 1){
+								if(isVisited[nextRow][nextCol] == 0){
+									isVisited[nextRow][nextCol] = 1;
 									
-									if(map[row][col] == 1 && map[nextRow][nextCol] == 0){
-										
-									}
-									else if(map[row][col] == 0 && map[nextRow][nextCol] == 1){
 									
-									}
-									else if(map[row][col] == 0 && map[nextRow][nextCol] == 0){
-										
-									}
 									
 									queue.offer(new Point(nextRow, nextCol));
 								}
