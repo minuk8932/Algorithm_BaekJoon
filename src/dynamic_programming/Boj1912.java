@@ -1,4 +1,5 @@
 package dynamic_programming;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
@@ -16,44 +17,29 @@ public class Boj1912 {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
-		int[] num = new int[MAX + 1];
-		int res = Integer.MIN_VALUE;
+		int[] num = new int[MAX];
+		int res = 0;
 
 		StringTokenizer st = new StringTokenizer(br.readLine(), SPACE);
 		for (int i = 1; i < n + 1; i++) {
 			num[i] = Integer.parseInt(st.nextToken());
 		}
 
-		int[] dp = new int[MAX + 1];		// [i] : i에서 n 까지 합중 가장 큰 것
-		int[] tmp = new int[MAX+ 1];
-		
-		for(int i = 1; i < n+1; i++){
-			dp[i] = num[i];
-			tmp[i] = num [i];
-		}
-
-		for(int i = 2; i < n + 1; i++){
-			dp[1] = dp[1] + num[i];
-			
-			if(tmp[1] < dp[1]){
-				tmp[1] = dp[1];
-			}
-		}
+		int[] dp = new int[MAX];		// [현재까지 더했을 때 또는 현재의 값 중 최대] 
+		res = dp[1] = num[1];
 		
 		for(int i = 2; i < n + 1; i++){
-			for(int j = i + 1; j < n + 1; j++){
-				dp[i] = dp[i] + num[j];
-				
-				if(tmp[i] <= dp[i]){
-					tmp[i] = Math.max(dp[i], num[i]);
-				}
-			}
+			dp[i] = Math.max(num[i], num[i] + dp[i - 1]);	// 더해가며 값들을 비교함, 즉 이전까지 합이랑 다음의 값을 비교해 더 큰 것을 max에 넣어둔다.
+																			// 이렇게 했을 때, 몇개씩 더했을 때 최대가 아닌 몇개를 더했는지에 대한 문제가 아닌 임의의 갯수를 더함에 따른 최대 값.
 		}
 		
 		for(int i = 1; i < n + 1; i++){
-			res = Math.max(res, tmp[i]);
+			System.out.println(dp[i]);
+			if(dp[i] > res){				// output max
+				res = dp[i];
+			}
 		}
-		
+
 		System.out.println(res);
 	}
 }

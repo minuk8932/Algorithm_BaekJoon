@@ -4,6 +4,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 		@author minchoba
+ *			백준 5427 : 불
+ */
+
 public class Boj5427 {
 	private static final String SPACE = " ";
 	private static final char WAY = '.';
@@ -67,7 +73,7 @@ public class Boj5427 {
 										if(top[nextRow][nextCol] != BLOCK && top[nextRow][nextCol] != FIRE){
 											escape += isVisited[nextRow][nextCol];
 										
-											// TODO : how to check when he cann't escape 
+											// TODO : how to check when he cann't escape
 										}
 										
 										q.offer(new Point(nextRow, nextCol));
@@ -94,21 +100,13 @@ public class Boj5427 {
 	}
 	
 	public static void spreadFire(int x, int y){
-		if(top[x][y] == FIRE){
-			if(top[x][y + 1] == WAY){
-				top[x][y + 1] = FIRE;
-			}
-			
-			if(top[x][y - 1] == WAY){
-				top[x][y - 1] = FIRE;
-			}
-			
-			if(top[x + 1][y] == WAY){
-				top[x + 1][y] = FIRE;
-			}
-			
-			if(top[x - 1][y] == WAY){
-				top[x - 1][y] = FIRE;
+		
+		for(final int[] DIRECTION : DIRECTIONS){
+			if(top[x][y] == FIRE){
+				int nextX = DIRECTION[ROW] + x;
+				int nextY = DIRECTION[COL] + y;
+				
+				top[nextX][nextY] = FIRE;
 			}
 		}
 	}
