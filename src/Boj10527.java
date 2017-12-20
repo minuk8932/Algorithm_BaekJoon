@@ -2,38 +2,33 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-public class Boj10527 {
+public class Boj10527 {	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		int N = Integer.parseInt(br.readLine());
-		String[] DOM = new String[N];
-		String[] Katties = new String[N];
+		String[] DOM = new String[N + 1];
+		String[] Katties = new String[N + 1];
+		String[] origin = new String[N * 2 + 1];
 
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < N; j++) {
-				if(i == 0){
-					DOM[j] = br.readLine();
-				}
-				else {
-					Katties[j] = br.readLine();
-				}
-			}
+		for (int i = 1; i < N + 1; i++) {
+			DOM[i] = br.readLine();
+			origin[i] = DOM[i];
 		}
+		for (int i = 1; i < N + 1; i++) {
+			Katties[i] = br.readLine();
+			origin[i + N] = Katties[i];
+		}
+		br.close();
+		
 		Arrays.sort(DOM);
 		Arrays.sort(Katties);
 		
-		int cnt = 0;
 		
-		for(int i = 0; i < N; i++){
-			for(int j = 0; j < N; j++){
-				if(DOM[i].equals(Katties[j])){					
-					cnt++;
-					i++;
-				}
-			}
+		for(int i = 1; i < N + 1; i++){
+			
 		}
-		System.out.println(cnt);
+		
+		
 	}
-
 }

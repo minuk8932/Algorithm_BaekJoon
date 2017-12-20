@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
  * @author minchoba
  *		using gcd
  */
+
 public class Boj1188 {
 	private static final String SPACE = " ";
 	

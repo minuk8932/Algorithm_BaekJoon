@@ -12,20 +12,9 @@ public class Boj1790 {
 		int N = Integer.parseInt(st.nextToken());
 		int k = Integer.parseInt(st.nextToken());
 		
-		int log10N = (int) Math.floor(Math.log10(N)); 
-		
+		int log10N = (int) Math.floor(Math.log10(N)); 		
 		int res = 0;
 		
-		for(int i = 0; i < log10N; i++){
-			res += 9 * (int) Math.pow(10, i) * (i + 1);
-		}
 		
-		res += (N - (int) Math.pow(10, log10N) + 1) * (log10N + 1);
-		
-		System.out.println(res);
-		
-		for(int i = 0; i < res; i++){
-			
-		}
 	}
 }

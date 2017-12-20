@@ -50,7 +50,7 @@ public class Boj5427 {
 				}
 			}
 			
-			int escape = 1;
+			int escape = 0;
 			int[][] isVisited = new int[h][w];
 			
 			for(int row = startH; row < h; row++){
@@ -71,11 +71,11 @@ public class Boj5427 {
 								if(nextRow >= 0 && nextRow < h && nextCol >= 0 && nextCol < w){
 									if(isVisited[nextRow][nextCol] == 0){
 										if(top[nextRow][nextCol] != BLOCK && top[nextRow][nextCol] != FIRE){
+											isVisited[nextRow][nextCol] = 1;
 											escape += isVisited[nextRow][nextCol];
 										
 											// TODO : how to check when he cann't escape
 										}
-										
 										q.offer(new Point(nextRow, nextCol));
 									}
 								}
@@ -100,13 +100,16 @@ public class Boj5427 {
 	}
 	
 	public static void spreadFire(int x, int y){
+		boolean isVisited[][] = new boolean[x][y];
 		
 		for(final int[] DIRECTION : DIRECTIONS){
-			if(top[x][y] == FIRE){
+			if(top[x][y] == FIRE && !isVisited[x][y]){
 				int nextX = DIRECTION[ROW] + x;
 				int nextY = DIRECTION[COL] + y;
 				
-				top[nextX][nextY] = FIRE;
+				if(top[nextX][nextY] == WAY){
+					top[nextX][nextY] = FIRE;
+				}
 			}
 		}
 	}
