@@ -8,7 +8,10 @@ import java.util.StringTokenizer;
 /**
  * 
  * @author minchoba
- *		Baek Joon : 2573번 빙산
+ *	백준 2573번 : 빙산
+ *
+ *	@see https://www.acmicpc.net/problem/2573
+ *
  */
 
 public class Boj2573 {
@@ -22,12 +25,8 @@ public class Boj2573 {
 	private static int[][] ice = new int[300][300];
 	private static boolean[][] isVisited = null;
 	
-	/**
-	 * main method
-	 * @param args
-	 * @throws Exception
-	 */
 	public static void main(String[] args) throws Exception {
+		// 버퍼를 통한 값 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), SPACE);
 
@@ -38,9 +37,6 @@ public class Boj2573 {
 
 		int max = 0;
 		
-		/**
-		 * 		input
-		 */
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine(), SPACE);
 			for (int j = 0; j < M; j++) {
@@ -55,12 +51,7 @@ public class Boj2573 {
 		int year = 0;
 		int isDivide = 0, tmp = 0;
 		
-		/**
-		 *  얼음이 어떻게 녹는지 탐색
-		 *  얼음이 2동강 이상 날 경우 반복문 정지
-		 *  
-		 */
-		LOOP: while (isDivide < 2) {
+		LOOP: while (isDivide < 2) {									// 얼음이 녹았을 때 2개 이상의 덩어리로 갈라진다면 탐색 정지
 			isVisited = new boolean[N][M];
 			
 			int cnt = 0;
@@ -82,10 +73,7 @@ public class Boj2573 {
 						Queue<Point> q = new LinkedList<>();
 						q.offer(new Point(row, col));
 						
-						/**
-						 *  현재 입력 받은 위치의 빙산이 녹는 경우
-						 */
-						meltedIce(row, col);
+						meltedIce(row, col);														// 현재 입력 받은 위치의 빙산이 녹는 경우
 						
 
 						while (!q.isEmpty()) {
@@ -100,11 +88,7 @@ public class Boj2573 {
 										isVisited[nextRow][nextCol] = true;
 										
 										q.offer(new Point(nextRow, nextCol));
-										
-										/**
-										 * 	현재 녹은 빙산의 옆도 빙산일때 녹는 경우
-										 */
-										meltingIce(nextRow, nextCol);
+										meltingIce(nextRow, nextCol);							// 현재 빙산의 주변도 빙산일 때
 									}
 								}
 							}
@@ -112,10 +96,7 @@ public class Boj2573 {
 					}
 				}
 			}
-			/**
-			 * 	만약 얼음이 2조각 이상 나지 않을 경우
-			 */
-			if(cnt == total){
+			if(cnt == total){									// 다 녹을 때 까지 빙산이 2 덩어리 이상 나오지 않을 경우
 				tmp = cnt;
 				break LOOP;
 			}
@@ -130,8 +111,9 @@ public class Boj2573 {
 	}
 	
 	/**
-	 * 탐색을 위한 좌표 클래스
+	 * 
 	 * @author minchoba
+	 *	정점 탐색 이너 클래스
 	 *
 	 */
 	private static class Point {
@@ -142,7 +124,6 @@ public class Boj2573 {
 		 * 
 		 * @param row
 		 * @param col
-		 * 	행, 열에 따라 값을 받아서 처리
 		 * 
 		 */
 		public Point(int row, int col) {
@@ -152,10 +133,11 @@ public class Boj2573 {
 	}
 	
 	/**
-	 * 	처음 탐색하는 얼음을 녹이는 메소드
+	 * 	
 	 * @param x
 	 * @param y
-	 * 		해당 x,y의 배열 값이 얼음이었다면 -> 주변 배열을 검사해 얼음이면, 해당 얼음 주변의 0의 갯수에 따라 녹여줌
+	 * 	해당 x,y의 배열 값이 얼음이었다면 -> 주변 배열을 검사해 얼음이면, 해당 얼음 주변의 0의 갯수에 따라 녹여줌
+	 * 
 	 */
 	private static void meltedIce(int x, int y){
 		if (ice[x + 1][y] == 0) {
@@ -177,9 +159,11 @@ public class Boj2573 {
 	}
 	
 	/**
-	 * 처음 탐색한 얼음 주변의 얼음들을 탐색해 녹이는 메소드
+	 * 
 	 * @param x
 	 * @param y
+	 * 	처음 탐색한 얼음 주변의 얼음들을 탐색해 녹이는 메소드
+	 * 
 	 */
 	private static void meltingIce(int x, int y){
 		if (ice[x + 1][y] == 0 && !isVisited[x + 1][y]) {

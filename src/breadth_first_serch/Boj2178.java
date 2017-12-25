@@ -60,13 +60,6 @@ public class Boj2178 {
 			}
 		}
 		
-//		for(int row = 0; row < N; row++){
-//			for(int col = 0; col < M; col++){
-//				System.out.print(isVisited[row][col] + "\t");	// 전체 depth 출력
-//			}
-//			System.out.println();
-//		}
-		
 		System.out.println(isVisited[N-1][M-1]);
 	}
 	

@@ -1,10 +1,9 @@
-package depth_first_search;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-/*	이동가능한 방법
+/*	*
+ * 이동가능한 방법
  * 		1. 걷기 : 현재 +1 / -1
  * 		2. 순간이동 :  현재 x2
  * 	-> 즉 이동 가능한 direction : 3 가지

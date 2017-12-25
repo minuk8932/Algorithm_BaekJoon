@@ -7,7 +7,11 @@ import java.util.StringTokenizer;
 
 /**
  * 
- * @author minchoba 1912번
+ * @author minchoba
+ *  백준 1912번 : 연속 합
+ *  
+ * @see https://www.acmicpc.net/problem/1912 
+ *  
  */
 
 public class Boj1912 {
@@ -30,7 +34,7 @@ public class Boj1912 {
 		
 		for(int i = 2; i < n + 1; i++){
 			dp[i] = Math.max(num[i], num[i] + dp[i - 1]);	// 더해가며 값들을 비교함, 즉 이전까지 합이랑 다음의 값을 비교해 더 큰 것을 max에 넣어둔다.
-																			// 이렇게 했을 때, 몇개씩 더했을 때 최대가 아닌 몇개를 더했는지에 대한 문제가 아닌 임의의 갯수를 더함에 따른 최대 값.
+																			// 이렇게 했을 때, 몇개를 더했는지에 대한 문제가 아닌 임의의 갯수를 더함에 따른 최대 값.
 		}
 		
 		for(int i = 1; i < n + 1; i++){
