@@ -6,7 +6,10 @@ import java.util.StringTokenizer;
 /**
  * 
  * 		@author minchoba 
- * 		Baekjun : 11052 붕어빵 판매하기
+ * 		백준 11052번 : 붕어빵 판매하기
+ * 
+ * 		@see https://www.acmicpc.net/problem/11052
+ * 
  */
 public class Boj11052 {
 	private static final String SPACE = " ";
