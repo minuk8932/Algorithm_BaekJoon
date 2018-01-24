@@ -2,12 +2,10 @@
 /Boj1074.class
 /Boj1188.class
 /Boj1697.class
-/Boj1753.class
 /Boj1790.class
 /Boj2610.class
 /Boj2660.class
 /Boj2790.class
-/Boj2823.class
 /Boj2857.class
 /Boj4883.class
 /Boj5427$Point.class
@@ -19,6 +17,7 @@
 /Default.class
 /Floyd_Washall/
 /binary_search/
+/boj1267.class
 /breadth_first_serch/
 /depth_first_search/
 /deque/
@@ -32,14 +31,4 @@
 /realization/
 /sort/
 /stack/
-/string_handle/
-/Boj2133.class
-/Boj1009.class
-/Point.class
-/Boj1753$Point.class
-/Boj1261.class
-/Boj1261$Point.class
-/Boj2903.class
-/Boj1357.class
-/Boj1964.class
 /string_manipulate/
