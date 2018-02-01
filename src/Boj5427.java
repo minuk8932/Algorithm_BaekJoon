@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 /**
  * 
  * 		@author minchoba
- *			백준 5427 : 불
+ *		백준 5427번 : 불
  */
 
 public class Boj5427 {

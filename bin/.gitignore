@@ -17,7 +17,6 @@
 /Default.class
 /Floyd_Washall/
 /binary_search/
-/boj1267.class
 /breadth_first_serch/
 /depth_first_search/
 /deque/
@@ -29,13 +28,10 @@
 /math/
 /queue/
 /realization/
+/simulation/
 /sort/
 /stack/
 /string_manipulate/
-/Boj1309.class
-/Boj1708.class
-/Boj5549.class
-/Boj9517.class
-/simulation/
-/Boj3190.class
-/Boj1629.class
+/Boj1260.class
+/Boj1260$Point.class
+/Boj1260$Node.class
