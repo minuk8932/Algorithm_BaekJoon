@@ -3,8 +3,8 @@ import java.io.InputStreamReader;
 
 public class Boj9324 {
 	private static final int ASCII = 65;
-	private static final int MAX = 100_000;
-	
+	private static final int MAX = 100_001;
+
 	private static final String NEW_LINE = "\n";
 	private static final String OK = "OK";
 	private static final String NO = "FAKE";
@@ -15,7 +15,7 @@ public class Boj9324 {
 
 		int N = Integer.parseInt(br.readLine());
 
-		char[] msg = new char[MAX+1];
+		char[] msg = new char[MAX];
 
 		while (N-- > 0) {
 			msg = br.readLine().toCharArray();
@@ -24,26 +24,27 @@ public class Boj9324 {
 			boolean chk = false;
 
 			for (int i = 0; i < msg.length; i++) {
-				if(msg[i] != ' '){
-					alphaChk[msg[i] - ASCII]++;
+				alphaChk[msg[i] - ASCII]++;
 
-					if (alphaChk[msg[i] - ASCII] == 3) {
-						alphaChk[msg[i] - ASCII] = 0;
-						i++;
-					
-						if (msg[i] != msg[i - 1]) {
-							chk = true;
-							break;
-						}
+				if (alphaChk[msg[i] - ASCII] == 3) {
+					alphaChk[msg[i] - ASCII] = 0;
+					i++;
+
+					if (msg[i] != msg[i - 1]) {
+						chk = true;
+						break;
 					}
 				}
+
 			}
 
 			if (!chk) {
 				sb.append(OK).append(NEW_LINE);
-			} else {
+			} 
+			else {
 				sb.append(NO).append(NEW_LINE);
 			}
+			System.out.println();
 		}
 
 		System.out.println(sb.toString());
