@@ -75,6 +75,7 @@ public class Boj5427 {
 											escape += isVisited[nextRow][nextCol];
 										
 											// TODO : how to check when he cann't escape
+										
 										}
 										q.offer(new Point(nextRow, nextCol));
 									}
