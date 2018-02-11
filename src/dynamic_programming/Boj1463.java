@@ -3,7 +3,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 // DP 1로 만들기
-public class boj1463 {
+public class Boj1463 {
 	private static final int MAX = 1_000_001;
 	private static final int ZERO = 0;
 	private static final int ONE = 1;
