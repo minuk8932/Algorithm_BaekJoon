@@ -5,6 +5,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 1865번 : 웜홀
+ *
+ *	@see https://www.acmicpc.net/problem/1865
+ *
+ */
 public class Boj1865{
 	private static final String SPACE = " ";
 	private static final String NEW_LINE = "\n";
