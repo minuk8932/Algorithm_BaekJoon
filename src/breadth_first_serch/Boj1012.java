@@ -6,6 +6,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 1012번 : 유기농 배추
+ *
+ *	@see https://www.acmicpc.net/problem/1012
+ *
+ */
 public class Boj1012 {
 	private static final int[][] DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0,-1}};
 	private static final int ROW = 0;	// 0 index is row
@@ -15,6 +23,7 @@ public class Boj1012 {
 	public static final String SPACE = " ";
 	
 	public static void main(String[] args) throws Exception{
+		// 버퍼를 통한 값 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());
 		
@@ -27,7 +36,7 @@ public class Boj1012 {
 			int N = Integer.parseInt(st.nextToken());
 			int K = Integer.parseInt(st.nextToken());
 			
-			boolean[][] map = new boolean[N][M];
+			boolean[][] map = new boolean[N][M];						// 배추 배열 선언
 			
 			while(K-- > 0){
 				st  = new StringTokenizer(br.readLine(), SPACE);
@@ -36,14 +45,13 @@ public class Boj1012 {
 				map[row][col] = true;
 			}
 			
-			int areaCnt = 0;
+			int areaCnt = 0;								// 필요한 배추 흰 지렁이 갯수
 			
 			for(int row = 0; row < N; row++){
 				for(int col = 0; col < M; col++){
-					//is here cabbage?
-					if(map[row][col]){
-						map[row][col] = false;	// visited check
-						areaCnt++;
+					if(map[row][col]){					// 배추가 심어져있는지?
+						map[row][col] = false;
+						areaCnt++;						// 심어져있는 경우 배추 흰지렁이 갯수 + 1, 방문한것으로 표시
 						
 						Queue<Point> queue = new LinkedList<>();
 						queue.offer(new Point(row, col));
@@ -56,8 +64,8 @@ public class Boj1012 {
 								int nextCol = current.col + DIRECTION[COL];
 								
 								if( 0 <= nextRow && nextRow < N && 0 <= nextCol && nextCol < M){
-									if(map[nextRow][nextCol]){	// next is cabbage?
-										map[nextRow][nextCol] = false;
+									if(map[nextRow][nextCol]){								// 다음 방문 할 칸도 배추가 심어져 있는가
+										map[nextRow][nextCol] = false;						// 방문한것으로 표시, 인접한 영역별로 각 1마리의 지렁이가 필요하므로 여기선 +1 연산을 하지 않음
 										queue.offer(new Point(nextRow, nextCol));
 									}
 								}
@@ -67,14 +75,19 @@ public class Boj1012 {
 					}
 				}
 			}
-			sb.append(areaCnt).append(NEW_LINE);
+			sb.append(areaCnt).append(NEW_LINE);										// 각 영역별 배추 흰지렁이 갯수 표시
 		}
 		br.close();
 		
-		System.out.println(sb.toString());
+		System.out.println(sb.toString());													// 결과 값 한번에 출력
 	}
 	
-	// Using 2 Dimension matrix, need class Point
+	/**
+	 * 
+	 * 	@author minchoba
+	 *	정점 이너 클래스
+	 *
+	 */
 	private static class Point{
 		public int row;
 		public int col;
