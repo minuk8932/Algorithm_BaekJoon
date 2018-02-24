@@ -27,10 +27,10 @@
 
 <br><br>
 # 프로젝트 구성
-**Algorithm_BaekJun**는 다음과 같이 구성되어 있습니다. 코드를 보시려면 **src > 알고리즘 분류 > Boj문제번호.java**를 보시면 됩니다.
+**Algorithm_BaekJoon**는 다음과 같이 구성되어 있습니다. 코드를 보시려면 **src > 알고리즘 분류 > Boj문제번호.java**를 보시면 됩니다.
 - 단 문제 제출시 반드시 클래스명을 Main으로 바꾼 후 제출해야합니다.
 ```text
-Algorithm_BaekJun
+Algorithm_BaekJoon
 ├── .classpath (클래스패스 파일)
 ├── .git (git 디렉토리)
 ├── .project (프로젝트 파일)
@@ -45,7 +45,7 @@ Algorithm_BaekJun
 ```
 <br><br>
 # 1003번 예제 소스
-Java를 이용한 [1003번 문제 풀이](https://github.com/minuk8932/Algorithm_BaekJun/blob/master/src/dynamic_programming/Boj1003.java)는 아래와 같습니다.
+Java를 이용한 [1003번 문제 풀이](https://github.com/minuk8932/Algorithm_BaekJoon/blob/master/src/dynamic_programming/Boj1003.java)는 아래와 같습니다.
 ```java
 package dynamic_programming;
 
@@ -79,7 +79,7 @@ public class Boj1003 {                      // 제출 전 반드시 클래스명
 <br><br>
 # 채점 형식
 백준 온라인 저지의 **채점 형식**은 6가지 입니다.<br>
-![](https://github.com/minuk8932/Algorithm_BaekJun/blob/master/img/grading_type.png)
+![](https://github.com/minuk8932/Algorithm_BaekJoon/blob/master/img/grading_type.png)
 > - **맞았습니다** : 자신이 제출한 프로그램이 온라인 저지에 등록되어있는 모든 테스트 케이스를 통과해 정답을 맞춘 경우입니다.
 > - **틀렸습니다** : 출력 결과가 다른 경우입니다. 채점중이라는 표시 도중 이 결과가 떴다면, 어떤 예외 테스트 케이스가 발생했을 가능성이 큽니다.
 > - **시간초과** : 프로그램이 주어진 문제 해결 시간안에 끝나지 못했을 경우입니다. 이 경우 대부분 결과는 잘 나와도 풀이 자체가 잘못된 경우가 많습니다.
@@ -105,4 +105,4 @@ public class Boj1003 {                      // 제출 전 반드시 클래스명
 기타 문의사항이 있으실 경우 아래의 **문의 수단**으로 연락해주세요.
 > **문의 수단**
 > - 메일 : **minuk8932@naver.com**
-> - github : *https://github.com/minuk8932/Algorithm_BaekJun/issues**
+> - github : *https://github.com/minuk8932/Algorithm_BaekJoon/issues**
