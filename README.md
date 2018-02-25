@@ -1,5 +1,5 @@
 # 백준 온라인 저지 (Baek-Joon Online Judge)
-[![](https://d2gd6pc034wcta.cloudfront.net/images/logo.png)](https://www.acmicpc.net)
+[![](https://github.com/minuk8932/Algorithm_BaekJoon/blob/master/img/baekjoon_logo.png)](https://www.acmicpc.net)
 
 - 프로그래밍 문제를 풀고 온라인으로 채점 받을 수 있는 곳입니다.
 - 위의 로고 클릭시 해당 사이트로 이동합니다.
