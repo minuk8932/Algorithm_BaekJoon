@@ -17,7 +17,9 @@
 > - 버젼 : **java version "1.8.0_91"**
 > - 시간제한 : **+5초**
 > - 메모리제한 : **+512MB**
-<p>Java 이외의 언어 채점 환경은 [여기](https://www.acmicpc.net/help/language)를 통해 확인해주세요.
+
+Java 이외의 채점 환경은 [여기](https://www.acmicpc.net/help/language)를 통해 확인해주세요.
+
 
 <br><br>
 # 사용 가능 프로그래밍 언어
