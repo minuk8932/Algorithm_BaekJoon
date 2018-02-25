@@ -7,10 +7,19 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 1389번 : 케빈 베이컨의 6단계 법칙
+ *
+ *	@see https://www.acmicpc.net/problem/1389
+ *
+ */
 public class Boj1389 {
 	private static final String SPACE = " ";
 
 	public static void main(String[] args) throws Exception {
+		// 버퍼를 통한 값 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		StringTokenizer st = new StringTokenizer(br.readLine(), SPACE);
@@ -42,12 +51,12 @@ public class Boj1389 {
 			isVisited[i] = 1;
 			
 			Queue<Integer> queue = new LinkedList<>();
-			queue.offer(i);		// 1번째 값 큐에 입력
+			queue.offer(i);										// 1번째 값 큐에 입력
 			
 			while(!queue.isEmpty()){
 				int current = queue.poll();
 				
-				for(final int next : list[current]){   		// current = 1 일 때 1에서 갈 수 있는 경로가 하나씩 들어옴
+				for(final int next : list[current]){   		// 현재 = 1 일 때 현 노드에서 갈 수 있는 경로가 하나씩 들어옴
 					if(isVisited[next] == 0){
 						
 						sum += isVisited[next] = isVisited[current] + 1;
@@ -56,12 +65,12 @@ public class Boj1389 {
 					}
 				}
 			}
-			if(min > sum){			// sum 케빈 베이컨 값이 min 보다 작으면 update 해주어야 한다 
+			if(min > sum){			// 케빈 베이컨 총합이 이전까지의 합의 최소 보다 작으면 값 변경 
 				min = sum;
 				minIdx = i;
 			}
 			
 		}
-		System.out.println(minIdx);
+		System.out.println(minIdx);		// 결과값 출
 	}
 }
