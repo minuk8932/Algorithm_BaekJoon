@@ -1,4 +1,4 @@
-package string_manipulate;
+package string_handle;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
