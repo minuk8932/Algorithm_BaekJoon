@@ -49,11 +49,43 @@ public class Boj2610 {
 			}
 		}
 		
+		int[] chk = new int[N + 1];
+		
 		for(int i = 1; i < N + 1; i++){
 			for(int j = 1; j < N + 1; j++){
-				System.out.print(sem[i][j] + "\t");
+				if(sem[i][j] != MAX){
+					chk[i] = Math.max(j, chk[i]);
+				}
 			}
-			System.out.println();
 		}
+		
+		int tmp = 0;
+		int cnt = 0;
+		
+		StringBuilder sb = new StringBuilder();
+		for(int i = 1; i < N + 1; i++){
+			int repre = 0;
+			
+			if(chk[i] == 0){
+				sb.append(i).append(NEW_LINE);
+				cnt++;
+			}
+			else{
+				for(int j = i; j < N + 1; j++){
+					if(chk[i] == chk[j]){
+							repre++;
+						if(tmp != chk[j] && repre > 1){	
+							sb.append(j).append(NEW_LINE);
+							
+							tmp = chk[i];
+							cnt++;
+						}
+					}
+				}
+			}
+		}
+		
+		System.out.println(cnt);
+		System.out.println(sb.toString());
 	}
 }
