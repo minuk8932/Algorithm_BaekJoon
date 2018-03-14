@@ -7,6 +7,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 2583번 : 영역 구하기
+ *
+ *	@see https://www.acmicpc.net/problem/2583
+ *
+ */
 public class Boj2583 {
 	private static final String SPACE = " ";
 	
@@ -15,6 +23,7 @@ public class Boj2583 {
 	private static final int COL = 1;
 
 	public static void main(String[] args) throws Exception {
+		// 버퍼를 통한 값 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), SPACE);
 
@@ -30,7 +39,7 @@ public class Boj2583 {
 			int C = Integer.parseInt(st.nextToken());
 			int D = Integer.parseInt(st.nextToken());
 			
-			for(int i = B; i < D; i++){
+			for(int i = B; i < D; i++){					// 문제의 영역을 미리처리 해놓고
 				for(int j = A; j < C; j++){
 					area[i][j] = 1;
 				}
@@ -39,13 +48,13 @@ public class Boj2583 {
 		
 		int[][] isVisited = new int[N][M];
 		
-		ArrayList<Integer> list = new ArrayList<>();
+		ArrayList<Integer> list = new ArrayList<>();		// 영역의 넓이를 담을 리스트
 		
 		int areaCnt = 0;
 		
 		StringBuilder sb = new StringBuilder();
 		
-		for(int row = 0; row < N; row++){
+		for(int row = 0; row < N; row++){		// BFS 실행
 			for(int col = 0; col < M; col++){
 				if(area[row][col] == 0 && isVisited[row][col] == 0){
 					isVisited[row][col] = 1;
@@ -82,20 +91,26 @@ public class Boj2583 {
 		int size = list.size();
 		int[] cnt = new int[size];
 		
-		for(int i = 0; i < cnt.length; i++){
+		for(int i = 0; i < cnt.length; i++){		// 리스트의 값들을 배열로 옮김
 			cnt[i] = list.get(i);
 		}
-		Arrays.sort(cnt);
+		Arrays.sort(cnt);							// 배열 내부 정렬
 		
 		for(int i = 0; i < cnt.length; i++){
 			sb.append(cnt[i]).append(SPACE);
 		}
 		
 		System.out.println(areaCnt);
-		System.out.println(sb.toString());
+		System.out.println(sb.toString());	// 결과값 한번에 출력
 		
 	}
 	
+	/**
+	 * 
+	 * 	@author minchoba
+	 *	정점 이너 클래스
+	 *
+	 */
 	private static class Point{
 		int row;
 		int col;
