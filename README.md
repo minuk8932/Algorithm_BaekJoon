@@ -80,7 +80,7 @@ public class Boj1003 {                      // 제출 전 반드시 클래스명
   // fibonacci 메소드 생략..
 }
 ```
-*default package* > *Default.java* 클래스는 온라인 저지 문제를 풀며 코드 디버깅이나, 출력값 확인하며 코드를 일시적으로 수정하는데 사용합니다.
+*default package* > *Default.java* 클래스는 온라인 저지 문제를 풀며 코드 디버깅이나, 출력 값 확인 등 코드를 일시적으로 수정하는데 사용합니다.
 
 <br><br>
 # 채점 형식
