@@ -2,13 +2,14 @@
 /Boj1188.class
 /Boj1194$Point.class
 /Boj1194.class
+/Boj1486$Point.class
+/Boj1486.class
 /Boj1790.class
 /Boj1937.class
 /Boj1967$Node.class
 /Boj1967.class
 /Boj2065.class
 /Boj2133.class
-/Boj2211.class
 /Boj2790.class
 /Boj2890.class
 /Boj3462.class
@@ -44,7 +45,4 @@
 /sort/
 /stack/
 /string_handle/
-/Boj1486.class
-/Boj1486$Point.class
-/Boj6324.class
-/Boj10818.class
+/Boj1486$Node.class
