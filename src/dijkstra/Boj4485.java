@@ -69,7 +69,7 @@ public class Boj4485 {
 	private static int dijkstra(int[][] cave, int[][] dist, int N){
 		// 우선순위 큐 객체 생성
 		PriorityQueue<Point> pq = new PriorityQueue<>();
-		pq.offer(new Point(0, 0, cave[0][0]));											
+		pq.offer(new Point(0, 0, cave[0][0]));										
 		
 		dist[0][0] = cave[0][0];																
 		

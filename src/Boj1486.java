@@ -1,13 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.StringTokenizer;
-
-// 다익스트라 인듯?
 
 public class Boj1486 {
 	private static final String SPACE = " ";
@@ -20,7 +14,7 @@ public class Boj1486 {
 	private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 	private static final int ROW = 0;
 	private static final int COL = 1;
-	private static final int INF = 1_000;
+	private static final int LOW = 1;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -31,11 +25,11 @@ public class Boj1486 {
 		D = Integer.parseInt(st.nextToken());				// 호텔에서 출발해 호텔까지 오는데 걸리는 시간
 		
 		int[][] map = new int[N][M];
-		int[][] cost = new int[N][M];
+		int[][] timer = new int[2][52];
+		int leng = 0;
 		
 		for(int i = 0; i < N; i++){
 			String line = br.readLine();
-			Arrays.fill(cost[i], INF);
 			
 			for(int j = 0; j < M; j++){
 				char tmp = line.charAt(j);
@@ -47,20 +41,27 @@ public class Boj1486 {
 				else if(tmp >= 'a' && tmp <= 'z'){
 					map[i][j] = (tmp - 'a' + 26);
 				}
+				
+				leng = Math.max(leng, map[i][j]);
 			}
 		}
 		
-		ArrayList<Point> pos = new ArrayList<>();
+		dijkstraMax(map, timer);
+		dijkstraMin(map, timer);
 		
-		dijkstra(map, pos);
+		int res = 0;
 		
-//		int max = 0, size = pos.size();
-//		
-//		for(int i = 0; i < size; i++){
-//			max = Math.max(max, map[pos.get(i).row][pos.get(i).col]);			
-//		}
-//		
-//		System.out.println(max);
+		for(int i = 0; i < leng + 1; i++){
+			int tmp = timer[0][timer[0].length - i - 1] + timer[1][i];
+			
+			System.out.println(timer[0][timer[0].length - i - 1] + " " + timer[1][i] + " " + i);
+			
+			if(tmp <= D + 1 && timer[0][i] != 0 && timer[1][i] != 0){
+				res = Math.max(i, res);
+			}
+		}
+		
+		System.out.println(res);
 	}
 	
 	private static class Point implements Comparable<Point>{
@@ -80,48 +81,87 @@ public class Boj1486 {
 		}
 	}
 	
-	private static void dijkstra(int[][] map, ArrayList<Point> pos){		
-		int[][] isVisited = new int[N][M];
+	private static int[][] dijkstraMax(int[][] map, int[][] timer){
 		
-		PriorityQueue<Point> pq = new PriorityQueue<>();
-		pq.offer(new Point(0, 0, map[0][0]));
-		
-		isVisited[0][0] = 1;
-		
-		while(!pq.isEmpty()){
-			Point current = pq.poll();
-			
-			for(final int[] DIRECTION : DIRECTIONS){
-				int nextRow = current.row + DIRECTION[ROW];
-				int nextCol = current.col + DIRECTION[COL];
+		for(int row = N - 1; row >= 0; row--){
+			for(int col = M - 1; col >= 0; col--){
+				int[][] isVisited = new int[N][M];
 				
-				if(nextRow >= 0 && nextRow < N && nextCol >= 0 && nextCol < M){
-					int way = map[current.row][current.col] - map[nextRow][nextCol];
-					boolean isOver = false;
+				PriorityQueue<Point> pq = new PriorityQueue<>();
+				pq.offer(new Point(row, col, map[row][col]));
+				isVisited[row][col] = 1;
+				
+				while(!pq.isEmpty()){
+					Point current = pq.poll();
 					
-					if(way < 0){				// 다음 갈 곳이 더 높은 경우
-						isOver = true;
-						way *= - 1;
+					for(final int[] DIRECTION : DIRECTIONS){
+						int nextRow = current.row + DIRECTION[ROW];
+						int nextCol = current.col + DIRECTION[COL];
+						
+						if(nextRow >= 0 && nextRow < N && nextCol >= 0 && nextCol < M && isVisited[nextRow][nextCol] == 0){
+							int comp = map[nextRow][nextCol] - map[row][col];
+							
+							if(Math.abs(comp) > T){
+								continue;
+							}
+							
+							if(comp <= 0){
+								isVisited[nextRow][nextCol] = isVisited[current.row][current.col] + LOW;
+							}
+							else{
+								isVisited[nextRow][nextCol] = isVisited[current.row][current.col] + (int)Math.pow(comp, 2);
+							}
+							
+							timer[0][map[row][col]] = isVisited[nextRow][nextCol];
+							
+							pq.offer(new Point(nextRow, nextCol, map[nextRow][nextCol]));							
+						}
 					}
-					
-//					if(isVisited[current.row][current.col] <= D && isVisited[nextRow][nextCol] == 0 && way <= T){
-//						isVisited[nextRow][nextCol] = isVisited[current.row][current.col] + 1;
-//						
-//						if(isOver){
-//							int times = (int) Math.pow(way, 2);
-//																	
-//							if(times > D){
-//								pos.add(new Point(current.row, current.col));
-//							}
-//							else if(times == D){
-//								pos.add(new Point(nextRow, nextCol));
-//							}
-//						}						
-//						
-//						pq.offer(new Point(nextRow, nextCol));
-//					}
 				}
 			}
-		}		
+		}
+		return timer;
+	}
+	
+	private static int[][] dijkstraMin(int[][] map, int[][] timer){
+		
+		for(int row = 0; row < N; row++){
+			for(int col = 0; col < M; col++){
+				int[][] isVisited = new int[N][M];
+				
+				PriorityQueue<Point> pq = new PriorityQueue<>();
+				pq.offer(new Point(row, col, map[row][col]));
+				isVisited[row][col] = 1;
+				
+				while(!pq.isEmpty()){
+					Point current = pq.poll();
+					
+					for(final int[] DIRECTION : DIRECTIONS){
+						int nextRow = current.row + DIRECTION[ROW];
+						int nextCol = current.col + DIRECTION[COL];
+						
+						if(nextRow >= 0 && nextRow < N && nextCol >= 0 && nextCol < M && isVisited[nextRow][nextCol] == 0){
+							int comp = map[nextRow][nextCol] - map[row][col];
+							
+							if(Math.abs(comp) > T){
+								continue;
+							}
+							
+							if(comp <= 0){
+								isVisited[nextRow][nextCol] = isVisited[current.row][current.col] + LOW;
+							}
+							else{
+								isVisited[nextRow][nextCol] = isVisited[current.row][current.col] + (int)Math.pow(comp, 2);
+							}
+							
+							timer[1][map[row][col]] = isVisited[nextRow][nextCol];
+							
+							pq.offer(new Point(nextRow, nextCol, map[nextRow][nextCol]));
+						}
+					}
+				}
+			}
+		}
+		return timer;
 	}
 }
