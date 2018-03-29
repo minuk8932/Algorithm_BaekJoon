@@ -9,6 +9,9 @@ import java.util.StringTokenizer;
  * 
  * 	@author minchoba
  *	백준 1916번 : 최소비용 구하기
+ *
+ * @see https://www.acmicpc.net/problem/1916/
+ *
  */
 public class Boj1916 {
 	private static final String SPACE = " ";
