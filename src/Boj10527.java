@@ -1,33 +1,31 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Boj10527 {	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		int N = Integer.parseInt(br.readLine());
-		String[] DOM = new String[N + 1];
-		String[] Katties = new String[N + 1];
-		String[] origin = new String[N * 2 + 1];
 
-		for (int i = 1; i < N + 1; i++) {
-			DOM[i] = br.readLine();
-			origin[i] = DOM[i];
+		ArrayList<String> dom = new ArrayList<>();
+		ArrayList<String> kat = new ArrayList<>();
+
+		for (int i = 0; i < N; i++) {
+			String line = br.readLine();
+			dom.add(line);
 		}
-		for (int i = 1; i < N + 1; i++) {
-			Katties[i] = br.readLine();
-			origin[i + N] = Katties[i];
+		for (int i = 0; i < N; i++) {
+			String line = br.readLine();
+			kat.add(line);
 		}
 		br.close();
 		
-		Arrays.sort(DOM);
-		Arrays.sort(Katties);
+		Collections.sort(dom);
+		Collections.sort(kat);
 		
-		
-		for(int i = 1; i < N + 1; i++){
-			
-		}
+		int res = 0;
 		
 		
 	}
