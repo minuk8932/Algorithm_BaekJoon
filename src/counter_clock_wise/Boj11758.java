@@ -29,6 +29,7 @@ public class Boj11758 {
 		}
 		
 		int res = (x[1] - x[0]) * (y[2] - y[0]) - (y[1] - y[0]) * (x[2] - x[0]);		// CCW 실행
+	// 다른 공식 : (A.x * B.y + B.x * C.y + C.x * A.y) - (A.y * B.x + B.y * C.x + C.y + A.x) - 벡터의 외적
 		
 		System.out.println(res == 0 ? 0 :  res > 0 ? 1 : -1);		// 해당 계산결과에 따라 res < 0 : 시계방향, res > 0 : 반시계방향, res == 0 : 일직선
 	}
