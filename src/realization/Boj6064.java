@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Boj6064 {
-	public static final int NOT_INVOLVED = -1;
 	public static final String NEW_LINE = "\n";
 
 	public static void main(String[] args) throws Exception {
@@ -13,42 +12,53 @@ public class Boj6064 {
 		StringBuilder sb = new StringBuilder();
 
 		int T = Integer.parseInt(br.readLine());
-		int[] M = new int[T];
-		int[] N = new int[T];
-		int[] x = new int[T];
-		int[] y = new int[T];
-		int cntX = 1, cntY = 1, cnt = 1;
 
-		for (int i = 0; i < T; i++) {
+		while (T-- != 0) {
 			StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-				M[i] = Integer.parseInt(st.nextToken());
-				N[i] = Integer.parseInt(st.nextToken());
-				x[i]  =Integer.parseInt(st.nextToken());
-				y[i] = Integer.parseInt(st.nextToken());
-				while(true){
-					
-					if(cntX < M[i] || cntY < N[i]){
-						if(cntX >= M[i]){
-							cntX = 1;
-							cnt++;
-						} else if(cntY >= N[i]){
-							cntY = 1;
-							cnt++;
-						} else {
-							cntX++;
-							cntY++;
-							cnt++;
-						}
-					} else if (cntX == x[i] && cntY == y[i]){
-						sb.append(cnt).append(NEW_LINE);
-						break;
-					} else if (cntX == M[i] && cntY == N[i]){
-						sb.append(NOT_INVOLVED).append(NEW_LINE);
-						break;
-					}
+			int M = Integer.parseInt(st.nextToken());
+			int N = Integer.parseInt(st.nextToken());
+			int x = Integer.parseInt(st.nextToken());
+			int y = Integer.parseInt(st.nextToken());
+
+			if (M > N) {
+				int tmp = M;
+				M = N;
+				N = tmp;
+				tmp = x;
+				x = y;
+				y = tmp;
+			}
+
+			int diff = N - M;
+			int cnt = 0;
+			int current = x;
+
+			while (current != y) {
+				cnt++;
+
+				if (current > diff) {
+					current -= diff;
 				}
-				
+
+				else {
+					current = N - (diff - current);
+				}
+
+				if (current == x) {
+					break;
+				}
+			}
+
+			if (cnt != 0 && current == x) {
+				sb.append(-1).append(NEW_LINE);
+			}
+
+			else {
+				sb.append(x + cnt * M).append(NEW_LINE);
+			}
 		}
+
+		br.close();
 		System.out.println(sb.toString());
 	}
 }
