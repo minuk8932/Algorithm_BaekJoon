@@ -31,6 +31,7 @@ public class Boj9935 {
 					break;
 				}
 			}
+			
 			if(isBoomed){
 				tos -= boomChars.length;
 			}
