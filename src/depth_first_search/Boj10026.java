@@ -93,7 +93,6 @@ public class Boj10026 {
 	}
 	
 	/**
-	 * 
 	 * 	@author minchoba
 	 *	행과 열의 정점을 저장할 이너 클래스
 	 */
