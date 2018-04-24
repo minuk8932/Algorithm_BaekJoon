@@ -71,6 +71,6 @@ public class Boj1389 {
 			}
 			
 		}
-		System.out.println(minIdx);		// 결과값 출
+		System.out.println(minIdx);		// 결과값 출력
 	}
 }
