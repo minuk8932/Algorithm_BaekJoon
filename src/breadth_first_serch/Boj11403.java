@@ -71,7 +71,7 @@ public class Boj11403 {
 					while(!q.isEmpty()){
 						Point current = q.poll();
 						
-						for(int next = 0; next < N; next++){		// 반복문을 돌려가
+						for(int next = 0; next < N; next++){		// 반복문을 돌려가며
 							if(map[current.row][current.col] == 1 && map[current.col][next] == 1){	// 조건에 해당하는 행과 열을 찾고
 								if(!isVisited[current.row][next]){			// 그때의 합 경로가 방문 전이면
 									isVisited[current.row][next] = true;	// 방문함으로 바꾸고
