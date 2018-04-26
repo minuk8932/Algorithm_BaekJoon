@@ -54,5 +54,4 @@ public class Boj14501 {
         dfs(day + during[day], profit + resrv[day], resrv[day]); 	//	상담을 하는 경우 
         dfs(day + 1 ,profit ,currentCost);									// 상담을 하지 않는 경우
 	}
-
 }
