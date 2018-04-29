@@ -67,6 +67,8 @@ public class Boj1963 {
 
 		for (int i = 2; i < loop; i++) {		// 에라토스테네스의 체
 			for (int j = 1000; j < INF; j++) {
+				if(!isPrime[j]) continue;
+				
 				if (i != j && j % i == 0) {
 					isPrime[j] = false;
 				}
