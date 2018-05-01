@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 public class Boj3462 {
 	private static final String SPACE = " ";
-	private static final String NEW_LINE = "\n";
+	private static final String END_LINE = "\n";
 	
 	public static void main(String[] args)throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,35 +18,24 @@ public class Boj3462 {
 			int n = Integer.parseInt(st.nextToken());
 			int m = Integer.parseInt(st.nextToken());
 			
-			int chk = 0;
-			int[] num = new int[2];
-			Arrays.fill(num, 1);
+			int[][] bSter = new int[n][m];
+			bSter[0][0] = 1;
 			
-			if(n == m || m == 1){
-				chk = 1;
+			for(int i = 0; i < n; i++){
+				bSter[i][0] = 0;
 			}
-			else if(m == 0 || n == 0){
-				chk = 0;
+			for(int i = 0; i < m; i++){
+				bSter[0][i] = 0;
 			}
-			else if(m == n -1){
-				chk = n * m / 2;
-			}
-			else if(m == 2){
-				chk = 1;
-			}
-			else {
-				for(int i = 1; i < m + 1; i++){
-					int tmp = num[1];
-					num[1] = num[1] * i + num[0];
-					num[0] = tmp;
+			
+			for(int i = 1; i < n; i++){
+				for(int j = 1; j < m; j++){
+					bSter[i][j] = j * bSter[i - 1][j] + bSter[i - 1][j - 1];
 				}
 			}
 			
-			System.out.println(num[1]);
 			
-			chk = (chk % 2 == 0 ? 0 : 1);
-			
-			sb.append(chk).append(NEW_LINE);
+			sb.append(bSter[n - 1][m - 1]).append(END_LINE);
 		}
 		br.close();
 		

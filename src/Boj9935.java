@@ -1,13 +1,7 @@
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Stack;
 
-/**
- * 
- * 	@author minchoba
- *		100%에서 런타임
- *
- */
 public class Boj9935 {
 	private static final String EMPTY = "FRULA";
 
@@ -16,32 +10,21 @@ public class Boj9935 {
 		char[] inputChars = br.readLine().toCharArray();
 		char[] boomChars = br.readLine().toCharArray();
 		
-		char[] stack = new char[inputChars.length];
-		int tos = -1;
+		Stack<Character> input = new Stack<>();
 		
-		for(final char C : inputChars){
-			stack[++tos] = C;
-			
-			boolean isBoomed = true;
-			
-			for(int i = 0; i < boomChars.length; i++){
-				if(boomChars[boomChars.length - 1 - i] != stack[tos - i]){
-					isBoomed = false;
-					
+		for(char word : inputChars){
+			input.add(word);
+		}
+		
+		for(int i = 0; i < inputChars.length; i++){
+			for(int j = boomChars.length - 1; j >= 0; j++){
+				if(input.peek() != boomChars[j]){
 					break;
 				}
-			}
-			
-			if(isBoomed){
-				tos -= boomChars.length;
+				else{
+					
+				}
 			}
 		}
-		
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < tos + 1; i++){
-			sb.append(stack[i]);
-		}
-		
-		System.out.println(sb.length() == 0 ? "FRULA" : sb.toString());
 	}
 }
