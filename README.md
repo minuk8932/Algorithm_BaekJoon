@@ -71,13 +71,13 @@ public class Boj1003 {                      // 제출 전 반드시 클래스명
 		while (T-- > 0) {
 			int num = Integer.parseInt(br.readLine());
 			chk = new int[2];
-
-			fibonacci(num);
+			
+			// 시간제한 감소로 인해 문제의 코드가 변경되었습니다. 위의 1003번 링크를 통해 확인해주세요.
+			//fibonacci(num);(x) - memoization을 통한 피보나치 수 구현
 			sb.append(chk[0]).append(SPACE).append(chk[1]).append(NEW_LINE);
 		}
 		System.out.println(sb.toString());
 	}
-  // fibonacci 메소드 생략..
 }
 ```
 *default package* > *Default.java* 클래스는 온라인 저지 문제를 풀며 코드 디버깅이나, 출력 값 확인 등 코드를 일시적으로 수정하는데 사용합니다.
