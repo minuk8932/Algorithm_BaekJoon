@@ -3,7 +3,6 @@ import java.io.InputStreamReader;
 
 public class Boj9324 {
 	private static final int ASCII = 65;
-	private static final int MAX = 100_001;
 
 	private static final String NEW_LINE = "\n";
 	private static final String OK = "OK";
@@ -11,42 +10,38 @@ public class Boj9324 {
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		
 		StringBuilder sb = new StringBuilder();
-
-		int N = Integer.parseInt(br.readLine());
-
-		char[] msg = new char[MAX];
-
-		while (N-- > 0) {
-			msg = br.readLine().toCharArray();
-
-			int[] alphaChk = new int[30];
-			boolean chk = false;
-
-			for (int i = 0; i < msg.length; i++) {
-				alphaChk[msg[i] - ASCII]++;
-
-				if (alphaChk[msg[i] - ASCII] == 3) {
-					alphaChk[msg[i] - ASCII] = 0;
-					i++;
-
-					if (msg[i] != msg[i - 1]) {
-						chk = true;
+		
+		while(T-- > 0){
+			char[] words = br.readLine().toCharArray();
+			int[] alpha = new int[26];
+			boolean isTrue = true;
+			
+			for(int i = 0; i < words.length; i++){
+				alpha[words[i] - ASCII]++;
+				
+				if(alpha[words[i] - ASCII] == 3){
+					alpha[words[i] - ASCII] = 0;
+					
+					if(i == words.length - 1){
+						isTrue = false;
 						break;
 					}
+					
+					if(words[i] != words[i + 1]){
+						isTrue = false;
+						break;
+					}
+					
+					i++;
 				}
-
 			}
-
-			if (!chk) {
-				sb.append(OK).append(NEW_LINE);
-			} 
-			else {
-				sb.append(NO).append(NEW_LINE);
-			}
-			System.out.println();
+			
+			sb.append(isTrue ? OK : NO).append(NEW_LINE);
 		}
-
+		
 		System.out.println(sb.toString());
 	}
 }
