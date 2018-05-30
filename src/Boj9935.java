@@ -15,16 +15,5 @@ public class Boj9935 {
 		for(char word : inputChars){
 			input.add(word);
 		}
-		
-		for(int i = 0; i < inputChars.length; i++){
-			for(int j = boomChars.length - 1; j >= 0; j++){
-				if(input.peek() != boomChars[j]){
-					break;
-				}
-				else{
-					
-				}
-			}
-		}
 	}
 }
