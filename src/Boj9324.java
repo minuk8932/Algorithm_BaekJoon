@@ -12,36 +12,37 @@ public class Boj9324 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());
 		
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sbRes = new StringBuilder();
 		
 		while(T-- > 0){
-			char[] words = br.readLine().toCharArray();
+			StringBuilder sbComp = new StringBuilder();
+			String msg = br.readLine();
+			char[] words = msg.toCharArray();
 			int[] alpha = new int[26];
-			boolean isTrue = true;
 			
 			for(int i = 0; i < words.length; i++){
 				alpha[words[i] - ASCII]++;
+				sbComp.append(words[i]);
 				
-				if(alpha[words[i] - ASCII] == 3){
-					alpha[words[i] - ASCII] = 0;
-					
-					if(i == words.length - 1){
-						isTrue = false;
+				if(alpha[words[i] - ASCII] == 3) {
+					if(i == words.length - 1) {
+						sbComp.append(words[i]);
+						
 						break;
 					}
 					
-					if(words[i] != words[i + 1]){
-						isTrue = false;
-						break;
+					if(words[i + 1] != words[i]) {
+						sbComp.append(words[i]);
+						alpha[words[i] - ASCII] = 0;
 					}
-					
-					i++;
 				}
 			}
 			
-			sb.append(isTrue ? OK : NO).append(NEW_LINE);
+			System.out.println(sbComp.toString());
+			
+			sbRes.append(msg.equals(sbComp.toString()) ? OK : NO).append(NEW_LINE);
 		}
 		
-		System.out.println(sb.toString());
+		System.out.println(sbRes.toString());
 	}
 }
