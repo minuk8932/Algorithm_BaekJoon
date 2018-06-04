@@ -1,7 +1,3 @@
-/Boj11779$Node.class
-/Boj11779.class
-/Boj1194$Point.class
-/Boj1194.class
 /Boj1197$Node.class
 /Boj1197.class
 /Boj1213.class
@@ -13,7 +9,6 @@
 /Boj14929.class
 /Boj15722$Point.class
 /Boj15722.class
-/Boj15792.class
 /Boj1790.class
 /Boj1967$Node.class
 /Boj1967.class
@@ -58,7 +53,7 @@
 /greedy/
 /heap/
 /implementation/
-/Boj15791.class
-/Boj8974.class
-/Boj2858.class
+/lowcost_spanning_tree/
 /math/
+/Boj1717.class
+/disjoint_set/

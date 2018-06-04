@@ -20,6 +20,7 @@ public class Boj4991 {
 	private static final int MAX = 30;
 	
 	private static Point start = null;
+	private static Point[] dust = new Point[10];
 	private static char[][] map = null;
 	private static int w = 0;
 	private static int h = 0;
@@ -50,26 +51,15 @@ public class Boj4991 {
 					}
 					
 					if(map[i][j] == DIRT) {
+						dust[dustCnt] = new Point(i, j);
 						dustCnt++;
 					}
 				}
 			}
 			
-			int res = 0;
-			int loop = dustCnt;
-			int[] cost = new int[dustCnt * 2 - 1];
-			ArrayList<Integer>[] arr = new ArrayList[dustCnt];
 			
-			for(int i = 0; i < dustCnt; i++) {
-				arr[i] = new ArrayList<>();
-			}
 			
-			while(loop-- > 0) {
-				int idx = dustCnt - loop -1;
-				bfs();
-			}
-			
-			sb.append(res).append(NEW_LINE);
+			sb.append(0).append(NEW_LINE);
 		}
 		
 		System.out.println(sb.toString());
@@ -85,7 +75,7 @@ public class Boj4991 {
 		}
 	}
 	
-	private static void bfs() {
+	private static void bfsStart() {
 		int[][] isVisited = new int[MAX][MAX];
 		
 		isVisited[start.row][start.col] = 1;
@@ -105,8 +95,7 @@ public class Boj4991 {
 						isVisited[nextRow][nextCol] = isVisited[current.row][current.col] + 1;
 						
 						if(map[nextRow][nextCol] == DIRT) {
-							map[nextRow][nextCol] = CLEAN;
-							start = new Point(nextRow, nextCol);
+							
 						}
 						
 						q.offer(new Point(nextRow, nextCol));
