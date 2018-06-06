@@ -1,4 +1,4 @@
-package string_handle;
+package brute_force;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
