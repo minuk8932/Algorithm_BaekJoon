@@ -5,6 +5,7 @@
 /Boj1194.class
 /Boj1197$Node.class
 /Boj1197.class
+/Boj13458.class
 /Boj13460$Point.class
 /Boj13460.class
 /Boj14504.class
@@ -19,7 +20,6 @@
 /Boj2065.class
 /Boj2133.class
 /Boj2504.class
-/Boj2530.class
 /Boj2668.class
 /Boj2790.class
 /Boj3462.class
@@ -55,7 +55,3 @@
 /disjoint_set/
 /dynamic_programming/
 /greedy/
-/heap/
-/implementation/
-/Boj9711.class
-/Boj2217.class
