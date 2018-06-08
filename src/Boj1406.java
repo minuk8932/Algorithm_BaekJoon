@@ -3,6 +3,9 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -43,6 +46,8 @@ public class Boj1406 {
 			}
 			
 			int limit = words.size() - 1;
+			
+			
 			
 			switch (cmd) {
 			case PUSH:

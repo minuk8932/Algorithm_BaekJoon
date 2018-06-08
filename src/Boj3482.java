@@ -15,9 +15,9 @@ public class Boj3482 {
 	private static final int[][] DIRECTIONS = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
 	private static final int ROW = 0;
 	private static final int COL = 1;
+	private static final int INF = 1_000_000;
 	
 	private static char[][] map = null;
-	private static boolean[][] start = null;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,9 +29,15 @@ public class Boj3482 {
 			StringTokenizer st = new StringTokenizer(br.readLine(), SPACE);
 			int C = Integer.parseInt(st.nextToken());
 			int R = Integer.parseInt(st.nextToken());
-
-			start = new boolean[R][C];
+			
 			map = new char[R][C];
+			
+			Point[] start = new Point[INF];
+			for(int i = 0; i < INF; i++) {
+				start[i] = new Point(0, 0);
+			}
+			
+			boolean once = false;
 			
 			for (int i = 0; i < R; i++) {
 				String line = br.readLine();
@@ -41,49 +47,36 @@ public class Boj3482 {
 				}
 			}
 			
+			int idx = 0;
+			
 			for(int i = 0; i < R; i++) {
 				for(int j = 0; j < C; j++) {
-					if(map[i][j] != WAY) continue;
-					
-					int isBlock = 0;
-					
-					for(final int[] DIRECTION : DIRECTIONS) {
-						int nextRow = DIRECTION[ROW] + i;
-						int nextCol = DIRECTION[COL] + j;
+					if(map[i][j] == WAY && !once) {						
+						int chk = 0;
 						
-						if(nextRow < 0 || nextCol < 0 || nextRow >= R || nextCol >= C) {
-							isBlock++;
-							continue;
+						for(final int[] DIRECTION : DIRECTIONS) {
+							int nextRow = i + DIRECTION[ROW];
+							int nextCol = j + DIRECTION[COL];
+							
+							if(nextRow < R && nextRow >= 0 && nextCol < C && nextCol >= 0 && map[nextRow][nextCol] == WAY) {
+								chk++;
+							}
 						}
 						
-						if(map[nextRow][nextCol] == BLOCK) {
-//							System.out.println(i + " " + j + " " + nextRow + " " + nextCol);
-							isBlock++;
+						if(chk <= 1) {
+							once = true;
+							start[idx].row = i;
+							start[idx].col = j;
+							
+							idx++;
 						}
-					}
-					
-					if (isBlock >= 3) {
-						start[i][j] = true;
 					}
 				}
 			}
 			
-			int cnt = 0;
-			for(int i = 0; i < R; i++) {
-				for(int j = 0; j < C; j++) {
-					if(start[i][j]) {
-						cnt++;
-					}
-				}
-			}
-			
-			if(cnt == 0) newStarter(R, C);
-			
-			int[][] isVisited = new int[R][C];
-			
-			int res = bfs(R, C, isVisited, map, start);
+			int res = bfs(R, C, start);
 
-			sb.append(ANSWER).append(SPACE).append(res).append(END_LINE);
+			sb.append(ANSWER).append(SPACE).append(res == -1 ? 0 : res).append(END_LINE);
 		}
 
 		System.out.println(sb.toString());
@@ -99,70 +92,38 @@ public class Boj3482 {
 		}
 	}
 
-	private static int bfs(int R, int C, int[][] isVisited, char[][] map, boolean[][] start) {
+	private static int bfs(int R, int C, Point[] s) {
 		int max = 0;
 		
-		for(int row = 0; row < R; row++) {
-			for(int col = 0; col < C; col++) {
-				if(!start[row][col]) continue;
-				
-				Queue<Point> q = new LinkedList<>();
-				q.offer(new Point(row, col));
-		
-				isVisited[row][col] = 1;
-		
-				while (!q.isEmpty()) {
-					Point current = q.poll();
-					
-					for (final int[] DIRECTION : DIRECTIONS) {
-						int nextRow = current.row + DIRECTION[ROW];
-						int nextCol = current.col + DIRECTION[COL];
-		
-						if (nextRow >= 0 && nextRow < R && nextCol >= 0 && nextCol < C) {
-							if (isVisited[nextRow][nextCol] == 0){
-								if(map[nextRow][nextCol] != BLOCK) {
-									isVisited[nextRow][nextCol] = isVisited[current.row][current.col] + 1;
-									
-									q.offer(new Point(nextRow, nextCol));
+		for(int i = 0; i < s.length; i++) {
+			Queue<Point> q = new LinkedList<>();
+			q.offer(new Point(s[i].row, s[i].col));
 			
-									if (isVisited[nextRow][nextCol] > max) {
-										max = isVisited[nextRow][nextCol];
-									}
-								}
-							}					
+			int[][] isVisited = new int[R][C];
+			
+			isVisited[s[i].row][s[i].col] = 1;
+			while(!q.isEmpty()) {
+				Point current = q.poll();
+				
+				for(final int[] DIRECTION : DIRECTIONS) {
+					int nextRow = current.row + DIRECTION[ROW];
+					int nextCol = current.col + DIRECTION[COL];
+					
+					if(nextRow >= 0 && nextRow < R && nextCol >= 0 && nextCol < C) {
+						if(isVisited[nextRow][nextCol] == 0 && map[nextRow][nextCol] != BLOCK) {
+							isVisited[nextRow][nextCol] = isVisited[current.row][current.col] + 1;
+							
+							if(isVisited[nextRow][nextCol] > max) {
+								max = isVisited[nextRow][nextCol];
+							}
+							
+							q.offer(new Point(nextRow, nextCol));
 						}
 					}
 				}
 			}
-		}		
-		return max;
-	}
-	
-	private static void newStarter(int row, int col) {
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {	
-				if(map[i][j] != WAY) continue;
-				
-				int isBlock = 0;
-				
-				for(final int[] DIRECTION : DIRECTIONS) {
-					int nextRow = DIRECTION[ROW] + i;
-					int nextCol = DIRECTION[COL] + j;
-					
-					if(nextRow < 0 || nextCol < 0 || nextRow >= row || nextCol >= col) {
-						isBlock++;
-						continue;
-					}
-					
-					if(map[nextRow][nextCol] == BLOCK) {
-						isBlock++;
-					}
-				}
-
-				if (map[i][j] == WAY && isBlock == 2) {
-					start[i][j] = true;
-				}
-			}
 		}
+		
+		return max - 1;
 	}
 }
