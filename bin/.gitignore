@@ -1,3 +1,4 @@
+/Boj10424.class
 /Boj10527.class
 /Boj11779$Node.class
 /Boj11779.class
@@ -5,6 +6,7 @@
 /Boj1194.class
 /Boj1197$Node.class
 /Boj1197.class
+/Boj1253.class
 /Boj13460$Point.class
 /Boj13460.class
 /Boj1406.class
@@ -12,7 +14,6 @@
 /Boj14846$Point.class
 /Boj14846.class
 /Boj14929.class
-/Boj1570.class
 /Boj15722$Point.class
 /Boj15722.class
 /Boj1790.class
@@ -21,6 +22,7 @@
 /Boj2065.class
 /Boj2133.class
 /Boj2504.class
+/Boj2546.class
 /Boj2668.class
 /Boj2790.class
 /Boj3197$Point.class
@@ -51,17 +53,4 @@
 /binary_search/
 /breadth_first_serch/
 /brute_force/
-/counter_clock_wise/
-/depth_first_search/
-/deque/
-/dijkstra/
-/disjoint_set/
-/dynamic_programming/
-/greedy/
-/heap/
 /implementation/
-/Boj1570$Node.class
-/Boj1507.class
-/Boj6591.class
-/math/
-/Boj9610.class
