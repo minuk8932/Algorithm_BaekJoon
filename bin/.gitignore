@@ -1,9 +1,9 @@
+/Boj10162.class
 /Boj10527.class
 /Boj11779$Node.class
 /Boj11779.class
 /Boj1194$Point.class
 /Boj1194.class
-/Boj11947.class
 /Boj1197$Node.class
 /Boj1197.class
 /Boj1253.class
@@ -25,6 +25,7 @@
 /Boj2504.class
 /Boj2668.class
 /Boj2790.class
+/Boj3060.class
 /Boj3197$Point.class
 /Boj3197.class
 /Boj3462.class
@@ -60,9 +61,4 @@
 /disjoint_set/
 /dynamic_programming/
 /greedy/
-/heap/
-/implementation/
 /math/
-/Boj4740.class
-/string_handle/
-/Boj11970.class

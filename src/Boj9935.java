@@ -10,10 +10,6 @@ public class Boj9935 {
 		char[] inputChars = br.readLine().toCharArray();
 		char[] boomChars = br.readLine().toCharArray();
 		
-		Stack<Character> input = new Stack<>();
 		
-		for(char word : inputChars){
-			input.add(word);
-		}
 	}
 }
