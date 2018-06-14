@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 
 public class Boj15783 {
 	private static ArrayList<Integer>[] map = null;
+	private static boolean[] isVisited = null;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -20,6 +21,8 @@ public class Boj15783 {
 			map[i] = new ArrayList<>();
 		}
 		
+		int max = 0, pure = 0;
+		
 		for(int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
 			int A = Integer.parseInt(st.nextToken());
@@ -32,14 +35,15 @@ public class Boj15783 {
 	}
 	
 	private static int bfs(int N) {
-		int[] isVisited = new int[N];
+		isVisited = new boolean[N];
 		int virus = 0;
 		
 		for(int i = 0; i < N; i++) {
-			if(isVisited[i] == 0) {
-				
+			if(!isVisited[i]) {				
 				Queue<Integer> q = new LinkedList<>();
-				isVisited[i] = 1;
+				isVisited[i] = true;
+				
+				virus++;
 				
 				q.offer(i);
 				
@@ -47,23 +51,14 @@ public class Boj15783 {
 					int current = q.poll();
 					
 					for(int next : map[current]) {
-						if(isVisited[next] == 0) {
-							isVisited[next] = isVisited[current] + 1;
+						if(!isVisited[next]) {
+							isVisited[next] = true;
+							
 							
 							q.offer(next);
 						}
-						
-						if(isVisited[next] == isVisited[current] && isVisited[current] == 1) {
-							isVisited[next] = isVisited[current] + 1;
-						}
 					}
 				}
-			}
-		}
-		
-		for(int i = 0; i < N; i++) {
-			if(isVisited[i] == 1) {
-				virus++;
 			}
 		}
 		
