@@ -3,35 +3,48 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Boj11779 {
 	private static ArrayList<Node>[] path = null;
+	private static ArrayList<Node>[] revPath = null;
 	private static StringTokenizer st = null;
 	private static StringBuilder sb = null;
 
 	private static int n = 0;
 	private static int m = 0;
-	private static int cnt = 1;
 	private static int[] cost = null;
+	private static boolean[] isVisited = null;
 
-	private static final int INF = 1_000_001;
+	private static final int INF = 100_001;
 	private static final String SPACE = " ";
+	private static final String NEW_LINE = "\n";
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		n = Integer.parseInt(br.readLine());
 		m = Integer.parseInt(br.readLine());
-
+		
 		path = new ArrayList[n + 1];
+		revPath = new ArrayList[n + 1];
+		isVisited = new boolean[n + 1];
+		
 		for (int i = 0; i < n + 1; i++) {
 			path[i] = new ArrayList<>();
+			revPath[i] = new ArrayList<>();
 		}
 
 		for (int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
-			path[Integer.parseInt(st.nextToken())].add(new Node(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+			int cost = Integer.parseInt(st.nextToken());
+			
+			path[from].add(new Node(to, cost));
+			revPath[to].add(new Node(from, cost));
 		}
 
 		st = new StringTokenizer(br.readLine());
@@ -42,13 +55,20 @@ public class Boj11779 {
 		Arrays.fill(cost, INF);
 		
 		sb = new StringBuilder();
-		System.out.println(dijkstra(start, end));
-		System.out.println(cnt);
-		System.out.println(sb.toString());
+		sb.append(dijkstra(start, end)).append(NEW_LINE);
 		
+		String route = bfs(start, end);
+		
+		int cnt = 0;
 		for(int i = 1; i < n + 1; i++){
-			System.out.println(cost[i]);
+			if(isVisited[i]) {
+				cnt++;
+			}
 		}
+		sb.append(cnt).append(NEW_LINE);
+		
+		System.out.print(sb.toString());
+		System.out.println(route.trim());
 	}
 
 	private static class Node implements Comparable<Node> {
@@ -68,7 +88,7 @@ public class Boj11779 {
 
 	private static int dijkstra(int s, int e) {
 		cost[s] = 0;
-		int min = Integer.MAX_VALUE;
+		int min = INF;
 		
 		PriorityQueue<Node> pq = new PriorityQueue<>();
 		pq.offer(new Node(s, cost[s]));
@@ -84,7 +104,6 @@ public class Boj11779 {
 					cost[nextNode] = nextCost + cost[current.node];
 					
 					if(nextNode == e){
-						cnt++;
 						min = Math.min(cost[nextNode], min);
 					}
 					
@@ -96,24 +115,33 @@ public class Boj11779 {
 		return min;
 	}
 	
-	private static int count(){
-		int cnt = 0;
+	private static String bfs(int s, int e) {
+		StringBuilder pathSb = new StringBuilder();
 		
-		for(int i = 1; i < n + 1; i++){
-			if(cost[i] != INF){
-				cnt++;
+		Queue<Integer> q = new LinkedList<>();
+		q.offer(e);
+		isVisited[e] = true;
+		pathSb.append(SPACE).append(e);
+		
+		while(!q.isEmpty()) {
+			int current = q.poll();
+			
+			if(current != s) {
+				boolean chk = false;
+				
+				for(Node next : revPath[current]) {
+					if(cost[current] == cost[next.node] + next.val && !chk) {
+						isVisited[next.node] = true;
+						
+						pathSb.append(SPACE).append(next.node);
+						
+						chk = true;
+						q.offer(next.node);
+					}
+				}
 			}
 		}
 		
-		return cnt;
-	}
-	
-	private static String getPath(){
-		for(int i = 1; i < n + 1; i++){
-			if(cost[i] != INF){
-				sb.append(i).append(SPACE);
-			}
-		}		
-		return sb.toString();
+		return pathSb.reverse().toString();
 	}
 }
