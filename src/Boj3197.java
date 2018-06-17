@@ -16,8 +16,10 @@ public class Boj3197 {
 	
 	private static char[][] map = null;
 	private static char[] fill = new char[2];
+	private static int[][] dist = null;
 	private static int R = 0;
 	private static int C = 0;
+	private static int minDist = INF;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -34,9 +36,12 @@ public class Boj3197 {
 		fill[1] = 'B';
 		
 		fillSwan();
-		int res = distance();
+		
+		dist = new int[R][C];
+		bfs();
+		
 				
-		System.out.println(res);
+		System.out.println(minDist);
 	}
 	
 	private static class Point{
@@ -86,17 +91,17 @@ public class Boj3197 {
 		}
 	}
 	
-	private static int distance() {
-		int maxIce = 0;
+	private static void bfs() {
+		boolean once = false;
 		
-		for(int i = 0; i < R; i++) {
-			for(int j = 0; j < C; j++) {
-				if(map[i][j] == fill[0]) {					
-					int[][] isVisited = new int[R][C];
-					isVisited[i][j] = 1;
+		for(int row = 0; row < R; row++) {
+			for(int col = 0; col < C; col++) {
+				if(map[row][col] == 'A' && dist[row][col] == 0) {
+					int min = Integer.MAX_VALUE;
+					dist[row][col] = 1;
 					
-					Queue<Point> q = new LinkedList<>();
-					q.offer(new Point(i, j));
+					Queue<Point> q= new LinkedList<>();
+					q.offer(new Point(row, col));
 					
 					while(!q.isEmpty()) {
 						Point current = q.poll();
@@ -106,29 +111,44 @@ public class Boj3197 {
 							int nextCol = current.col + DIRECTION[COL];
 							
 							if(nextRow >= 0 && nextRow < R && nextCol >= 0 && nextCol < C) {
-								if(isVisited[nextRow][nextCol] == 0) {
-									if(map[nextRow][nextCol] == fill[1]) break;
-									
-									if(map[nextRow][nextCol] != fill[1]) {
-										if(map[nextRow][nextCol] == ICE) {
-											isVisited[nextRow][nextCol] = isVisited[current.row][current.col] + 1;
-										}
+								if(dist[nextRow][nextCol] == 0) {
+									if(map[nextRow][nextCol] == ICE) {
+										dist[nextRow][nextCol] = dist[current.row][current.col] + 1;
+										once = false;
 										
-										if(map[nextRow][nextCol] == WATER) {
-											isVisited[nextRow][nextCol] = 1;
-											maxIce = Math.max(maxIce, isVisited[current.row][current.col] - 1);
+										q.offer(new Point(nextRow, nextCol));
+									}
+									
+									else if(map[nextRow][nextCol] == WATER) {
+										dist[nextRow][nextCol] = 1;
+										
+										if(!once) {
+											min = Math.min(min, dist[current.row][current.col]);
+											once = true;
 										}
 										
 										q.offer(new Point(nextRow, nextCol));
 									}
+								}
+								
+								if(map[nextRow][nextCol] == 'B') {
+									int tmp = 0;
+									
+									if(min % 2 == 0) {
+										tmp = min / 2;
+									}
+									else {
+										tmp = min / 2 + 1;
+									}
+									
+									once = false;
+									minDist = min == 0 ? 0 : Math.min(minDist, tmp);
 								}
 							}
 						}
 					}
 				}
 			}
-		}	
-		
-		return maxIce % 2 == 0 ? maxIce / 2 : maxIce / 2 + 1;
+		}
 	}
 }

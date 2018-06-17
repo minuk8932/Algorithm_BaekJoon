@@ -7,9 +7,8 @@ public class Boj9935 {
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		char[] inputChars = br.readLine().toCharArray();
-		char[] boomChars = br.readLine().toCharArray();
-		
-		
+		Stack<Character> stk = new Stack<>();
+		char[] words = br.readLine().toCharArray();
+		char[] boom = br.readLine().toCharArray();
 	}
 }
