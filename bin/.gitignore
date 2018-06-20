@@ -1,5 +1,5 @@
-/Boj10174.class
 /Boj10527.class
+/Boj10819.class
 /Boj11062.class
 /Boj11779$Node.class
 /Boj11779.class
@@ -38,7 +38,6 @@
 /Boj4883.class
 /Boj4991$Point.class
 /Boj4991.class
-/Boj5430.class
 /Boj5549$Geo.class
 /Boj5549.class
 /Boj6593$Point.class
@@ -64,10 +63,4 @@
 /dijkstra/
 /disjoint_set/
 /dynamic_programming/
-/greedy/
-/heap/
-/implementation/
-/string_handle/
-/Boj10866.class
-/Boj10157.class
-/simulation/
+/math/
