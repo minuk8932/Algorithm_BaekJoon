@@ -17,7 +17,6 @@
 /Boj14923$Point.class
 /Boj14923.class
 /Boj14929.class
-/Boj1500.class
 /Boj15722$Point.class
 /Boj15722.class
 /Boj15783.class
@@ -34,6 +33,7 @@
 /Boj3462.class
 /Boj3482$Point.class
 /Boj3482.class
+/Boj3908.class
 /Boj4378.class
 /Boj4883.class
 /Boj4991$Point.class
@@ -64,4 +64,8 @@
 /greedy/
 /heap/
 /implementation/
+/Solution.class
+/Boj2565.class
+/Boj1969.class
+/Boj15727.class
 /math/
