@@ -31,7 +31,7 @@ public class Boj1260 {
 		int M = Integer.parseInt(st.nextToken());
 		int V = Integer.parseInt(st.nextToken());
 		
-		ArrayList<Integer>[] graph = new ArrayList[N + 1];		// 인접 리스트 선언
+		ArrayList<Integer>[] graph = new ArrayList[N + 1];	// 인접 리스트 선언
 		
 		boolean[] isVisited = new boolean[N + 1];
 		
