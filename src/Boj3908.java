@@ -31,7 +31,6 @@ public class Boj3908 {
 					if(notPrime[j]) continue;
 					
 					sum += j;
-					
 				}
 			}
 		}
