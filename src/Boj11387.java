@@ -19,9 +19,9 @@ public class Boj11387 {
 									Double.parseDouble(st.nextToken()),
 									Double.parseDouble(st.nextToken()));
 		
+		double crtLimitCC = (crii.criticalPercent = crii.criticalPercent >= 100 ? 1.0 : crii.criticalPercent);
 		double criiCurrent = crii.strikePower * (1.0 + crii.strong / 100) * 
-				((1.0 - (crii.criticalPercent = crii.criticalPercent >= 100 ? 1.0 : crii.criticalPercent / 100)) + 
-				(crii.criticalPercent = crii.criticalPercent >= 100 ? 1.0 : crii.criticalPercent / 100) * crii.criticalDemage) * 
+				((1.0 - crtLimitCC) + crtLimitCC * crii.criticalDemage) * 
 				(1.0 + crii.attackSpeed / 100);
 		
 		st = new StringTokenizer(br.readLine());
@@ -31,45 +31,45 @@ public class Boj11387 {
 								Double.parseDouble(st.nextToken()),
 								Double.parseDouble(st.nextToken()));
 		
+		double crtLimitPC = (pabu.criticalPercent = pabu.criticalPercent >= 100 ? 1.0 : pabu.criticalPercent);
 		double pabuCurrent = pabu.strikePower * (1.0 + pabu.strong / 100) * 
-				((1.0 - (pabu.criticalPercent = pabu.criticalPercent >= 100 ? 1.0 : pabu.criticalPercent / 100)) + 
-				(pabu.criticalPercent = pabu.criticalPercent >= 100 ? 1.0 : pabu.criticalPercent / 100) * pabu.criticalDemage) * 
+				((1.0 - crtLimitPC) + crtLimitPC * pabu.criticalDemage) * 
 				(1.0 + pabu.attackSpeed / 100);
 		
 		st = new StringTokenizer(br.readLine());
 		double spC = Double.parseDouble(st.nextToken());
 		double sC = Double.parseDouble(st.nextToken());
-		double cpC = Double.parseDouble(st.nextToken());
-		double cdC = Double.parseDouble(st.nextToken());
-		double asC = Double.parseDouble(st.nextToken());	
+		double cpC = Double.parseDouble(st.nextToken()) / 100;
+		double cdC = Double.parseDouble(st.nextToken()) / 100;
+		double asC = Double.parseDouble(st.nextToken()) / 100;	
 		
 		st = new StringTokenizer(br.readLine());
 		double spP = Double.parseDouble(st.nextToken());
 		double sP = Double.parseDouble(st.nextToken());
-		double cpP = Double.parseDouble(st.nextToken());
-		double cdP = Double.parseDouble(st.nextToken());
-		double asP = Double.parseDouble(st.nextToken());	
+		double cpP = Double.parseDouble(st.nextToken()) / 100;
+		double cdP = Double.parseDouble(st.nextToken()) / 100;
+		double asP = Double.parseDouble(st.nextToken()) / 100;	
 		
-		crii.strikePower = crii.strikePower - spC + spP;
-		crii.strong = crii.strong - sC + sP;
-		crii.criticalPercent = crii.criticalPercent - cpC + cpP;
-		crii.criticalDemage = crii.criticalDemage - cdC + cdP;
-		crii.attackSpeed = crii.attackSpeed - asC + asP;
+		crii.strikePower += (spP - spC);
+		crii.strong += (sP - sC);
+		crii.criticalPercent += (cpP - cpC);
+		crii.criticalDemage += (cdP - cdC);
+		crii.attackSpeed += (asP - asC);
 		
+		double crtLimitCE = (crii.criticalPercent = crii.criticalPercent >= 100 ? 1.0 : crii.criticalPercent / 100);
 		double criiEquiped = crii.strikePower * (1.0 + crii.strong / 100) * 
-				((1.0 - (crii.criticalPercent = crii.criticalPercent >= 100 ? 1.0 : crii.criticalPercent / 100)) + 
-				(crii.criticalPercent = crii.criticalPercent >= 100 ? 1.0 : crii.criticalPercent / 100) * crii.criticalDemage) * 
+				((1.0 - crtLimitCE) + crtLimitCE * crii.criticalDemage) * 
 				(1.0 + crii.attackSpeed / 100);
 		
-		pabu.strikePower = pabu.strikePower + spC - spP;
-		pabu.strong = pabu.strong + sC - sP;
-		pabu.criticalPercent = pabu.criticalPercent + cpC - cpP;
-		pabu.criticalDemage = pabu.criticalDemage + cdC - cdP;
-		pabu.attackSpeed = pabu.attackSpeed + asC - asP;
+		pabu.strikePower += (spC - spP);
+		pabu.strong += (sC - sP);
+		pabu.criticalPercent += (cpC - cpP);
+		pabu.criticalDemage += (cdC - cdP);
+		pabu.attackSpeed += (asC - asP);
 		
+		double crtLimitPE = (pabu.criticalPercent = pabu.criticalPercent >= 100 ? 1.0 : pabu.criticalPercent / 100); 
 		double pabuEquiped = pabu.strikePower * (1.0 + pabu.strong / 100) * 
-				((1.0 - (pabu.criticalPercent = pabu.criticalPercent >= 100 ? 1.0 : pabu.criticalPercent / 100)) + 
-				(pabu.criticalPercent = pabu.criticalPercent >= 100 ? 1.0 : pabu.criticalPercent / 100) * pabu.criticalDemage) * 
+				((1.0 - crtLimitPE) + crtLimitPE * pabu.criticalDemage) * 
 				(1.0 + pabu.attackSpeed / 100);
 		
 		sb.append(criiCurrent == criiEquiped ? NOT : (criiCurrent > criiEquiped ? DOWN : UP)).append(NEW_LINE);
@@ -89,8 +89,8 @@ public class Boj11387 {
 			this.strikePower = strikePower;
 			this.strong = strong;
 			this.criticalPercent = criticalPercent;
-			this.criticalDemage = criticalDemage;
-			this.attackSpeed = attackSpeed;
+			this.criticalDemage = criticalDemage / 100;
+			this.attackSpeed = attackSpeed / 100;
 		}
 	}
 }

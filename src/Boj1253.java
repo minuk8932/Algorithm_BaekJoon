@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Boj1253 {	
@@ -14,16 +15,34 @@ public class Boj1253 {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
 		
+		Arrays.sort(arr);
+		int cnt = 0;
+		
 		for(int i = 0; i < N; i++) {
 			int left = 0, right = N - 1;
 			int mid = 0;
-			isVisited[i] = true;
 			
-			while(!isVisited[i] && left < right) {
+			while(left < right) {
 				mid = (left + right) / 2;
 				
+				int tmp = arr[left] + arr[right];
 				
+				if(left == mid || right == mid) break;
+				
+				if(arr[mid] > tmp) {
+					right = mid - 1;
+				}
+				else if(arr[mid] < tmp) {
+					left = mid + 1;
+				}
+				else {
+					cnt++;
+					System.out.println(left + " " + right + " " + arr[mid]);
+					break;
+				}
 			}
 		}
+		
+		System.out.println(cnt);
 	}
 }
