@@ -10,7 +10,6 @@
 /Boj1197.class
 /Boj1215.class
 /Boj1253.class
-/Boj1300.class
 /Boj13016$Node.class
 /Boj13016.class
 /Boj13460$Point.class
@@ -22,6 +21,7 @@
 /Boj14923$Point.class
 /Boj14923.class
 /Boj14929.class
+/Boj1568.class
 /Boj15722$Point.class
 /Boj15722.class
 /Boj15783.class
@@ -74,5 +74,3 @@
 /greedy/
 /heap/
 /implementation/
-/Boj15873.class
-/string_handle/
