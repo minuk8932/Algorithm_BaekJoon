@@ -15,20 +15,10 @@ public class Boj3047 {
 		Number[] arr = new Number[3];
 		char[] alpha = new char[3];
 
-		int tmp = 0;
-
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 		for (int i = 0; i < arr.length; i++) {
 			arr[i] = new Number(Integer.parseInt(st.nextToken()));
 	
-//			if(i > 0){
-//				if(arr[i] < arr[i-1]){
-//					tmp = arr[i];
-//					arr[i] = arr[i - 1];
-//					arr[i - 1] = tmp;
-//					System.out.println("i: " + i +" " +arr[i - 1]);
-//				}
-//			}
 		}
 		Arrays.sort(arr, Number.comparator);
 
