@@ -54,10 +54,6 @@ public class Boj9466 {
 		for(int next : term[current]){
 			if(!isVisited[next]){
 				isCycle(next);
-				
-				if(current == term[next].get(0)){
-					res++;
-				}
 			}
 		}
 	}
