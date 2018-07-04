@@ -26,7 +26,6 @@
 /Boj15722$Point.class
 /Boj15722.class
 /Boj15783.class
-/Boj15814.class
 /Boj15875.class
 /Boj1790.class
 /Boj1967$Node.class
@@ -65,17 +64,4 @@
 /bellman_ford/
 /binary_search/
 /breadth_first_search/
-/brute_force/
-/counter_clock_wise/
-/depth_first_search/
-/deque/
-/dijkstra/
-/disjoint_set/
-/dynamic_programming/
-/greedy/
-/heap/
-/implementation/
-/string_handle/
-/Boj2174.class
-/simulation/
-/Boj14720.class
+/stack/
