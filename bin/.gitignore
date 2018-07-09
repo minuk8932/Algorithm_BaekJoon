@@ -22,11 +22,11 @@
 /Boj14929$InputReader.class
 /Boj14929$OutputWriter.class
 /Boj14929.class
-/Boj15719.class
 /Boj15722$Point.class
 /Boj15722.class
 /Boj15783.class
 /Boj15875.class
+/Boj15877.class
 /Boj1700.class
 /Boj1790.class
 /Boj1967$Node.class
@@ -75,9 +75,5 @@
 /greedy/
 /heap/
 /implementation/
-/Boj15719$InputReader$SpaceCharFilter.class
-/Boj15719$InputReader.class
-/Boj15719$OutputWriter.class
-/math/
-/Boj4388.class
-/string_handle/
+/Boj2166.class
+/Boj2166$Point.class
