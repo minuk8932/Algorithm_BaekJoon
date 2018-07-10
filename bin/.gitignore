@@ -1,4 +1,5 @@
 /Boj10527.class
+/Boj1068.class
 /Boj11062.class
 /Boj11387$Inven.class
 /Boj11387.class
@@ -26,7 +27,6 @@
 /Boj15722.class
 /Boj15783.class
 /Boj15875.class
-/Boj15877.class
 /Boj1700.class
 /Boj1790.class
 /Boj1967$Node.class
@@ -75,8 +75,4 @@
 /greedy/
 /heap/
 /implementation/
-/Boj2166.class
-/Boj2166$Point.class
-/Boj14248.class
-/Boj9289.class
-/string_handle/
+/tree_search/
