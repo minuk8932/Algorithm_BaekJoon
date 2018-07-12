@@ -52,13 +52,16 @@ public class Boj1700 {
 
 			int diff = -1, newConIdx = 0;
 			for (int inserted = 0; inserted < N; inserted++) { // 가장 마지막에 사용될 또는 아예 사용되지 않을 제품을 찾음
-				int tmp = 0;
+				int tmp = 0, after = insert + 1; // 현재 다음으로 들어올 제품부터
 
-				for (int after = insert + 1; after < K && con[inserted] != thg[after]; after++) { // 현재 다음으로 들어올 제품부터
-					tmp++; 							// 이미 꽂혀있는것과 다음으로 들어온 제품들이 다른 경우, 임시 간격을 구하고
+				while(after < K) {				// 이미 꽂혀있는것과 다음으로 들어온 제품이 같을 때까지 임시 간격을 구하고
+                    if(con[inserted] == thg[after]) break;
+                    
+                    after++;
+                    tmp++;
 				}
 
-				if (tmp > diff) { 			// 즉 꽂혀있는 것 중, 가장 늦게 들어오는 제품을 찾음
+				if (tmp > diff) { 			// 간격이 제일 큰, 즉 꽂혀있는 것 중 가장 늦게 들어오는 제품을 찾음
 					newConIdx = inserted; 
 					diff = tmp;
 				}
