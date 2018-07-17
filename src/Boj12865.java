@@ -19,7 +19,33 @@ public class Boj12865 {
 		
 		Arrays.sort(knap);
 		
+		int max = 0;
 		
+		for(int i = 0; i < N; i++) {
+			int sum = knap[i].v;
+			int wSum = knap[i].w;
+			
+			if(wSum > K) continue;
+			
+			for(int j = 0; j < N; j++) {
+				if(i == j) continue;
+				
+				wSum += knap[j].w;
+				
+				if(wSum > K) {
+					if(sum > max) max = sum;
+					
+					break;
+				}
+				else {
+					sum += knap[j].v;
+				}
+			}
+			
+			if(sum > max) max = sum;
+		}
+		
+		System.out.println(max);
 	}
 	
 	private static class Knapsack implements Comparable<Knapsack>{

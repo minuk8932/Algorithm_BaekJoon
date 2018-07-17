@@ -54,7 +54,6 @@ public class Boj15889 {
 //			
 //			System.out.print(i + " " + range[i] + '\t');
 //		}
-//		System.out.println(loop);
 		
 		System.out.println(giveAndTake(pos, range, N) ? SAFE : DANGER);
 	}

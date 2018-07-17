@@ -12,47 +12,7 @@ public class Boj15886 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
 		char[] way = br.readLine().toCharArray();
-
-		int map[] = new int[N];
-		int idx = 0;
-
-		for (int i = 0; i < N; i++) {
-			int cnt = 0;
-
-			for (char tmp : way) {
-				switch (tmp) {
-				case EAST:
-					cnt += E;
-					idx = cnt + i;
-
-					if (idx >= 0 && idx < N)
-						map[idx]++;
-
-					break;
-
-				case WEST:
-					cnt += W;
-					idx = cnt + i;
-
-					if (idx >= 0 && idx < N)
-						map[idx]++;
-					break;
-				}
-			}
-
-		}
 		
-		int max = 0;
-
-		for (int i = 0; i < N; i++) {
-			if(max < map[i]) max = map[i];
-		}
 		
-		int res = 0;
-		for(int i = 0; i < N; i++) {
-			if(max == map[i]) res++;
-		}
-
-		 System.out.println(res);
 	}
 }
