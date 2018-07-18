@@ -12,6 +12,7 @@
 /Boj12865.class
 /Boj13460$Point.class
 /Boj13460.class
+/Boj14267.class
 /Boj14504$Sort.class
 /Boj14504.class
 /Boj14846$Point.class
@@ -22,7 +23,6 @@
 /Boj14929$InputReader.class
 /Boj14929$OutputWriter.class
 /Boj14929.class
-/Boj15683.class
 /Boj15722$Point.class
 /Boj15722.class
 /Boj15783.class
@@ -37,6 +37,8 @@
 /Boj2504.class
 /Boj2668.class
 /Boj2790.class
+/Boj2980$Sign.class
+/Boj2980.class
 /Boj3197$Point.class
 /Boj3197.class
 /Boj3462.class
@@ -73,19 +75,4 @@
 /disjoint_set/
 /dynamic_programming/
 /greedy/
-/Boj1987.class
-/Boj4267.class
-/Boj14267.class
-/Boj14267$SocialLife.class
-/Boj14267$Node.class
-/Boj1471.class
-/Boj1173.class
 /simulation/
-/Boj8595.class
-/string_handle/
-/Boj1257.class
-/Boj2980.class
-/Boj2980$Sign.class
-/Boj11866.class
-/math/
-/queue/

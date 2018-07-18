@@ -6,16 +6,17 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Boj14267 {
-	private static final int INF = 100_001;
 	private static final String SPACE = " ";
 	
 	private static ArrayList<Integer>[] mem = null;
-	private static int[] res = null;
+	private static long[] res = null;
+	
+	private static int n = 0;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int n = Integer.parseInt(st.nextToken());
+		n = Integer.parseInt(st.nextToken());
 		int m = Integer.parseInt(st.nextToken());
 		
 		mem = new ArrayList[n + 1];
@@ -25,12 +26,15 @@ public class Boj14267 {
 			mem[i] = new ArrayList<>();
 		}
 		
-		for(int i = 1; i < n + 1; i++) {
-			mem[i].add(Integer.parseInt(st.nextToken()));
+		for(int i = 1; i < n + 1 ; i++) {
+			int tmp = Integer.parseInt(st.nextToken());
+			
+			if(tmp == - 1) tmp = 0;
+			mem[tmp].add(i);
 		}
 		
 		int[][] socialLife = new int[m][2];
-		res = new int[n + 1];
+		res = new long[n + 1];
 		
 		for(int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -40,19 +44,32 @@ public class Boj14267 {
 		}
 		
 		search(socialLife);
+		
+		StringBuilder sb = new StringBuilder();
+		for(int i = 1; i < n + 1; i++) {
+			sb.append(res[i]).append(SPACE);
+		}
+		
+		System.out.println(sb.toString());
 	}
 	
-	private static void search(int[][] sl) {
-		for(int[] social : sl) {
+	private static void search(int[][] social) {		
+		for(int[] s : social) {
 			Queue<Integer> q = new LinkedList<>();
 			
-			q.offer(social[0]);
+			res[s[0]] += s[1];
+			
+			q.offer(s[0]);
 			
 			while(!q.isEmpty()) {
 				int current = q.poll();
 				
 				for(int next : mem[current]) {
-					
+					if(next > 0 && next < n + 1) {						
+						res[next] += s[1];
+						
+						q.offer(next);
+					}
 				}
 			}
 		}
