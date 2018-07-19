@@ -34,11 +34,10 @@
 /Boj1967.class
 /Boj2065.class
 /Boj2133.class
+/Boj2158.class
 /Boj2504.class
 /Boj2668.class
 /Boj2790.class
-/Boj2980$Sign.class
-/Boj2980.class
 /Boj3197$Point.class
 /Boj3197.class
 /Boj3462.class
@@ -75,4 +74,6 @@
 /disjoint_set/
 /dynamic_programming/
 /greedy/
-/simulation/
+/heap/
+/implementation/
+/Boj2158$Point.class
