@@ -29,7 +29,9 @@
 /Boj15875.class
 /Boj15886.class
 /Boj15889.class
+/Boj1707.class
 /Boj1790.class
+/Boj1818.class
 /Boj1967$Node.class
 /Boj1967.class
 /Boj2065.class
@@ -48,11 +50,12 @@
 /Boj4991.class
 /Boj5549$Geo.class
 /Boj5549.class
-/Boj5656.class
 /Boj6593$Point.class
 /Boj6593.class
 /Boj6987$Point.class
 /Boj6987.class
+/Boj9019$Search.class
+/Boj9019.class
 /Boj9324.class
 /Boj9466.class
 /Default.class
@@ -74,10 +77,3 @@
 /disjoint_set/
 /dynamic_programming/
 /greedy/
-/heap/
-/implementation/
-/Boj181.class
-/Boj1818.class
-/Boj1818$Book.class
-/boj1707.class
-/Boj1707.class
