@@ -29,7 +29,6 @@
 /Boj15875.class
 /Boj15886.class
 /Boj15889.class
-/Boj1707.class
 /Boj1790.class
 /Boj1818.class
 /Boj1967$Node.class
@@ -44,6 +43,8 @@
 /Boj3462.class
 /Boj3482$Point.class
 /Boj3482.class
+/Boj4184$Point.class
+/Boj4184.class
 /Boj4378.class
 /Boj4883.class
 /Boj4991$Point.class
@@ -76,6 +77,5 @@
 /dijkstra/
 /disjoint_set/
 /dynamic_programming/
-/greedy/
-/Boj14405.class
-/string_handle/
+/Boj4184$Destination.class
+/Boj4184$Router.class
