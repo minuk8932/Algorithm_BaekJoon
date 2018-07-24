@@ -107,7 +107,7 @@ public class Boj4184 {
 					
 					for(int stare = 0; stare < BEARING.length; stare++) {		// 물의 흐름을 탐색
 						if(map[current.row][current.col] == BEARING[stare]) {
-							tmpRow = DIRECTIONS[stare][ROW];					// 해당 물의 흐름을 임시 정점 변수에 저장 후 반복문 종료
+							tmpRow = DIRECTIONS[stare][ROW];					// 해당 물의 흐름을 임시 정점 변수에 저장 후 반복문 종료 
 							tmpCol = DIRECTIONS[stare][COL];
 							
 							break;
