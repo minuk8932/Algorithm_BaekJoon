@@ -14,20 +14,12 @@ import java.util.StringTokenizer;
  *
  */
 public class Boj4184 {
-	private static final int[][] DIRECTIONS = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 } };
+	private static final int[][] DIRECTIONS = {{ -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 }, { -1, -1 } };
 	private static final int ROW = 0;
 	private static final int COL = 1;
 	private static final int INF = 1_000_001;
 
-	private static final char N = '0';
-	private static final char NE = '1';
-	private static final char E = '2';
-	private static final char SE = '3';
-	private static final char S = '4';
-	private static final char SW = '5';
-	private static final char W = '6';
-	private static final char NW = '7';
-
+	private static final char[] BEARING = {'0', '1', '2', '3', '4', '5', '6', '7'};
 	private static final String NEW_LINE = "\n";
 
 	private static int[][] cost = null;
@@ -112,47 +104,14 @@ public class Boj4184 {
 				if (nextRow > 0 && nextRow < n + 1 && nextCol > 0 && nextCol < m + 1) {
 					int tmpRow = 0;
 					int tmpCol = 0;
-
-					switch (map[current.row][current.col]) {		// 현재 물의 흐름에 따라 해당 흐름을 변수 tmp에 저장
-					case N:
-						tmpRow = -1;
-						tmpCol = 0;
-						break;
-
-					case NE:
-						tmpRow = -1;
-						tmpCol = 1;
-						break;
-
-					case E:
-						tmpRow = 0;
-						tmpCol = 1;
-						break;
-
-					case SE:
-						tmpRow = 1;
-						tmpCol = 1;
-						break;
-
-					case S:
-						tmpRow = 1;
-						tmpCol = 0;
-						break;
-
-					case SW:
-						tmpRow = 1;
-						tmpCol = -1;
-						break;
-
-					case W:
-						tmpRow = 0;
-						tmpCol = -1;
-						break;
-
-					case NW:
-						tmpRow = -1;
-						tmpCol = -1;
-						break;
+					
+					for(int stare = 0; stare < BEARING.length; stare++) {		// 물의 흐름을 탐색
+						if(map[current.row][current.col] == BEARING[stare]) {
+							tmpRow = DIRECTIONS[stare][ROW];					// 해당 물의 흐름을 임시 정점 변수에 저장 후 반복문 종료
+							tmpCol = DIRECTIONS[stare][COL];
+							
+							break;
+						}
 					}
 					
 					// 물의 흐름과 배가 가려는 방향이 같다면 0, 아니면 1을 다음 비용으로 저장
