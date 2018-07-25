@@ -95,27 +95,18 @@ public class Boj4184 {
 
 		while (!pq.isEmpty()) {
 			Point current = pq.poll();
-
-			for (final int[] DIRECTION : DIRECTIONS) {
-				int nextRow = current.row + DIRECTION[ROW];
-				int nextCol = current.col + DIRECTION[COL];
+			
+			for(int stare = 0; stare < BEARING.length; stare++) {
+				int nextRow = current.row + DIRECTIONS[stare][ROW];
+				int nextCol = current.col + DIRECTIONS[stare][COL];
 				int nextCost = 0;
 
 				if (nextRow > 0 && nextRow < n + 1 && nextCol > 0 && nextCol < m + 1) {
 					int tmpRow = 0;
 					int tmpCol = 0;
 					
-					for(int stare = 0; stare < BEARING.length; stare++) {		// 물의 흐름을 탐색
-						if(map[current.row][current.col] == BEARING[stare]) {
-							tmpRow = DIRECTIONS[stare][ROW];					// 해당 물의 흐름을 임시 정점 변수에 저장 후 반복문 종료 
-							tmpCol = DIRECTIONS[stare][COL];
-							
-							break;
-						}
-					}
-					
 					// 물의 흐름과 배가 가려는 방향이 같다면 0, 아니면 1을 다음 비용으로 저장
-					nextCost = (DIRECTION[ROW] == tmpRow && DIRECTION[COL] == tmpCol) ? 0 : 1;
+					nextCost = (map[current.row][current.col] == BEARING[stare]) ? 0 : 1;
 
 					if (cost[nextRow][nextCol] > cost[current.row][current.col] + nextCost) {	// 다음 비용의 값이 현재까지 비용보다 큰 경우
 						cost[nextRow][nextCol] = cost[current.row][current.col] + nextCost;		// 값 갱신
