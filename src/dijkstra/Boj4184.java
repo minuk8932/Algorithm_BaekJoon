@@ -101,10 +101,7 @@ public class Boj4184 {
 				int nextCol = current.col + DIRECTIONS[stare][COL];
 				int nextCost = 0;
 
-				if (nextRow > 0 && nextRow < n + 1 && nextCol > 0 && nextCol < m + 1) {
-					int tmpRow = 0;
-					int tmpCol = 0;
-					
+				if (nextRow > 0 && nextRow < n + 1 && nextCol > 0 && nextCol < m + 1) {					
 					// 물의 흐름과 배가 가려는 방향이 같다면 0, 아니면 1을 다음 비용으로 저장
 					nextCost = (map[current.row][current.col] == BEARING[stare]) ? 0 : 1;
 
