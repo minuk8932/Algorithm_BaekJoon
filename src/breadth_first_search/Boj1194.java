@@ -14,8 +14,6 @@ import java.util.StringTokenizer;
  *
  */
 public class Boj1194 {
-	private static final String SPACE = " ";
-
 	private static final char START = '0';
 	private static final char BLOCK = '#';
 	private static final char EXIT = '1';
@@ -28,17 +26,16 @@ public class Boj1194 {
 	private static final char DOOR_LOCK = 'A';
 	private static final char KEY = 'a';
 
-	private static char[][] map = null;
 	private static int[][][] isVisited = null;
 
 	public static void main(String[] args) throws Exception {
 		// 버퍼를 통한 값 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine(), SPACE);
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 
-		map = new char[N][M];
+		char[][] map = new char[N][M];
 		isVisited = new int[N][M][1 << 6];		// 6자리 비트마스크 생성, 열쇠 소지 여부 체크
 
 		int sRow = 0, sCol = 0;
@@ -55,7 +52,7 @@ public class Boj1194 {
 			}
 		}
 
-		System.out.println(bfs(N, M, sRow, sCol));	// 너비 우선 탐색을 이용한 결과값 출력
+		System.out.println(bfs(N, M, sRow, sCol, map));	// 너비 우선 탐색을 이용한 결과값 출력
 	}
 	
 	/**
@@ -79,7 +76,7 @@ public class Boj1194 {
 	 * 너비 우선 탐색 메소드
 	 * 
 	 */
-	private static int bfs(int N, int M, int row, int col) {
+	private static int bfs(int N, int M, int row, int col, char[][] map) {
 		isVisited[row][col][0] = 1;			// 시작: 방문 배열 1 저장
 
 		Queue<Point> q = new LinkedList<>();
@@ -87,9 +84,6 @@ public class Boj1194 {
 
 		while (!q.isEmpty()) {
 			Point current = q.poll();
-			
-			// 탐색 중 출구에 도달 한 경우, 현재 방문 배열의 값 - 1 반환
-			if (map[current.row][current.col] == EXIT) return isVisited[current.row][current.col][current.key] - 1;
 			
 			for (final int[] DIRECTION : DIRECTIONS) {
 				int nextRow = current.row + DIRECTION[ROW];
@@ -115,7 +109,7 @@ public class Boj1194 {
 							// 열쇠 비트로 해당 문의 열쇠를 가진지 확인
 							nextKey = current.key & (1 << map[nextRow][nextCol] - DOOR_LOCK);
 							
-							// 열쇠를 가지고 있는 경우 문을 열고 지나감 (없다면, nextKey == 0)
+							// 열쇠를 가지고 있는 경우 문을 열고 지나감 (없다면, nextKey == 0, a: 1, b: 2, c: 4, d: 8, e: 16, f: 32)
 							if (nextKey != 0) {
 								isVisited[nextRow][nextCol][current.key] = isVisited[current.row][current.col][current.key] + 1;
 
@@ -123,10 +117,12 @@ public class Boj1194 {
 							}
 						}
 						
-						// 아무런 조작 없이 이동 가능한 경로
+						// 아무런 조작 없이 이동 가능한 경로, 출구 포함
 						else {
 							isVisited[nextRow][nextCol][current.key] = isVisited[current.row][current.col][current.key] + 1;
-
+							
+							// 탐색 중 출구에 도달 한 경우, 현재 방문 배열의 값 - 1 반환
+							if (map[nextRow][nextCol] == EXIT) return isVisited[nextRow][nextCol][current.key] - 1;
 							q.offer(new Point(nextRow, nextCol, current.key));
 						}
 					}
