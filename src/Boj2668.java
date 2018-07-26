@@ -8,8 +8,11 @@ public class Boj2668 {
 	
 	private static int N = 0;
 	private static int max = 0;
+	private static int start = 0;
+	private static int loop = 0;
+	
 	private static ArrayList<Integer>[] map = null;
-	private static boolean[] isVisited = null;
+	private static int[] isVisited = null;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,17 +28,19 @@ public class Boj2668 {
 			map[i].add(Integer.parseInt(br.readLine()));
 		}
 		
-		isVisited = new boolean[N + 1];
 		StringBuilder sb = new StringBuilder();
 		
-		for(int i = 1; i < N + 1; i++){			
-			if(!isVisited[i]){
+		isVisited = new int[N + 1];
+		for(int i = 1; i < N + 1; i++){		
+			if(isVisited[i] == 0){
+				start = i;
 				dfs(i);
+				loop++;
 			}
 		}
 		
 		for(int i = 1; i < N + 1; i++){
-			if(isVisited[i]){
+			if(isVisited[i] != 0){
 				sb.append(i).append(END_LINE);
 				max++;
 			}
@@ -46,18 +51,16 @@ public class Boj2668 {
 	}
 	
 	private static void dfs(int current){	
-		if(isVisited[current]) return;
+		if(isVisited[current] != 0) return;
 		
-		isVisited[current] = true;
-		
+		isVisited[current] = loop;
 		
 		for(int next: map[current]){	
-			if(isVisited[next]){
-				isVisited[current] = false;
-				return;
+			if(isVisited[next] == 0){
+				isVisited[next] = loop;
+				
+				dfs(next);
 			}
-								
-			dfs(next);
 		}
 	}
 }
