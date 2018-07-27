@@ -18,17 +18,15 @@ public class Boj6600 {
 		// 버퍼를 통한 값 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		while(true) {		
-			StringTokenizer st = new StringTokenizer(br.readLine());
+		while(true) {
+			String line = br.readLine();
+			if(line == null) break;
+			
+			StringTokenizer st = new StringTokenizer(line);
 			Point[] p = new Point[3];
 			
-			try {
-				for(int i = 0; i < p.length; i++) {
-					p[i] = new Point(Double.parseDouble(st.nextToken()), Double.parseDouble(st.nextToken()));
-				}
-			}
-			catch (Exception e) {
-				break;
+			for(int i = 0; i < p.length; i++) {
+				p[i] = new Point(Double.parseDouble(st.nextToken()), Double.parseDouble(st.nextToken()));
 			}
 			
 			// 외접원과 삼각형의 넓이 공식 이용: 4R = abc / S, (a,b,c는 각 변의 길이, R은 외접원의 반지름, S는 삼각형의 넓이)

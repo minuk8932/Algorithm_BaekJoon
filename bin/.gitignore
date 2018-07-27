@@ -2,8 +2,6 @@
 /Boj11062.class
 /Boj11779$Node.class
 /Boj11779.class
-/Boj1194$Point.class
-/Boj1194.class
 /Boj1197$Node.class
 /Boj1197.class
 /Boj1215.class
@@ -39,7 +37,9 @@
 /Boj2504.class
 /Boj2668.class
 /Boj2790.class
-/Boj2842.class
+/Boj2812.class
+/Boj2908$Node.class
+/Boj2908.class
 /Boj3197$Point.class
 /Boj3197.class
 /Boj3462.class
@@ -56,6 +56,7 @@
 /Boj9019$Search.class
 /Boj9019.class
 /Boj9324.class
+/Boj9328.class
 /Boj9466.class
 /Default.class
 /FastIO$InputReader$SpaceCharFilter.class
@@ -75,16 +76,3 @@
 /dijkstra/
 /disjoint_set/
 /dynamic_programming/
-/Boj2019.class
-/Boj1600.class
-/Boj9328.class
-/Boj4991$Node.class
-/Boj2842$Point.class
-/Boj1600$Point.class
-/Boj2908.class
-/Boj2908$Node.class
-/Boj2812.class
-/Boj11140.class
-/greedy/
-/Boj4132.class
-/Boj14241.class
