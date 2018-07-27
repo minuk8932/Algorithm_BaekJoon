@@ -30,12 +30,9 @@
 /Boj15892$Node.class
 /Boj15892.class
 /Boj1818.class
-/Boj1967$Node.class
-/Boj1967.class
 /Boj2065.class
 /Boj2133.class
 /Boj2504.class
-/Boj2668.class
 /Boj2790.class
 /Boj2812.class
 /Boj2908$Node.class
@@ -43,6 +40,7 @@
 /Boj3197$Point.class
 /Boj3197.class
 /Boj3462.class
+/Boj3584.class
 /Boj4378.class
 /Boj4883.class
 /Boj4991$Point.class
@@ -76,4 +74,3 @@
 /dijkstra/
 /disjoint_set/
 /dynamic_programming/
-/Boj1967$Answer.class
