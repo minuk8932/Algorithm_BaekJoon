@@ -28,7 +28,6 @@
 /Boj15889.class
 /Boj15892$Node.class
 /Boj15892.class
-/Boj1759.class
 /Boj1818.class
 /Boj2065.class
 /Boj2133.class
@@ -72,7 +71,4 @@
 /depth_first_search/
 /deque/
 /dijkstra/
-/disjoint_set/
-/dynamic_programming/
-/greedy/
-/Boj2210.class
+/Boj9328$Point.class
