@@ -29,6 +29,8 @@
 /Boj15892$Node.class
 /Boj15892.class
 /Boj1818.class
+/Boj1981$Point.class
+/Boj1981.class
 /Boj2065.class
 /Boj2133.class
 /Boj2504.class
@@ -53,8 +55,8 @@
 /Boj9019$Search.class
 /Boj9019.class
 /Boj9324.class
-/Boj9328.class
 /Boj9466.class
+/Default$Point.class
 /Default.class
 /FastIO$InputReader$SpaceCharFilter.class
 /FastIO$InputReader.class
@@ -71,4 +73,9 @@
 /depth_first_search/
 /deque/
 /dijkstra/
-/Boj9328$Point.class
+/disjoint_set/
+/dynamic_programming/
+/greedy/
+/heap/
+/implementation/
+/stack/
