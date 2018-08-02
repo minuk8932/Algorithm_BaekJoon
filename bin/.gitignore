@@ -14,11 +14,6 @@
 /Boj14504.class
 /Boj14846$Point.class
 /Boj14846.class
-/Boj14923$Point.class
-/Boj14923.class
-/Boj14929$InputReader$SpaceCharFilter.class
-/Boj14929$InputReader.class
-/Boj14929$OutputWriter.class
 /Boj14929.class
 /Boj15722$Point.class
 /Boj15722.class
@@ -47,7 +42,6 @@
 /Boj4991.class
 /Boj5549$Geo.class
 /Boj5549.class
-/Boj6198.class
 /Boj6593$Point.class
 /Boj6593.class
 /Boj6987$Point.class
@@ -56,7 +50,6 @@
 /Boj9019.class
 /Boj9324.class
 /Boj9466.class
-/Default$Point.class
 /Default.class
 /FastIO$InputReader$SpaceCharFilter.class
 /FastIO$InputReader.class
@@ -72,19 +65,4 @@
 /counter_clock_wise/
 /depth_first_search/
 /deque/
-/dijkstra/
-/disjoint_set/
-/dynamic_programming/
-/greedy/
-/heap/
-/implementation/
-/stack/
-/Boj2098.class
-/Boj1075.class
 /math/
-/Boj1049.class
-/Boj1085.class
-/Boj5558.class
-/Boj5558$Point.class
-/Boj2206$Point.class
-/Boj2206.class
