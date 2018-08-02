@@ -6,62 +6,78 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Boj15783 {
-	private static ArrayList<Integer>[] map = null;
-	private static boolean[] isVisited = null;
+	private static boolean[] isCycle = null;
+	private static int[] isVisited = null;
+	private static int virus = 0;
 	
-	public static void main(String[] args) throws Exception{
+	private static ArrayList<Integer>[] map = null;
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
-		
+
 		map = new ArrayList[N];
-		
-		for(int i = 0; i < N; i++) {
+
+		for (int i = 0; i < N; i++) {
 			map[i] = new ArrayList<>();
 		}
-		
-		int max = 0, pure = 0;
-		
-		for(int i = 0; i < M; i++) {
+
+		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
 			int A = Integer.parseInt(st.nextToken());
 			int B = Integer.parseInt(st.nextToken());
 			
 			map[A].add(B);
 		}
+
+		isCycle = new boolean[N];
+		for(int i = 0; i < N; i++) {
+			dfs(i);
+		}
 		
-		System.out.println(bfs(N));
+		bfs(N);
+
+		for (int i = 0; i < N; i++) {
+			if (isVisited[i] == 0) {
+				virus++;
+			}
+		}
+
+		System.out.println(virus);
 	}
 	
-	private static int bfs(int N) {
-		isVisited = new boolean[N];
-		int virus = 0;
+	private static void dfs(int start) {
 		
-		for(int i = 0; i < N; i++) {
-			if(!isVisited[i]) {				
-				Queue<Integer> q = new LinkedList<>();
-				isVisited[i] = true;
-				
-				virus++;
-				
-				q.offer(i);
-				
-				while(!q.isEmpty()) {
-					int current = q.poll();
-					
-					for(int next : map[current]) {
-						if(!isVisited[next]) {
-							isVisited[next] = true;
-							
-							
-							q.offer(next);
+	}
+	
+	private static void bfs(int N) {
+		isVisited = new int[N];
+
+		for (int i = 0; i < N; i++) {
+			for(int start: map[i]) {
+				if (isVisited[start] == 0) {
+					Queue<Integer> q = new LinkedList<>();
+					isVisited[start] = 1;
+	
+					q.offer(start);
+	
+					while (!q.isEmpty()) {
+						int current = q.poll();
+	
+						for (int next : map[current]) {							
+							if (isVisited[next] == 0) {
+								isVisited[next] = isVisited[current] + 1;
+								
+								if(i == next) virus++;
+	
+								q.offer(next);
+							}
 						}
 					}
 				}
 			}
 		}
-		
-		return virus;
 	}
 }
