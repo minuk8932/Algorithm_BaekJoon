@@ -68,6 +68,6 @@ public class Boj2252 {
 			if(!isVisited[next]) dfs(next);	// 아직 방문하지 않은 노드는 이어서 탐색
 		}
 		
-		res.add(start);		// 역으로 함수를 종료해 나오면 리스트의 노드들을 뒤에서부터 저장
+		res.add(start);		// 함수를 종료해 나오면서 리스트의 노드들을 역순 저장
 	}
 }
