@@ -37,16 +37,15 @@ public class Boj1005 {
 			
 			for(int i = 0; i < K; i++) {
 				st = new StringTokenizer(br.readLine());
-				int to = Integer.parseInt(st.nextToken());
 				int from = Integer.parseInt(st.nextToken());
+				int to = Integer.parseInt(st.nextToken());
 				
 				map[from].add(to);
 			}
 			
-			res = 0;
 			
 			int finish = Integer.parseInt(br.readLine());
-			res += cost[finish];
+			
 			
 			dfs(finish);	
 			
@@ -57,17 +56,6 @@ public class Boj1005 {
 	}
 	
 	private static void dfs(int start) {
-		if(isVisited[start]) return;
-		isVisited[start] = true;
-		
-		if(map[start] == null) return;
-		
-		for(int next: map[start]) {
-			if(!isVisited[next]) {
-				dfs(next);
-			}
-		}
-		
 		
 	}
 }

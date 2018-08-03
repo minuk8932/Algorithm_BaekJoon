@@ -1,3 +1,4 @@
+/Boj1005.class
 /Boj11062.class
 /Boj11779$Node.class
 /Boj11779.class
@@ -14,7 +15,6 @@
 /Boj14504.class
 /Boj14846$Point.class
 /Boj14846.class
-/Boj14929.class
 /Boj15722$Point.class
 /Boj15722.class
 /Boj15783.class
@@ -23,6 +23,7 @@
 /Boj15889.class
 /Boj15892$Node.class
 /Boj15892.class
+/Boj15894.class
 /Boj1818.class
 /Boj1981$Point.class
 /Boj1981.class
@@ -65,18 +66,7 @@
 /counter_clock_wise/
 /depth_first_search/
 /deque/
+/dijkstra/
+/disjoint_set/
+/dynamic_programming/
 /math/
-/Boj2150.class
-/Boj1342.class
-/Boj2522.class
-/Boj2252.class
-/Boj1005.class
-/Boj1766.class
-/Boj1302.class
-/Boj1302$Books.class
-/Boj10546.class
-/string_handle/
-/Boj5525.class
-/Boj1167.class
-/Boj1167$Node.class
-/Node.class
