@@ -1,81 +1,78 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Boj12865 {
-	public static void main(String[] args) throws Exception{
+	private static final int INF = 101;
+	private static int max = 0;
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int K = Integer.parseInt(st.nextToken());
+
+		Back[] map = new Back[N + 1];
+		map[0] = new Back(-1, -1);
 		
-		Knapsack[] knap = new Knapsack[N];
-		
-		for(int i = 0; i < N; i++) {
+		for (int i = 1; i < N + 1; i++) {
 			st = new StringTokenizer(br.readLine());
-			knap[i] = new Knapsack(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+			int weigh = Integer.parseInt(st.nextToken());
+			int value = Integer.parseInt(st.nextToken());
+
+			map[i] = new Back(weigh, value);
 		}
 		
-		Arrays.sort(knap);
-		
-		int max = 0;
-		
-		for(int i = 0; i < N; i++) {
-			int sum = knap[i].v;
-			int wSum = knap[i].w;
-			
-			if(wSum > K) continue;
-			
-			for(int j = 0; j < N; j++) {
-				if(i == j) continue;
-				
-				wSum += knap[j].w;
-				
-				if(wSum > K) {
-					if(sum > max) max = sum;
-					
-					break;
-				}
-				else {
-					sum += knap[j].v;
-				}
-			}
-			
-			if(sum > max) max = sum;
-		}
-		
+		Arrays.sort(map);
+//		for(int i = 1; i < N + 1; i++) System.out.println(map[i].w + " " + map[i].c);
+	
+		search(N, K, map);
 		System.out.println(max);
 	}
 	
-	private static class Knapsack implements Comparable<Knapsack>{
-		int w;
-		int v;
+	private static void search(int N, int W, Back[] knap) {
+		int[][] total = new int[N + 1][N + 1];
+		int[] weight = new int[N + 1];
 		
-		public Knapsack (int w, int v) {
+		for(int i = 1; i < N + 1; i++) {
+			weight[i] = knap[i].w;
+			total[i][i] = knap[i].c;
+			
+			Queue<Back> q = new LinkedList<>();
+			q.offer(new Back(i, knap[i].c));
+			
+			while(!q.isEmpty()) {
+				Back current = q.poll();
+				
+				for(int next = current.w; next < N + 1; next++) {
+					weight[i] += knap[next].w;
+					total[i][next] += knap[next].c;
+					
+					if(weight[i] <= W) {
+						
+						if(max < total[i][next]) max = total[i][next];
+						q.offer(new Back(next, knap[next].c));
+					}					
+				}
+			}
+		}
+	}
+	
+	private static class Back implements Comparable<Back>{
+		int w;
+		int c;
+		
+		public Back(int w, int c) {
 			this.w = w;
-			this.v = v;
+			this.c = c;
 		}
 
 		@Override
-		public int compareTo(Knapsack k) {
-			if(this.w < k.w) {
-				return -1;
-			}
-			else if(this.w > k.w) {
-				return 1;
-			}
-			else {
-				if(this.v > k.v) {
-					return -1;
-				}
-				else if(this.v < k.v) {
-					return 1;
-				}
-				else {
-					return 0;
-				}
-			}
+		public int compareTo(Back b) {
+			return b.w > this.w ? -1 : 1;
 		}
 	}
 }

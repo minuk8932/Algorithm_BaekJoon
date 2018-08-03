@@ -1,62 +1,73 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Boj14267 {
 	private static final String SPACE = " ";
 
 	private static ArrayList<Integer>[] mem = null;
 	private static long[] cost = null;
-
-	private static final int INF = 100_001;
+	private static long[] res = null;
+	private static boolean[] isVisited = null;
 
 	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int n = Integer.parseInt(st.nextToken());
-		int m = Integer.parseInt(st.nextToken());
+//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//		StringTokenizer st = new StringTokenizer(br.readLine());
+//		int n = Integer.parseInt(st.nextToken());
+//		int m = Integer.parseInt(st.nextToken());
 
-		mem = new ArrayList[n + 1];
-		for (int i = 0; i < n + 1; i++) {
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		int m = sc.nextInt();
+		
+		mem = new ArrayList[n];
+		isVisited = new boolean[n];
+		
+		for (int i = 0; i < n; i++) {
 			mem[i] = new ArrayList<>();
 		}
 		
-		st = new StringTokenizer(br.readLine());
-		int num = 0;
+//		st = new StringTokenizer(br.readLine());
 		
-		for (int i = 1; i < n + 1; i++) {
-			num = Integer.parseInt(st.nextToken());
+		for (int i = 0; i < n; i++) {
+//			int num = Integer.parseInt(st.nextToken()) - 1;
+			int num = sc.nextInt() - 1;
+			
+			if(num < 0) continue;
 
-			if(num == -1) continue;
 			mem[num].add(i);
 		}
 
-		cost = new long[INF];
+		cost = new long[n];
+		res = new long[n];
 
 		for (int i = 0; i < m; i++) {
-			st = new StringTokenizer(br.readLine());
-			cost[Integer.parseInt(st.nextToken())] += Long.parseLong(st.nextToken());
+//			st = new StringTokenizer(br.readLine());
+//			cost[Integer.parseInt(st.nextToken()) - 1] += Long.parseLong(st.nextToken());
+			cost[sc.nextInt() - 1] += sc.nextLong();
 		}
 		
-		br.close();
+//		br.close();
 		
-		search(1);
+		search(0, cost[0]);
 
 		StringBuilder sb = new StringBuilder();
-		for (int i = 1; i < n + 1; i++) {
-			sb.append(cost[i]).append(SPACE);
+		for (int i = 0; i < n; i++) {
+			sb.append(res[i]).append(SPACE);
 		}
 
 		System.out.println(sb.toString());
 	}
 	
-	private static void search(int start) {		
-		for(int next: mem[start]) {
-			if(next == 0) continue;
-			
-			cost[next] += cost[start];
-			search(next);
+	private static void search(int start, long sum) {
+		if(isVisited[start]) return;
+		
+		isVisited[start] = true;
+		long tmpCost = sum;
+		
+		res[start] = tmpCost;
+		
+		for(int next: mem[start]) {			
+			if(!isVisited[next]) search(next, tmpCost + cost[next]);
 		}
 	}
 }
