@@ -15,20 +15,20 @@ public class BSIS_ProblemD {
 		Arrays.fill(prime, true);
 		isPrime();
 		
-		int cnt = 0, res = 0;
+		int cnt = 0, idx = 0;
 		
-		for(int i = 1; i < INF; i++) {
+		for(int i = 0; i < INF; i++) {
 			if(prime[i]) {
 				cnt++;
 				
 				if(cnt == K) {
-					res = i;
+					idx = i;
 					break;
 				}
 			}
 		}
 		
-		System.out.println(cnt);
+		System.out.println(idx);
 	}
 	private static void isPrime() {
 		prime[0] = prime[1] = false;
