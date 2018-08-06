@@ -24,6 +24,7 @@ public class BSIS_ProblemG {
 		StringBuilder sb = new StringBuilder();
 		
 		Range[] r = new Range[Q + 1];
+		int[] values = new int[N + 1];
 		
 		for(int i = 0; i < Q; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -34,18 +35,11 @@ public class BSIS_ProblemG {
 			r[T] = new Range(R, L);
 		}
 		
-		for(int i = 1; i < N + 1; i++) {
-			if(Math.abs(w[i].pos - w[i - 1].pos) > w[i].move) {
-				w[i].pos = w[i - 1].pos - 1;
-			}
+		for(int i = 1; i < Q + 1; i++) {
+			
 		}
 		
-		for(int i = 1; i < N + 1; i++) {
-			for(int j = 1; j < Q + 1; j++) {
-				w[i].pos = i;
-				
-			}
-		}
+		
 	}
 	
 	private static class Range{
