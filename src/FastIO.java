@@ -13,9 +13,10 @@ public class FastIO {
 		OutputWriter out = new OutputWriter(System.out);
 
 		int a = in.readInt();
+		int b = in.readInt();
 
-		out.printLine(a);
-		out.print((a + 1) * a / 2); 
+		out.printLine(a + " " + b);
+		out.print((a + b) * a / 2); 
 	}
 
 	private static class InputReader {
