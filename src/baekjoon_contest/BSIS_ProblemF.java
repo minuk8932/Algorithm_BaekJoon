@@ -14,16 +14,14 @@ public class BSIS_ProblemF {
 		int Q1 = Integer.parseInt(st.nextToken());
 		int Q2 = Integer.parseInt(st.nextToken());
 		
-		int[] damageSet = new int[N + 1];
-		int[] damage = new int[N + 1];
-		int sumD = 0;
+		long[] damageSet = new long[N + 1];
+		long[] tmp = new long[N + 1];
 		
 		st = new StringTokenizer(br.readLine());
 		for(int i = 1; i < N + 1; i++) {
-			int d = Integer.parseInt(st.nextToken());
-			damageSet[i] = damage[i] = d;
-			sumD += damage[i];
-			
+			long d = Long.parseLong(st.nextToken());
+			damageSet[i] = (long) d;
+			tmp[i] = damageSet[i];
 			damageSet[i] += damageSet[i - 1];
 		}
 		
@@ -37,15 +35,15 @@ public class BSIS_ProblemF {
 			int to = Integer.parseInt(st.nextToken());
 			int add = 0;
 			
-			int res = 0;
+			long res = 0;
 			
 			if(q == 1) {
-				if(to == N || from == 1) {
-					res = sumD - damageSet[from - 1];
+				if(to == N) {	
+					res = damageSet[N] - damageSet[from - 1];
 				}
 				
 				else {
-					res = sumD - damageSet[to] + damageSet[from - 1];
+					res = damageSet[to] - damageSet[from - 1];
 				}
 				
 				sb.append(res).append(NEW_LINE);
@@ -53,12 +51,15 @@ public class BSIS_ProblemF {
 			
 			else {
 				add = Integer.parseInt(st.nextToken());
+				int rep = 0;
 				
-				for(int i = from; i < to + 1; i++) {
-					damageSet[i] += add;
+				for(int i = from; i < N + 1; i++) {
+					if(i < to + 1) {
+						rep++;
+					}
+					
+					damageSet[i] += (add * rep);
 				}
-				
-				sumD += (to - from + 1) * add;
 			}
 		}
 		
