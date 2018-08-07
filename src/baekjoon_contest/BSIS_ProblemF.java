@@ -50,9 +50,7 @@ public class BSIS_ProblemF {
 	}
 	
 	private static void Query1(int N, int from, int to, long result) {
-		if(to == N) result = damageSet[N] - damageSet[from - 1];				
-		else result = damageSet[to] - damageSet[from - 1];
-		
+		result = damageSet[to] - damageSet[from - 1];			
 		sb.append(result).append(NEW_LINE);
 	}
 	

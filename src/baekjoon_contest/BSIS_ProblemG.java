@@ -29,8 +29,6 @@ public class BSIS_ProblemG {
 			w[i] = new Water(-i, Long.parseLong(st.nextToken()) + 1L);
 		}
 		
-//		ArrayList<Range> r = new ArrayList<>();
-		
 		r[0] = new Range(-1, -1);
 		
 		for(int i = 1; i < Q + 1; i++) {
@@ -40,7 +38,6 @@ public class BSIS_ProblemG {
 			int R = Integer.parseInt(st.nextToken());
 
 			r[T] = new Range(L, R);
-//			r.add(new Range(L, R));
 			seq[i] = T;
 		}
 		
@@ -58,10 +55,13 @@ public class BSIS_ProblemG {
 			
 			for(int j = 0; j < N + 1; j++) {				
 				if(w[j].pos >= r[i].left && w[j].pos <= r[i].right) cnt++;
+				
+				System.out.print(w[j].pos + " ");
 			}
 			
 			values[i] = cnt;
 //			sb.append(cnt).append(NEW_LINE);
+			System.out.println();
 		}
 		
 		for(int i = 1; i < Q + 1; i++) {
