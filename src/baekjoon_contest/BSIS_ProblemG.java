@@ -1,93 +1,137 @@
 package baekjoon_contest;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.InputMismatchException;
 
 public class BSIS_ProblemG {
 	private static final String NEW_LINE = "\n";
 	
-	private static final int INF = 500_001;
-	
-	private static Water[] w = new Water[INF];
-	private static Range[] r = new Range[INF];
-	
-	private static long[] values = new long[INF];
-	private static int[] seq = new int[INF];
-	
-	private static StringBuilder sb = new StringBuilder();
-	
 	public static void main(String[] args) throws Exception{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		int Q = Integer.parseInt(st.nextToken());
-		
-		st = new StringTokenizer(br.readLine());
-		
-		for(int i = 1; i < N + 1; i++) {
-			w[i] = new Water(-i, Long.parseLong(st.nextToken()) + 1L);
-		}
-		
-		r[0] = new Range(-1, -1);
-		
-		for(int i = 1; i < Q + 1; i++) {
-			st = new StringTokenizer(br.readLine());
-			int T = Integer.parseInt(st.nextToken());
-			int L = Integer.parseInt(st.nextToken());
-			int R = Integer.parseInt(st.nextToken());
+		InputReader in = new InputReader(System.in);
+		OutputWriter out = new OutputWriter(System.out);
+		StringBuilder sb = new StringBuilder();
 
-			r[T] = new Range(L, R);
-			seq[i] = T;
+		int N = in.readInt();
+		int Q = in.readInt();
+		
+		for(int i = 0; i < N; i++) {
+			int a = in.readInt();
 		}
 		
-		w[0] = new Water(0, 0);
-		
-		for(int i = 1; i < Q + 1; i++) {
-			long cnt = 0;
-			w[0].pos++;
+		for(int i = 0; i < Q; i++) {
+			int T = in.readInt();
+			int L = in.readInt();
+			int R = in.readInt();
 			
-			for(int j = 1; j < N + 1; j++) {
-				if(Math.abs(w[j - 1].pos - w[j].pos) >= w[j].dist) w[j].pos = w[j - 1].pos - 1;
+			int cnt = 0;
+			
+			if(R >= T && L <= T - N) {
+				cnt += N + 1;
 			}
 			
-//			Range ran = r.remove(0);
-			
-			for(int j = 0; j < N + 1; j++) {				
-				if(w[j].pos >= r[i].left && w[j].pos <= r[i].right) cnt++;
+			else {
+				if(R > T) {
+					if(L <= T) cnt += T - L + 1;
+				}
 				
-				System.out.print(w[j].pos + " ");
+				else if(L < T - N) {
+					if(R >= T - N) cnt += R - (T - N) + 1;
+				}
+				
+				else {
+					cnt += R - L + 1;
+				}
 			}
 			
-			values[i] = cnt;
-//			sb.append(cnt).append(NEW_LINE);
-			System.out.println();
+			sb.append(cnt).append(NEW_LINE);
 		}
 		
-		for(int i = 1; i < Q + 1; i++) {
-			sb.append(values[seq[i]]).append(NEW_LINE);
-		}
-		
-		System.out.println(sb.toString());
+		out.print(sb.toString());
 	}
 	
-	private static class Range{
-		int left;
-		int right;
-		
-		public Range(int left, int right){
-			this.left = left;
-			this.right = right;
+	private static class InputReader {
+		private InputStream stream;
+		private byte[] buf = new byte[1024];
+		private int curChar;
+		private int numChars;
+		private SpaceCharFilter filter;
+
+		public InputReader(InputStream stream) {
+			this.stream = stream;
+		}
+
+		public int read() {
+			if (numChars == -1) {
+				throw new InputMismatchException();
+			}
+			if (curChar >= numChars) {
+				curChar = 0;
+				try {
+					numChars = stream.read(buf);
+				} catch (IOException e) {
+					throw new InputMismatchException();
+				}
+				if (numChars <= 0) {
+					return -1;
+				}
+			}
+			return buf[curChar++];
+		}
+
+		public int readInt() {
+			int c = read();
+			while (isSpaceChar(c)) {
+				c = read();
+			}
+			int sgn = 1;
+			if (c == '-') {
+				sgn = -1;
+				c = read();
+			}
+			int res = 0;
+			do {
+				if (c < '0' || c > '9') {
+					throw new InputMismatchException();
+				}
+				res *= 10;
+				res += c - '0';
+				c = read();
+			} while (!isSpaceChar(c));
+			return res * sgn;
+		}
+
+		public boolean isSpaceChar(int c) {
+			if (filter != null) {
+				return filter.isSpaceChar(c);
+			}
+			return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+		}
+
+		public interface SpaceCharFilter {
+			public boolean isSpaceChar(int ch);
 		}
 	}
-	
-	private static class Water{
-		int pos;
-		long dist;
-		
-		public Water(int pos, long dist) {
-			this.pos = pos;
-			this.dist = dist;
+
+	private static class OutputWriter {
+		private final PrintWriter writer;
+
+		public OutputWriter(OutputStream outputStream) {
+			writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(outputStream)));
+		}
+
+		public void print(Object... objects) {
+			for (int i = 0; i < objects.length; i++) {
+				if (i != 0) {
+					writer.print(' ');
+				}
+				writer.print(objects[i]);
+			}
+			writer.flush();
 		}
 	}
 }
