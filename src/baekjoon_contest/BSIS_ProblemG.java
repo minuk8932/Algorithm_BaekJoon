@@ -10,50 +10,119 @@ import java.util.InputMismatchException;
 
 public class BSIS_ProblemG {
 	private static final String NEW_LINE = "\n";
+	private static final int INF = 500_001;
 	
-	public static void main(String[] args) throws Exception{
-		InputReader in = new InputReader(System.in);
-		OutputWriter out = new OutputWriter(System.out);
-		StringBuilder sb = new StringBuilder();
+	private static InputReader in = new InputReader(System.in);
+	private static OutputWriter out = new OutputWriter(System.out);
+	private static StringBuilder sb = new StringBuilder();
+	private static int cnt = 0;
+	private static int one = 0;
+	
+	private static Water[] init = new Water[INF];
+	private static Water[] w = new Water[INF];
+
+	public static void main(String[] args) throws Exception {
 
 		int N = in.readInt();
 		int Q = in.readInt();
-		
-		for(int i = 0; i < N; i++) {
-			int a = in.readInt();
+
+		Water[] w = new Water[N + 1];
+
+		w[0] = new Water(0, 0);
+		init[0] = new Water(0, 0);
+
+		for (int i = 0; i < N; i++) {
+			int idx = -(i + 1);
+			int dist = in.readInt();
+			
+			w[i + 1] = new Water(idx, dist);
+			if(w[i + 1].dist == 1) one++;
+			
+			init[i + 1] = new Water(idx, dist);
 		}
+
+		Range(Q, N);
 		
-		for(int i = 0; i < Q; i++) {
+		out.print(sb.toString());
+	}
+
+	private static class Water {
+		int idx;
+		int dist;
+
+		public Water(int idx, int dist) {
+			this.idx = idx;
+			this.dist = dist;
+		}
+	}
+	
+	private static void Range(int Q, int N) {
+		for (int i = 0; i < Q; i++) {
 			int T = in.readInt();
 			int L = in.readInt();
 			int R = in.readInt();
 			
-			int cnt = 0;
+			cnt = 0;
 			
-			if(R >= T && L <= T - N) {
-				cnt += N + 1;
-			}
-			
-			else {
-				if(R > T) {
-					if(L <= T) cnt += T - L + 1;
-				}
-				
-				else if(L < T - N) {
-					if(R >= T - N) cnt += R - (T - N) + 1;
+			if(one == N) {
+				if(R >= T && L <= T - N) {
+					cnt += N + 1;
 				}
 				
 				else {
-					cnt += R - L + 1;
+					if(R > T) {
+						if(L <= T) cnt += T - L + 1;
+					}
+					
+					else if(L < T - N) {
+						if(R >= T - N) cnt += R - (T - N) + 1;
+					}
+					
+					else {
+						cnt += R - L + 1;
+					}
 				}
+			}
+			else {
+				init(N);
+				process(N, T, L, R);
 			}
 			
 			sb.append(cnt).append(NEW_LINE);
 		}
+	}
+
+	private static void process(int N, int T, int L, int R) {
+		w[0].idx = T;
 		
-		out.print(sb.toString());
+		for(int j = 1; j < N + 1; j++) {
+			
+			if(j > 1 && w[j].dist % w[j - 1].dist != 0) {
+				int val = w[j].dist / w[j - 1].dist;
+				w[j].dist = (val + 1) * w[j - 1].dist;
+				
+				if(w[j].dist < w[j - 1].dist) w[j].dist = w[j - 1].dist;
+			}
+			
+			if(w[j - 1].idx - w[j].idx > w[j].dist)	w[j].idx += w[j].dist * (T / w[j].dist);
+			if(w[j].idx >= L && w[j].idx <= R) cnt++;
+			
+			System.out.print(w[j].idx + " ");
+		}
+
+		if(T >= L && T <= R) cnt++;
+		
+		System.out.println();
 	}
 	
+	private static void init(int N) {
+		w[0] = new Water(init[0].idx, init[0].dist);
+		
+		for(int i = 1; i < N + 1; i++) {
+			w[i] = new Water(init[i].idx, init[i].dist);
+		}
+	}
+
 	private static class InputReader {
 		private InputStream stream;
 		private byte[] buf = new byte[1024];
