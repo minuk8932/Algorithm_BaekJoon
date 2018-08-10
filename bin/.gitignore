@@ -21,6 +21,7 @@
 /Boj15875.class
 /Boj15892$Node.class
 /Boj15892.class
+/Boj1708.class
 /Boj1818.class
 /Boj1981$Point.class
 /Boj1981.class
@@ -69,5 +70,13 @@
 /greedy/
 /heap/
 /implementation/
-/Boj14916.class
-/Boj1011.class
+/lowcost_spanning_tree/
+/math/
+/queue/
+/simulation/
+/sort/
+/stack/
+/string_handle/
+/Boj1708$Point.class
+/Boj1708$Point$1.class
+/convex_hull/
