@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 /**
  * 
  * 	@author minchoba
- *	백준 1708번: 블록껍질
+ *	백준 1708번: 볼록껍질
  *
  *	@see https://www.acmicpc.net/problem/1708/
  *
@@ -111,7 +111,7 @@ public class Boj1708 {
 	}
 	
 	/**
-	 * 블록껍질 메소드
+	 * 볼록껍질 메소드
 	 * 
 	 */
 	private static void convexHull(int N, Point[] p) {
