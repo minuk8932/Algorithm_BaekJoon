@@ -5,14 +5,4 @@
 /binary_search/
 /breadth_first_search/
 /brute_force/
-/convex_hull/
-/counter_clock_wise/
-/depth_first_search/
-/deque/
-/dijkstra/
-/disjoint_set/
-/dynamic_programming/
-/greedy/
-/heap/
-/implementation/
-/math/
+/stack/
