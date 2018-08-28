@@ -17,8 +17,8 @@ public class Boj14489 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int A = Integer.parseInt(st.nextToken()) + Integer.parseInt(st.nextToken());	// 욱제의 통장 잔고
-		int C = Integer.parseInt(br.readLine());					// 치킨 한마리 가격
+		int C = Integer.parseInt(br.readLine()) * 2;					// 치킨 한마리 가격
 		
-		System.out.println(A >= C * 2 ? A - C * 2 : A);	// 조건에 따라 결과 값 출력
+		System.out.println(A >= C ? A - C : A);	// 조건에 따라 결과 값 출력
 	}
 }
