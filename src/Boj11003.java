@@ -1,10 +1,11 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.PriorityQueue;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 public class Boj11003 {
-	private static final char NEW_LINE = '\n';
+	private static final char SPACE = ' ';
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -14,34 +15,31 @@ public class Boj11003 {
 		int N = Integer.parseInt(st.nextToken());
 		int L = Integer.parseInt(st.nextToken());
 		
-		int idx = 0;
-		int loop = 0;
-		
-		PriorityQueue<Number> pq = new PriorityQueue<>();
+		Deque<Integer> deq = new LinkedList<>();
 		st = new StringTokenizer(br.readLine());
+		int[] A = new int[N + 1];
 		
-		while(N-- > 0) {
-			int A = Integer.parseInt(st.nextToken());
+		for(int i = 1; i < N + 1; i++) {
+			A[i] = Integer.parseInt(st.nextToken());
 			
-			pq.offer(new Number(A, idx++));
-			sb.append(pq.peek().num).append(NEW_LINE);
+			if(deq.isEmpty()) {
+				deq.offerFirst(A[i]);
+			}
+			else {
+				while(!deq.isEmpty() && deq.peekLast() > A[i]) {
+					deq.pollLast();
+				}
+				
+				deq.offerLast(A[i]);
+			}
+			
+			if(i > L) {
+				if(deq.peekFirst() == A[i - L]) deq.pollFirst();
+			}
+			
+			sb.append(deq.peekFirst()).append(SPACE);
 		}
 		
 		System.out.println(sb.toString());
-	}
-	
-	private static class Number implements Comparable<Number>{
-		int num;
-		int idx;
-		
-		public Number(int num, int idx) {
-			this.num = num;
-			this.idx = idx;
-		}
-
-		@Override
-		public int compareTo(Number n) {
-			return this.num < n.num ? -1 : 1;
-		}
 	}
 }
