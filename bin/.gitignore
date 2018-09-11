@@ -10,5 +10,7 @@
 /depth_first_search/
 /deque/
 /dijkstra/
-/math/
-/string_handle/
+/disjoint_set/
+/dynamic_programming/
+/greedy/
+/implementation/
