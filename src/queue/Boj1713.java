@@ -1,75 +1,63 @@
 package queue;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 /**
- * ¹éÁØ ¿Â¶óÀÎ ÀúÁö 1713¹ø (ÈÄº¸ ÃßÃµÇÏ±â) ¹®Á¦Ç®ÀÌ
+ * 
+ * 	@author minchoba
+ *	ë°±ì¤€ 1713ë²ˆ: í›„ë³´ ì¶”ì²œí•˜ê¸°
  *
- * @see https://www.acmicpc.net/problem/1713
- * @author devetude
+ *	@see https://www.acmicpc.net/problem/1713/
+ *
  */
 public class Boj1713 {
-	// °ø¹é ¹®ÀÚ¿­ »ó¼ö
 	private static final String SPACE = " ";
+	
+	public static void main(String[] args) throws Exception{
+		// ë²„í¼ë¥¼ í†µí•œ ê°’ ì…ë ¥
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		int recomCnt = Integer.parseInt(br.readLine());
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		Queue<Integer> q = new LinkedList<>();
+		int[] album = new int[recomCnt + 1];	// ì œê±° í•  ë°°ì—´ í¬í•¨
 
-	public static void main(String args[]) throws Exception {
-		// ÀÔ·Â °ªÀ» ¹ŞÀ½
-		Scanner sc = new Scanner(System.in);
-		int N = sc.nextInt();
-		int cnt = sc.nextInt();
+		for (int i = 0; i < recomCnt; i++) {
+			int p = Integer.parseInt(st.nextToken());
+			album[p]++;			// ì•¨ë²”ì— í›„ë³´ ì¶”ê°€
 
-		// Å¥ °´Ã¼ º¯¼ö ÃÊ±âÈ­
-		Queue<Integer> queue = new LinkedList<>();
+			if (!q.contains(p)) {			// í ë‚´ë¶€ì— í˜„ì¬ ë“¤ì–´ì˜¨ í›„ë³´ê°€ ì¡´ì¬í•˜ëŠ”ê°€
+				if (q.size() >= N) {				// íê°€ ì•¨ë²”ì˜ ê°¯ìˆ˜ í•œë„ë¥¼ ì´ˆê³¼í•œ ê²½ìš°
+					Iterator<Integer> it = q.iterator();
+					int removeCandidate = it.next();
 
-		// ÈÄº¸ ÃßÃµ ¼ö ÀúÀå ¹è¿­ ÃÊ±âÈ­
-		int[] points = new int[cnt + 1];
+					while (it.hasNext()) {				// ì´í„°ë ˆì´í„°ë¥¼ í†µí•´ í ë‚´ë¶€ì˜ ê°’ë“¤ì„ ê°€ì ¸ì™€ì„œ
+						int addCandidate = it.next();
 
-		for (int i = 0; i < cnt; i++) {
-			int idx = sc.nextInt();
-			points[idx]++;
-
-			// ÀÌ¹Ì ÇØ´ç ÈÄº¸ÀÇ »çÁøÀÌ °É·ÁÀÖÁö ¾ÊÀº °æ¿ì¿¡¸¸
-			if (!queue.contains(idx)) {
-				// ÈÄº¸ÀÇ »çÁøÀÌ »çÁøÆ²ÀÇ °¹¼ö º¸´Ù ¸¹À» °æ¿ì¿¡¸¸
-				if (queue.size() >= N) {
-					Iterator<Integer> iterator = queue.iterator();
-					int minPointIdx = iterator.next();
-
-					// °¡Àå ÃßÃµ ¼ö°¡ ÀûÀº ÈÄº¸¸¦ Ã£¾Æ³¿ (ÃßÃµ ¼ö°¡ °°Àº °æ¿ì ¿À·¡ °É·ÁÀÖ´ø ¼ø¼­¶ÇÇÑ Ã£¾Æ³¿)
-					while (iterator.hasNext()) {
-						int comparingIdx = iterator.next();
-
-						if (points[comparingIdx] < points[minPointIdx]) {
-							minPointIdx = comparingIdx;
-						}
+						// ì œê±°ë  í›„ë³´ë¥¼ ë‚¨ê¸°ê³  ì•ìœ¼ë¡œ ë‹¹ê²¨ì¤Œ 
+						if (album[addCandidate] < album[removeCandidate]) removeCandidate = addCandidate;
 					}
 
-					// ÇØ´ç ÈÄº¸¸¦ Å¥¿¡¼­ »èÁ¦ ¹× °ªÀ» 0À¸·Î ¸¸µë
-					queue.remove(minPointIdx);
-					points[minPointIdx] = 0;
+					q.remove(removeCandidate);	// í›„ë³´ì œê±°
+					album[removeCandidate] = 0;
 				}
 
-				// ÇØ´ç ÈÄº¸ÀÇ »çÁøÀ» »çÁøÆ²¿¡ Ãß°¡
-				queue.offer(idx);
+				q.offer(p);		// íì— ì•¨ë²”ì— ì¡´ì¬í•˜ëŠ” í›„ë³´ë¥¼ ì¶”ê°€
 			}
 		}
 
-		sc.close();
-
-		// Å¥¸¦ ¿À¸§Â÷¼øÀ¸·Î Á¤·Ä
-		Collections.sort((LinkedList<Integer>) queue);
-
-		// ¹öÆÛ¸¦ ÅëÇØ °á°ú °ªÀ» ¸¸µë
+		Collections.sort((LinkedList<Integer>) q);		// í ë‚´ë¶€ ì •ë ¬
 		StringBuilder sb = new StringBuilder();
 
-		while (!queue.isEmpty()) {
-			sb.append(queue.poll()).append(SPACE);
-		}
+		while (!q.isEmpty()) sb.append(q.poll()).append(SPACE);		// íì˜ ê°’ë“¤ì„ ì˜¤ë¦„ ì°¨ìˆœìœ¼ë¡œ ë²„í¼ì— ë‹´ìŒ
 
-		// °á°ú °ª ÇÑ²¨¹ø¿¡ Ãâ·Â
-		System.out.println(sb.toString());
+		System.out.println(sb.toString());		// ê²°ê³¼ ê°’ í•œë²ˆì— ì¶œë ¥
 	}
 }
