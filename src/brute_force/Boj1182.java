@@ -7,6 +7,9 @@ import java.util.StringTokenizer;
  * 
  * 	@author minchoba
  *	백준 1182번 : 부분집합의 합
+ *
+ *	@see https://www.acmicpc.net/problem/1182/
+ *
  */
 public class Boj1182 {
 	private static final String SPACE = " ";
