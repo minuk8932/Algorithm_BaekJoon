@@ -8,4 +8,8 @@
 /convex_hull/
 /counter_clock_wise/
 /depth_first_search/
-/stack/
+/deque/
+/dijkstra/
+/disjoint_set/
+/dynamic_programming/
+/greedy/
