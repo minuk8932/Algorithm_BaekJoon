@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-
 public class Boj14543 {
 	private static final String CASE = "Equation ";
 	private static final String NO_ANSWER = "No solution.";
