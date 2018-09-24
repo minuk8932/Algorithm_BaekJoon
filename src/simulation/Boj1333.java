@@ -26,8 +26,9 @@ public class Boj1333 {
 		
 LOOP:	for (int i = 0; i < N; i++) {			// 곡의 수 만큼
 			int loop = (i + 1) * runningTime;
+			int start = i * runningTime + L;
 	
-			for (int j = (i * runningTime + L); j < loop; j++) {	// 들을 수 있는 구간 설정 (격 단위)
+			for (int j = start; j < loop; j++) {	// 들을 수 있는 구간 설정 (격 단위)
 				if (j % D == 0) {								// 이 때의 j 값이 D의 배수인 경우
 					res = j;									// 그때의 시간을 저장하고 전체 반복문 종료
 					break LOOP;
