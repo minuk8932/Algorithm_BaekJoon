@@ -10,5 +10,6 @@
 /depth_first_search/
 /deque/
 /dijkstra/
-/simulation/
-/tree_search/
+/disjoint_set/
+/dynamic_programming/
+/string_handle/
