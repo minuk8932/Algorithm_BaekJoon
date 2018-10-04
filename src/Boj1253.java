@@ -17,38 +17,6 @@ public class Boj1253 {
 
 		Arrays.sort(arr);
 
-		int res = 0;
-
-		for (int i = 0; i < N; i++) {
-			int target = arr[i];
-			if (isVisited[i]) continue;
-
-LOOP:		for (int j = 0; j < N && j != i; j++) {			
-				int left = j, right = N - 1, mid = 0;
-				
-				isVisited[i] = true;
-				
-				while(left < right) {
-					mid = (left + right) / 2;
-					
-					if(i == 4) System.out.println(arr[left] + " " + arr[right] + " " + target);
-					
-					if(arr[left] + arr[right] > target) {
-						right = mid;
-					}
-					
-					else if(arr[left] + arr[right] < target) {
-						left = mid;
-					}
-					
-					else {
-						res++;
-						break LOOP;
-					}
-				}
-			}
-		}
-
-		System.out.println(res);
+		
 	}
 }
