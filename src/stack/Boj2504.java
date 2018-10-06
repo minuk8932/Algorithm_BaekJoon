@@ -77,6 +77,7 @@ public class Boj2504 {
 				break;
 			}
 			
+			
 			if(terminate) break;
 		}
 
