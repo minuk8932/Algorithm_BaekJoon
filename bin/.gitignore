@@ -8,8 +8,5 @@
 /convex_hull/
 /counter_clock_wise/
 /depth_first_search/
-/segment_tree/
-/tree_search/
-/queue/
-/simulation/
-/implementation/
+/deque/
+/string_handle/
