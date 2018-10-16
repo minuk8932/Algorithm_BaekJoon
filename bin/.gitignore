@@ -9,5 +9,7 @@
 /counter_clock_wise/
 /depth_first_search/
 /deque/
+/dijkstra/
+/disjoint_set/
+/dynamic_programming/
 /math/
-/two_pointer/
