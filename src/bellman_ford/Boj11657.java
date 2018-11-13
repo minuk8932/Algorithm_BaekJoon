@@ -17,7 +17,7 @@ public class Boj11657 {
 	private static final String NEW_LINE = "\n";
 
 	private static final int NO_WAY = -1;
-	private static final int INF = 100_001;
+	private static final int INF = 10_001;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -66,7 +66,7 @@ public class Boj11657 {
 		}
 
 		for (int i = 1; i < M + 1; i++) {
-			if (dist[pc[i].e] > dist[pc[i].s] + pc[i].v) {											// 위에서 최솟값 갱신을 했는데도, 다시 최솟값이 발생한 경우 
+			if (dist[pc[i].e] > dist[pc[i].s] + pc[i].v) {													// 위에서 최솟값 갱신을 했는데도, 다시 최솟값이 발생한 경우 
 				return false;																				// 양 노드를 반복하는데 음수의 비용이 발생한 것이므로, false 반환
 			}
 		}
