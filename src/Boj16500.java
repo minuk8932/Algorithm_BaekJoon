@@ -1,0 +1,38 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Boj16500 {
+	private static final String SPACE = " ";
+	private static final String EMPTY = "";
+	
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String S = br.readLine();
+		int N = Integer.parseInt(br.readLine());
+		
+		String[] A = new String[N];
+		for(int i = 0; i < N; i++) {
+			A[i] = br.readLine();
+		}
+		
+		System.out.println(wordPuzzle(S, A, N) ? 1 : 0);
+	}
+	
+	private static boolean wordPuzzle(String S, String[] A, int N) {
+		while(true) {
+			boolean isContained = false;
+			
+			for(int i = 0; i < N; i++) {
+				if(S.contains(A[i])) isContained = true;
+				S = S.replace(A[i], SPACE);
+			}
+			
+			if(!isContained) {
+				S = S.replace(SPACE, EMPTY);
+				
+				if(S.equals(EMPTY)) return true;
+				else return false;
+			}
+		}
+	}
+}
