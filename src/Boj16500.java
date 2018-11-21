@@ -19,20 +19,8 @@ public class Boj16500 {
 	}
 	
 	private static boolean wordPuzzle(String S, String[] A, int N) {
-		while(true) {
-			boolean isContained = false;
-			
-			for(int i = 0; i < N; i++) {
-				if(S.contains(A[i])) isContained = true;
-				S = S.replace(A[i], SPACE);
-			}
-			
-			if(!isContained) {
-				S = S.replace(SPACE, EMPTY);
-				
-				if(S.equals(EMPTY)) return true;
-				else return false;
-			}
-		}
+		
+		
+		return true;
 	}
 }
