@@ -1,3 +1,4 @@
+/.DS_Store
 /Floyd_Washall/
 /back_tracking/
 /baekjoon_contest/
@@ -19,10 +20,10 @@
 /math/
 /next_permutation/
 /queue/
+/search/
 /segment_tree/
 /simulation/
 /sliding_window/
 /sort/
 /stack/
 /string_handle/
-/search/
