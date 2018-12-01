@@ -28,10 +28,10 @@ public class Boj11653 {
 		Arrays.fill(arr, true);
 		arr[0] = arr[1] = false;
 		
-		for(int i = 2; i < n + 1; i++) {
+		for(int i = 2; i * i < n + 1; i++) {
 			if(!arr[i]) continue;
 			
-			for(int j = i + i; j < n + 1; j += i) {
+			for(int j = i + i; j * j < n + 1; j += i) {
 				arr[j] = false;
 			}
 		}
