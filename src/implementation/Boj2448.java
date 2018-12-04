@@ -1,6 +1,8 @@
 package implementation;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 /**
  * 
@@ -12,25 +14,24 @@ import java.io.InputStreamReader;
  */
 public class Boj2448 {
 	private static final String NEW_LINE = "\n";
-	private static String space = " ";
-
-	private static String[] uniStar = null;
-	private static StringBuilder sb = new StringBuilder();
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
 		br.close();
 
-		uniStar = new String[N];
+		String[] uniStar = new String[N];
 		uniStar[0] = "  *  ";
 		uniStar[1] = " * * ";
 		uniStar[2] = "*****";
-
-		System.out.println(shootingStar(N));
+		
+		shootingStar(N, uniStar);
 	}
 
-	private static String shootingStar(int level) {
+	private static void shootingStar(int level, String[] arr) throws Exception {
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		String space = " ";
 		int tmp = level / 3;
 		int loop = 0;
 
@@ -45,7 +46,7 @@ public class Boj2448 {
 
 			space = " ";
 			for (int j = mid; j < bot; j++) {
-				uniStar[j] = uniStar[j - mid] + space + uniStar[j - mid];
+				arr[j] = arr[j - mid] + space + arr[j - mid];
 			}
 
 			space = "";
@@ -54,12 +55,16 @@ public class Boj2448 {
 			}
 
 			for (int j = 0; j < mid; j++) {
-				uniStar[j] = space + uniStar[j] + space;
+				arr[j] = space + arr[j] + space;
 			}
 		}
 
-		for (int i = 0; i < level; i++) sb.append(uniStar[i]).append(NEW_LINE);
+		for (int i = 0; i < level; i++) {
+			bw.write(arr[i]);
+			bw.write(NEW_LINE);
+		}
 
-		return sb.toString();
+		bw.flush();
+		bw.close();
 	}
 }
