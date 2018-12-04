@@ -1,9 +1,11 @@
 package sliding_window;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.util.Deque;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
-import java.util.StringTokenizer;
 
 /**
  * 
@@ -14,44 +16,108 @@ import java.util.StringTokenizer;
  *
  */
 public class Boj11003 {
-	private static final char SPACE = ' ';
+	private static final String SPACE = " ";
 	
-	public static void main(String[] args) throws Exception{
-		// 버퍼를 통한 값 입력
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		StringTokenizer st = new StringTokenizer(br.readLine());
+	public static void main(String[] args) throws Exception {
+		InputReader in = new InputReader(System.in);
 		
-		int N = Integer.parseInt(st.nextToken());
-		int L = Integer.parseInt(st.nextToken());
+		int N = in.readInt();
+		int L = in.readInt();
+		slidingWindow(in, N, L);
+	}
+	
+	private static class Pair{
+		int first;
+		int second;
 		
-		Deque<Integer> deq = new LinkedList<>();
-		st = new StringTokenizer(br.readLine());
-		int[] A = new int[N + 1];
+		public Pair(int first, int last) {
+			this.first = first;
+			this.second = last;
+		}
+	}
+	
+	private static void slidingWindow(InputReader in, int numSize, int winSize) throws Exception{
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));		// 출력량이 많기때문에 버퍼로 처리
+		Deque<Pair> deq = new LinkedList<>();
 		
-		for(int i = 1; i < N + 1; i++) {
-			A[i] = Integer.parseInt(st.nextToken());
-			
-			if(deq.isEmpty()) {			// 덱이 빈 경우 값을 담음
-				deq.offerFirst(A[i]);
-			}
-			else {
-				while(!deq.isEmpty() && deq.peekLast() > A[i]) { // 덱에 값이 존재하면서, 현재 들어온 값보다 마지막에 있는 값이 큰 경우 덱에서 제거
-					deq.pollLast();
-				}
-				
-				deq.offerLast(A[i]); // 이후 현재 들어온 값을 덱 끝에 담음
-			}
-			
-			int idx = i - L;
-			
-			if(idx > 0) { 	// 윈도우의 움직임
-				if(deq.peekFirst() == A[idx]) deq.pollFirst();	// 윈도우 크기에 따라 가장 앞의 값을 제거
+		for(int i = 1; i < numSize + 1; i++) {
+			while(!deq.isEmpty() && deq.peekFirst().second <= i - winSize) {		// 윈도우 사이즈가 초과된 경우 
+				deq.pollFirst();
 			}
 			
-			sb.append(deq.peekFirst()).append(SPACE);		// 윈도우에 존재하는 값 중 최솟값을 버퍼에 저장
+			int num = in.readInt();
+			while(!deq.isEmpty() && deq.peekLast().first >= num) {					// 이제 들어올 값이 가장 마지막에 있는 값보다 크거나 같은경우
+				deq.pollLast();
+			}
+			
+			deq.offer(new Pair(num, i));
+			bw.write(deq.peekFirst().first + SPACE);
 		}
 		
-		System.out.println(sb.toString());		// 결과 값 한번에 출력
+		bw.flush();		// 결과 출력
+		bw.close();
+	}
+
+	private static class InputReader {
+		private InputStream stream;
+		private byte[] buf = new byte[1024];
+		private int curChar;
+		private int numChars;
+		private SpaceCharFilter filter;
+
+		public InputReader(InputStream stream) {
+			this.stream = stream;
+		}
+
+		public int read() {
+			if (numChars == -1) {
+				throw new InputMismatchException();
+			}
+			if (curChar >= numChars) {
+				curChar = 0;
+				try {
+					numChars = stream.read(buf);
+				} catch (IOException e) {
+					throw new InputMismatchException();
+				}
+				if (numChars <= 0) {
+					return -1;
+				}
+			}
+			return buf[curChar++];
+		}
+
+		public int readInt() {
+			int c = read();
+			while (isSpaceChar(c)) {
+				c = read();
+			}
+			int sgn = 1;
+			if (c == '-') {
+				sgn = -1;
+				c = read();
+			}
+			int res = 0;
+			do {
+				if (c < '0' || c > '9') {
+					throw new InputMismatchException();
+				}
+				res *= 10;
+				res += c - '0';
+				c = read();
+			} while (!isSpaceChar(c));
+			return res * sgn;
+		}
+
+		public boolean isSpaceChar(int c) {
+			if (filter != null) {
+				return filter.isSpaceChar(c);
+			}
+			return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+		}
+
+		public interface SpaceCharFilter {
+			public boolean isSpaceChar(int ch);
+		}
 	}
 }

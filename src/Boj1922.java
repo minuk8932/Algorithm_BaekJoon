@@ -66,11 +66,16 @@ public class Boj1922 {
 		}
 	}
 	
-	private static void dijkstra(int n) {		
+	private static void dijkstra(int n) {
+		boolean[] isVisited = new boolean[n + 1];
+		
 		for(int i = 1; i < n + 1; i++) {
-			for(Node start: map[i]) {				
+			if(isVisited[i]) continue;
+			
+			for(Node start: map[i]) {			
 				PriorityQueue<Node> pq = new PriorityQueue<>();
 				
+				isVisited[start.edge] = true;
 				pq.offer(new Node(start.edge, start.cost));
 				res[i][start.edge] = start.cost;
 				
@@ -80,6 +85,7 @@ public class Boj1922 {
 					for(Node next: map[current.edge]) {
 						if(res[current.edge][next.edge] > next.cost + current.cost) {
 							res[current.edge][next.edge] = next.cost + current.cost;
+							isVisited[current.edge] = isVisited[next.edge] = true;
 							
 							pq.offer(new Node(next.edge, res[current.edge][next.edge]));
 						}
