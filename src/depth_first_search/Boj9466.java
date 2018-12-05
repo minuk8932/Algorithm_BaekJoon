@@ -20,7 +20,6 @@ public class Boj9466 {
 	private static int cycle = 0;
 	
 	public static void main(String[] args) throws Exception{
-		// 버퍼를 통한 값 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());
 		
@@ -29,9 +28,9 @@ public class Boj9466 {
 		while(T-- > 0){
 			int n = Integer.parseInt(br.readLine());
 			
-			isVisited = new boolean[n + 1];		// 방문했는지
-			term = new int[n + 1];				// 팀 정보
-			res = new int[n + 1];				// 사이클 체커
+			isVisited = new boolean[n + 1];	
+			term = new int[n + 1];
+			res = new int[n + 1];
 			
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			for(int i = 1; i < n + 1; i++) term[i] = Integer.parseInt(st.nextToken());
@@ -41,30 +40,26 @@ public class Boj9466 {
 			for(int i = 1; i < n + 1; i++) {
 				if(isVisited[i]) continue;
 				
-				dfs(i);		// 깊이 우선 탐색 메소드
+				dfs(i);
 			}
 			
-			sb.append(n - cycle).append(NEW_LINE);		// 팀이 짜여진 인원을 제외한 나머지 인원를 버퍼에 저장
+			sb.append(n - cycle).append(NEW_LINE);
 		}
 		
-		System.out.println(sb.toString());			// 결과 값 한번에 출력
+		System.out.println(sb.toString());		// 결과 출력
 	}
 	
-	/**
-	 * 깊이 우선 탐색 메소드
-	 * 
-	 */
 	private static void dfs(int current) {
-		if(res[current] != 0) return;		// 이미 탐색한 인원이면 재귀 종료
-		isVisited[current] = true;		// 방문 하지 않은경우
+		if(res[current] != 0) return;
+		isVisited[current] = true;
 		
 		int next = term[current];		// 다음 깊이를 탐색하기 위한 해당 배열의 값을 저장
 		
-		if(!isVisited[next]) {		// 다음 깊이가 탐색이 되지 않은 경우
-			dfs(next);				// 다시 재귀 호출
+		if(!isVisited[next]) {
+			dfs(next);
 		}
 		else {
-			if(res[next] == 0) {	// 탐색되지 않은 인원의 경우
+			if(res[next] == 0) {
 				cycle++;
 				
 				for(int i = next; i != current; i = term[i]) cycle++;		// 사이클에 걸리는 인원의 수를 증가
