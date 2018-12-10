@@ -2,21 +2,10 @@ package dijkstra;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
-
 import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-/**
- * 
- * 	@author minchoba
- *	백준 4184번: Ocean Currents
- *
- *	@see https://www.acmicpc.net/problem/4184/
- *
- */
 public class Boj4184 {
 	private static final int[][] DIRECTIONS = {{ -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 }, { -1, -1 } };
 	private static final int ROW = 0;
@@ -24,12 +13,10 @@ public class Boj4184 {
 	private static final int INF = 1_000_001;
 
 	private static final char[] BEARING = {'0', '1', '2', '3', '4', '5', '6', '7'};
-
-	private static final String NEW_LINE = "\n";
+	private static final char NEW_LINE = '\n';
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int r = Integer.parseInt(st.nextToken());
 		int c = Integer.parseInt(st.nextToken());
@@ -44,6 +31,7 @@ public class Boj4184 {
 		}
 
 		int n = Integer.parseInt(br.readLine());
+		StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -54,13 +42,10 @@ public class Boj4184 {
 			int endCol = Integer.parseInt(st.nextToken());
 
 			int res = dijkstra(r, c, startRow, startCol, endRow, endCol, map);
-
-            bw.write(res + "\n");
+			sb.append(res).append(NEW_LINE);
 		}
-		
-		br.close();
-		bw.flush();
-		bw.close();
+
+		System.out.println(sb);
 	}
 	
 	private static class Point implements Comparable<Point> {
@@ -76,13 +61,15 @@ public class Boj4184 {
 
 		@Override
 		public int compareTo(Point p) {
-			return this.cost < p.cost ? -1 : 1;
+			if(this.cost < p.cost) return -1;
+			else if(this.cost > p.cost) return 1;
+			else return 0;
 		}
 	}
 	
 	private static int dijkstra(int n, int m, int sRow, int sCol, int eRow, int eCol, char[][] map) {
-		int[][] cost = costInit(n, m);
-        cost[sRow][sCol] = 0;
+        int[][] cost = costInit(n, m);
+		cost[sRow][sCol] = 0;
 
 		PriorityQueue<Point> pq = new PriorityQueue<>();
 		pq.offer(new Point(sRow, sCol, cost[sRow][sCol]));
@@ -96,7 +83,7 @@ public class Boj4184 {
 				int nextCost = 0;
 
 				if (nextRow > 0 && nextRow < n + 1 && nextCol > 0 && nextCol < m + 1) {
-					nextCost = (map[current.row][current.col] == BEARING[i]) ? 0 : 1;		// 흐름과 물의 방향이 같으면 0 다르면 1
+					if(map[current.row][current.col] != BEARING[i]) nextCost = 1;
 
 					if (cost[nextRow][nextCol] > cost[current.row][current.col] + nextCost) {	
 						cost[nextRow][nextCol] = cost[current.row][current.col] + nextCost;

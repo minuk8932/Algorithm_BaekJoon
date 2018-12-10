@@ -64,6 +64,7 @@ public class Boj5397 {
 			}
 			else if(cursor > size) {
 				tmp.addLast(w);
+				
 				cursor = size + 1;
 			}
 			else {
