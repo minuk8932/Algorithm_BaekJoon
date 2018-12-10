@@ -1,4 +1,5 @@
 package sliding_window;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +13,7 @@ import java.util.LinkedList;
  * 	@author minchoba
  *	백준 11003번: 최솟값 찾기
  *
- *	@see https://www.acmicpc.net/problem/11003
+ *	@see https://www.acmicpc.net/problem/11003/
  *
  */
 public class Boj11003 {
@@ -37,16 +38,16 @@ public class Boj11003 {
 	}
 	
 	private static void slidingWindow(InputReader in, int numSize, int winSize) throws Exception{
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));		// 출력량이 많기때문에 버퍼로 처리
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		Deque<Pair> deq = new LinkedList<>();
 		
 		for(int i = 1; i < numSize + 1; i++) {
-			while(!deq.isEmpty() && deq.peekFirst().second <= i - winSize) {		// 윈도우 사이즈가 초과된 경우 
+			while(!deq.isEmpty() && deq.peekFirst().second <= i - winSize) {	// 윈도우 사이즈에 따른 조정
 				deq.pollFirst();
 			}
 			
 			int num = in.readInt();
-			while(!deq.isEmpty() && deq.peekLast().first >= num) {					// 이제 들어올 값이 가장 마지막에 있는 값보다 크거나 같은경우
+			while(!deq.isEmpty() && deq.peekLast().first >= num) {				// 값 비교에 따른 조정
 				deq.pollLast();
 			}
 			
@@ -54,7 +55,7 @@ public class Boj11003 {
 			bw.write(deq.peekFirst().first + SPACE);
 		}
 		
-		bw.flush();		// 결과 출력
+		bw.flush();
 		bw.close();
 	}
 
