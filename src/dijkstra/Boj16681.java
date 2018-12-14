@@ -17,7 +17,6 @@ import java.util.PriorityQueue;
 public class Boj16681 {
 	private static final String NO_WAY = "Impossible";
 	private static final long INF = Long.MAX_VALUE;
-	private static final long UNINF = Long.MIN_VALUE;
 	
 	private static long[][] cost;
 	
@@ -53,7 +52,7 @@ public class Boj16681 {
 		dijkstra(hikeRoute, N, M, height, N, 1);		// N에서 출발
 		
 		long res = getResult(height, E, D, N);
-		System.out.println(res == UNINF ? NO_WAY: res);		// 결과 출력
+		System.out.println(res == -INF ? NO_WAY: res);		// 결과 출력
 	}
 	
 	private static class Node implements Comparable<Node>{
@@ -98,7 +97,7 @@ public class Boj16681 {
 	}
 	
 	private static long getResult(int[] h, int e, int d, int n) {
-		long max = UNINF;
+		long max = -INF;
 		
 		for(int i = 1; i <  n + 1; i++) {
 			long sum = h[i] * e - (cost[0][i] + cost[1][i]) * d;			// 성취감 계산
