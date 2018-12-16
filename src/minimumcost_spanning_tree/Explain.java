@@ -1,4 +1,4 @@
-package lowcost_spanning_tree;
+package minimumcost_spanning_tree;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

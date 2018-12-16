@@ -1,4 +1,4 @@
-package lowcost_spanning_tree;
+package minimumcost_spanning_tree;
 
 public class Edge implements Comparable<Edge>{
 	public int start;
