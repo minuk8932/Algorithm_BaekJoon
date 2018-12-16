@@ -94,13 +94,10 @@ public class Boj3697 {
 		
 		for(int i = 0; i < N; i++) {
 			for(int j = 0; j < M; j++) {
-				System.out.print(pIdx[i][j] + " ");
 				if(find(pIdx[i][j], (M * i) + j)) {
 					counts++;
 				}
 			}
-			
-			System.out.println();
 		}
 		
 		return counts;
