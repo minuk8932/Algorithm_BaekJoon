@@ -1,8 +1,7 @@
 package minimumcost_spanning_tree;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 /**
@@ -21,7 +20,7 @@ public class Boj1922 {
 		int N = Integer.parseInt(br.readLine());
 		int M = Integer.parseInt(br.readLine());
 		
-		ArrayList<Node> map = new ArrayList<>();
+		PriorityQueue<Node> map = new PriorityQueue<>();
 		parent = new int[N + 1];
 		
 		for(int i = 1; i < N + 1; i++) {
@@ -80,11 +79,12 @@ public class Boj1922 {
 		else return false;
 	}
 	
-	private static int Kruskal(ArrayList<Node> graph, int n, int m) {
+	private static int Kruskal(PriorityQueue<Node> graph, int n, int m) {
 		int minCost = 0;
-		Collections.sort(graph);		// 비용이 작은 순으로 정렬
-		
-		for(Node next: graph) {
+
+		while(!graph.isEmpty()) {
+			Node next = graph.poll();
+			
 			if(!isSame(next.start, next.end)) {		// 서로 같은 부모를 갖는 경우 이미 다른 작은 값의 노드로 연결이 완료됨.
 				minCost += next.cost;
 					
