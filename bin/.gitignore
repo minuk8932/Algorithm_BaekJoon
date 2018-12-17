@@ -16,7 +16,14 @@
 /greedy/
 /heap/
 /implementation/
-/simulation/
-/kuskal/
-/lowcost_spanning_tree/
+/math/
 /minimumcost_spanning_tree/
+/next_permutation/
+/queue/
+/search/
+/segment_tree/
+/simulation/
+/sliding_window/
+/sort/
+/stack/
+/string_handle/
