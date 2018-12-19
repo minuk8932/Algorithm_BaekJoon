@@ -6,7 +6,7 @@ import java.util.InputMismatchException;
 /**
  * 
  * 	@author minchoba
- *	백준 12015번: 가장 긴 증가하는 부분 수열 4
+ *	백준 12015번: 가장 긴 증가하는 부분 수열 2
  *
  * 	@see https://www.acmicpc.net/problem/12015/
  * 
