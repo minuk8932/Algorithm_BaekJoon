@@ -1,3 +1,5 @@
+/.DS_Store
+/stack/
 /Floyd_Washall/
 /back_tracking/
 /baekjoon_contest/
@@ -24,5 +26,7 @@
 /simulation/
 /sliding_window/
 /sort/
-/stack/
 /string_handle/
+/topology_sort/
+/tree_search/
+/two_pointer/
