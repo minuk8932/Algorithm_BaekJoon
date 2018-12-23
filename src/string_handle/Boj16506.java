@@ -4,6 +4,14 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 16506번: CPU
+ *
+ *	@see https://www.acmicpc.net/problem/16506/
+ *
+ */
 public class Boj16506 {
 	private static final char NEW_LINE ='\n';
 	private static StringBuilder sb = new StringBuilder();
@@ -28,7 +36,7 @@ public class Boj16506 {
 		System.out.println(sb);
 	}
 	
-	private static HashMap<String, String> init(){
+	private static HashMap<String, String> init(){		// opcode 와 5번 비트까지 미리 저장
 		HashMap<String, String> hm = new HashMap<>();
 		
 		hm.put("ADD", "000000");
@@ -67,7 +75,7 @@ public class Boj16506 {
 		StringBuilder bin = new StringBuilder();
 		char[] binary = new char[4];
 		
-		for(int i = 3; i >= 0; i--) {
+		for(int i = 3; i >= 0; i--) {					// 정수 값을 이진수로
 			binary[i] = (char) ((value % 2) + '0');
 			value /= 2;
 		}
@@ -76,7 +84,7 @@ public class Boj16506 {
 			bin.append(binary[i]);
 		}
 		
-		if(hasC) bin.append(0);
+		if(hasC) bin.append(0);				// rB 연산시 C의 포함 여부에 따라.
 		return bin;
 	}
 }
