@@ -1,83 +1,174 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.InputMismatchException;
+import java.util.PriorityQueue;
 
 public class Boj15783 {
-	private static boolean[] isCycle = null;
-	private static int[] isVisited = null;
-	private static int virus = 0;
+	private static int[] parent;
 	
-	private static ArrayList<Integer>[] map = null;
-
 	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
+		InputReader in = new InputReader(System.in);
+		int N = in.readInt();
+		int M = in.readInt();
+		
+		init(N);
 
-		map = new ArrayList[N];
-
-		for (int i = 0; i < N; i++) {
-			map[i] = new ArrayList<>();
-		}
+		PriorityQueue<Node> map = new PriorityQueue<>();
 
 		for (int i = 0; i < M; i++) {
-			st = new StringTokenizer(br.readLine());
-			int A = Integer.parseInt(st.nextToken());
-			int B = Integer.parseInt(st.nextToken());
+			int A = in.readInt();
+			int B = in.readInt();
 			
-			map[A].add(B);
+			map.offer(new Node(A, B));
 		}
 
-		isCycle = new boolean[N];
-		for(int i = 0; i < N; i++) {
-			dfs(i);
-		}
+		search(map);
+	}
+	
+	private static class Node implements Comparable<Node>{
+		int from;
+		int to;
 		
-		bfs(N);
+		public Node(int from, int to) {
+			this.from = from;
+			this.to = to;
+		}
 
-		for (int i = 0; i < N; i++) {
-			if (isVisited[i] == 0) {
-				virus++;
+		@Override
+		public int compareTo(Node n) {
+			if(this.from < n.from) {
+				return -1;
+			}
+			else if(this.from > n.from) {
+				return 1;
+			}
+			else {
+				if(this.to < n.to) return -1;
+				else if(this.to > n.to) return 1;
+				else return 0;
 			}
 		}
-
-		System.out.println(virus);
 	}
 	
-	private static void dfs(int start) {
+	private static void init(int N) {
+		parent = new int[N];
 		
+		for(int i = 0; i < N; i++) {
+			parent[i] = i;
+		}
 	}
 	
-	private static void bfs(int N) {
-		isVisited = new int[N];
+	private static int find(int n) {
+		if(parent[n] == n) return n;
+		else return find(parent[n]);
+	}
+	
+	private static void merge(int x, int y) {
+		x = find(x);
+		y = find(y);
+		
+		if(x < y) parent[y] = x;
+		else parent[x] = y;
+	}
+	
+	private static boolean isCycle(int x, int y) {
+		x = find(x);
+		y = find(y);
+		
+		if(x == y) return true;
+		else return false;
+	}
+	
+	private static void search(PriorityQueue<Node> pq) {
+		while(!pq.isEmpty()) {
+			Node next = pq.poll();
+			
+			if(!isCycle(next.from, next.to)) {
+				merge(next.from, next.to);
+				
+				System.out.println(next.from + " " + next.to); 
+			}
+		}
+		
+		System.out.println(getRes());
+	}
+	
+	private static int getRes() {
+		boolean[] arr = new boolean[1_000_001];
+		int counts = 0;
+		
+		for(int i = 0; i < parent.length; i++) {
+			arr[parent[i]] = true;
+//			System.out.println(parent[i]);
+		}
+		
+		for(int i = 0; i < arr.length; i++) {
+			if(arr[i]) counts++;
+		}
+		
+		return counts;
+	}
+	
+	private static class InputReader {
+		private InputStream stream;
+		private byte[] buf = new byte[1024];
+		private int curChar;
+		private int numChars;
+		private SpaceCharFilter filter;
 
-		for (int i = 0; i < N; i++) {
-			for(int start: map[i]) {
-				if (isVisited[start] == 0) {
-					Queue<Integer> q = new LinkedList<>();
-					isVisited[start] = 1;
-	
-					q.offer(start);
-	
-					while (!q.isEmpty()) {
-						int current = q.poll();
-	
-						for (int next : map[current]) {							
-							if (isVisited[next] == 0) {
-								isVisited[next] = isVisited[current] + 1;
-								
-								if(i == next) virus++;
-	
-								q.offer(next);
-							}
-						}
-					}
+		public InputReader(InputStream stream) {
+			this.stream = stream;
+		}
+
+		public int read() {
+			if (numChars == -1) {
+				throw new InputMismatchException();
+			}
+			if (curChar >= numChars) {
+				curChar = 0;
+				try {
+					numChars = stream.read(buf);
+				} catch (IOException e) {
+					throw new InputMismatchException();
+				}
+				if (numChars <= 0) {
+					return -1;
 				}
 			}
+			return buf[curChar++];
+		}
+
+		public int readInt() {
+			int c = read();
+			while (isSpaceChar(c)) {
+				c = read();
+			}
+			int sgn = 1;
+			if (c == '-') {
+				sgn = -1;
+				c = read();
+			}
+			int res = 0;
+			do {
+				if (c < '0' || c > '9') {
+					throw new InputMismatchException();
+				}
+				res *= 10;
+				res += c - '0';
+				c = read();
+			} while (!isSpaceChar(c));
+			return res * sgn;
+		}
+
+		public boolean isSpaceChar(int c) {
+			if (filter != null) {
+				return filter.isSpaceChar(c);
+			}
+			return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+		}
+		
+		public interface SpaceCharFilter {
+			public boolean isSpaceChar(int ch);
 		}
 	}
 }
