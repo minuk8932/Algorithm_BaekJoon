@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 /**
  * 
  * 	@author minchoba
- *	백준 6592번 : 상범 빌딩
+ *	백준 6593번 : 상범 빌딩
  *
  *	@see https://www.acmicpc.net/problem/6593/
  *
