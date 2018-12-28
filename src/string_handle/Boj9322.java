@@ -1,8 +1,17 @@
+package string_handle;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 9322번: 철벽 보안 알고리즘
+ *
+ *	@see https://www.acmicpc.net/problem/9322/
+ *
+ */
 public class Boj9322 {
 	private static final char SPACE = ' ';
 	private static final char NEW_LINE = '\n';
@@ -14,13 +23,13 @@ public class Boj9322 {
 		
 		while(T-- > 0) {
 			int n = Integer.parseInt(br.readLine());
-			String[] publicKey1  = new String[n];
+			HashMap<String, Integer> publicKey1  = new HashMap<>();
 			String[] publicKey2  = new String[n];
 			String[] pw = new String[n];
 			
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			for(int i = 0; i < n; i++) {
-				publicKey1[i] = st.nextToken();
+				publicKey1.put(st.nextToken(), i);
 			}
 			
 			st = new StringTokenizer(br.readLine());
@@ -33,25 +42,25 @@ public class Boj9322 {
 				pw[i] = st.nextToken();
 			}
 			
-			sb.append(decoding(publicKey1, publicKey2, pw));
+			sb.append(decoding(publicKey1, publicKey2, pw)).append(NEW_LINE);
 		}
+		
+		System.out.println(sb);
 	}
 	
-	private static String decoding(String[] arr1, String[] arr2, String[] ans) {
-		int[] idx = new int[arr1.length];
-		Arrays.fill(idx, -1);
+	private static StringBuilder decoding(HashMap<String, Integer> hm, String[] arr, String[] password) {
+		String[] res = new String[arr.length];
 		
-		for(int i = 0; i < arr1.length; i++) {
-			if(idx[i] != -1) continue;
-			
-			for(int j = 0; j < arr2.length; j++) {
-				if(arr1[i] == arr2[j]) {
-					idx[i] = j;
-					break;
-				}
-			}
+		for(int i = 0; i < arr.length; i++) {
+			int idx = hm.get(arr[i]);			// 순서 조정
+			res[idx] = password[i];
 		}
 		
-		return null;
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < res.length; i++) {		// 암호 해독
+			sb.append(res[i]).append(SPACE);
+		}
+		
+		return sb;
 	}
 }
