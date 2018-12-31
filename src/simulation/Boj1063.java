@@ -53,8 +53,8 @@ public class Boj1063 {
 	private static void directionInit() {		// 움직임에 대한 값 정보 초기화
 		hm.put("R", new Point('C', 0));
 		hm.put("L", new Point('A', 0));
-		hm.put("B", new Point(' ', -1));
-		hm.put("T", new Point(' ', 1));
+		hm.put("B", new Point(SPACE, -1));
+		hm.put("T", new Point(SPACE, 1));
 		hm.put("RT", new Point('C', 1));
 		hm.put("LT", new Point('A', 1));
 		hm.put("RB", new Point('C', -1));
