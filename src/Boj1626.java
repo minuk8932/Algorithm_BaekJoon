@@ -94,12 +94,7 @@ public class Boj1626 {
 			}
 		}
 		
-		int second = minCost - max;		
-		second += min;
-		
-		if(min == Integer.MAX_VALUE) return -1;
-		if(second == minCost) return -1;
-		else return second;
+		return 0;
 	}
 	
 	private static class InputReader {
