@@ -23,6 +23,7 @@ public class Boj3697 {
 			int[][] map = new int[n][m];
 			int[][] diff = new int[n][m];
 			
+			int max = 0;
 			
 			for(int i = 0; i < n; i++) {
 				st = new StringTokenizer(br.readLine());
@@ -31,6 +32,7 @@ public class Boj3697 {
 					map[i][j] = Integer.parseInt(st.nextToken());
 					diff[i][j] = map[i][j] - d;
 				
+					if(map[i][j] > max) max = map[i][j];
 				}
 			}
 			
