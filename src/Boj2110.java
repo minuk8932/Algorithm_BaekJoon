@@ -1,61 +1,62 @@
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.InputMismatchException;
 
-public class Boj16572 {
-	private static final int INF = 2_001;
-	private static int[][] isVisited = new int[INF][INF];
-	
-	public static void main(String[] args) {
+/**
+ * 
+ * 	@author minchoba
+ *	백준 2110번: 공유기 설치
+ *
+ *	@see https://www.acmicpc.net/problem/2110/
+ *
+ */
+public class Boj2110 {
+	public static void main(String[] args) throws Exception{
 		InputReader in = new InputReader(System.in);
-		int n = in.readInt();
+		int N = in.readInt();
+		int C = in.readInt();
 		
-		boolean[][] pixel = new boolean[INF][INF];
-		
-		while(n-- > 0) {
-			int A = in.readInt();
-			int B = in.readInt();
-			int C = in.readInt();
-			
-			if(isVisited[A][B] >= C) continue;
-			isVisited[A][B] = C;
-			
-			pixel = makeTriangle(pixel, A, B ,C);
+		int[] router = new int[N];
+		for(int i = 0; i < N; i++) {
+			router[i] = in.readInt();
 		}
 		
-		System.out.println(area(pixel));
+		Arrays.sort(router);
+		System.out.println(binarySearch(router, C));	// 결과 출력
 	}
 	
-	private static boolean[][] makeTriangle(boolean[][] arr, int row, int col, int size) {
-		int cost = 0;
-		int value = size;
+	private static int binarySearch(int[] arr, int hits) {		
+		int start = arr[0], end = arr[arr.length - 1] - arr[0];
+		int res = 0;
 		
-		for(int i = row; i < row + size; i++) {
-			int fill = value;
+		while(start <= end) {
+			int mid = (start + end) / 2;
+			int count = getCount(arr[0], mid, arr);		// mid(간격)에 따른 공유기 설치 갯수 반환
 			
-			for(int j = col; j < col + size - cost; j++) {
-				if(arr[i][j]) continue;
-				arr[i][j] = true;
-				isVisited[i][j] = fill--;
+			if(hits <= count) {
+				start = mid + 1;		// 갯수가 더 많은 경우
+				res = mid;				// 같은 경우
 			}
-			
-			value--;
-			cost++;
-		}
-		
-		return arr;
-	}
-	
-	private static int area(boolean[][] arr) {
-		int sum = 0;
-		
-		for(int i = 1; i < INF; i++) {
-			for(int j = 1; j < INF; j++) {
-				if(arr[i][j]) sum++;
+			else {
+				end = mid - 1;
 			}
 		}
 		
-		return sum;
+		return res;
+	}
+	
+	private static int getCount(int first, int target, int[] arr) {
+		int cnt = 1;
+		
+		for(int i = 1; i < arr.length; i++) {
+			if(first + target <= arr[i]) {
+				cnt++;
+				first = arr[i];
+			}
+		}
+		
+		return cnt;
 	}
 	
 	private static class InputReader {
