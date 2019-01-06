@@ -1,64 +1,8 @@
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.InputMismatchException;
 
-/**
- * 
- * 	@author minchoba
- *	백준 2110번: 공유기 설치
- *
- *	@see https://www.acmicpc.net/problem/2110/
- *
- */
-public class Boj2110 {
-	public static void main(String[] args) throws Exception{
-		InputReader in = new InputReader(System.in);
-		int N = in.readInt();
-		int C = in.readInt();
-		
-		int[] router = new int[N];
-		for(int i = 0; i < N; i++) {
-			router[i] = in.readInt();
-		}
-		
-		Arrays.sort(router);
-		System.out.println(binarySearch(router, C));	// 결과 출력
-	}
-	
-	private static int binarySearch(int[] arr, int hits) {		
-		int start = arr[0], end = arr[arr.length - 1] - arr[0];
-		int res = 0;
-		
-		while(start <= end) {
-			int mid = (start + end) / 2;
-			int count = getCount(arr[0], mid, arr);		// mid(간격)에 따른 공유기 설치 갯수 반환
-			
-			if(hits <= count) {
-				start = mid + 1;		// 갯수가 더 많은 경우
-				res = mid;				// 같은 경우
-			}
-			else {
-				end = mid - 1;
-			}
-		}
-		
-		return res;
-	}
-	
-	private static int getCount(int first, int target, int[] arr) {
-		int cnt = 1;
-		
-		for(int i = 1; i < arr.length; i++) {
-			if(first + target <= arr[i]) {
-				cnt++;
-				first = arr[i];
-			}
-		}
-		
-		return cnt;
-	}
-	
+public class Boj3020 {
 	private static class InputReader {
 		private InputStream stream;
 		private byte[] buf = new byte[1024];
