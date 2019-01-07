@@ -1,61 +1,57 @@
+package greedy;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.InputMismatchException;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 16572번: Pixel triangle
+ *
+ *	@see https://www.acmicpc.net/problem/16572/
+ *
+ */
 public class Boj16572 {
 	private static final int INF = 2_001;
-	private static int[][] isVisited = new int[INF][INF];
-	
+
 	public static void main(String[] args) {
 		InputReader in = new InputReader(System.in);
 		int n = in.readInt();
 		
-		boolean[][] pixel = new boolean[INF][INF];
+		int[][] pixel = new int[INF][INF];
 		
 		while(n-- > 0) {
 			int A = in.readInt();
 			int B = in.readInt();
 			int C = in.readInt();
 			
-			if(isVisited[A][B] >= C) continue;
-			isVisited[A][B] = C;
-			
-			pixel = makeTriangle(pixel, A, B ,C);
+			if(pixel[A][B] >= C) continue;
+			pixel[A][B] = C;				// 현재 위치의 자신보다 큰 삼각형이 입력으로 들어올 때
 		}
 		
-		System.out.println(area(pixel));
+		System.out.println(makeTriangle(pixel));
 	}
 	
-	private static boolean[][] makeTriangle(boolean[][] arr, int row, int col, int size) {
-		int cost = 0;
-		int value = size;
-		
-		for(int i = row; i < row + size; i++) {
-			int fill = value;
-			
-			for(int j = col; j < col + size - cost; j++) {
-				if(arr[i][j]) continue;
-				arr[i][j] = true;
-				isVisited[i][j] = fill--;
-			}
-			
-			value--;
-			cost++;
-		}
-		
-		return arr;
-	}
-	
-	private static int area(boolean[][] arr) {
-		int sum = 0;
+	private static int makeTriangle(int[][] arr) {
+		int count = 0;
 		
 		for(int i = 1; i < INF; i++) {
 			for(int j = 1; j < INF; j++) {
-				if(arr[i][j]) sum++;
+				int cost = getMax(arr[i][j], arr[i - 1][j] - 1, arr[i][j - 1] - 1);
+				if(cost == 0) continue;			// 모든 칸이 0이면 삼각형이 없는 경우
+				
+				arr[i][j] = cost;
+				count++;				// 삼각형이 존재하는 칸이라면 + 1
 			}
 		}
+
+		return count;
+	}
+	
+	private static int getMax(int cost1, int cost2, int cost3) {
+		int max = Math.max(cost1, cost2);
 		
-		return sum;
+		return max > cost3 ? max: cost3;
 	}
 	
 	private static class InputReader {
