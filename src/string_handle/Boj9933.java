@@ -1,4 +1,4 @@
-package implementation;
+package string_handle;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
