@@ -14,7 +14,7 @@ import java.util.LinkedList;
  */
 public class Boj3671 {
 	private static boolean[] isPrime = new boolean[10_000_000];
-	private static LinkedList<Integer> list;
+	private static LinkedList<Integer> list = new LinkedList<>();
 	private static int count;
 	
 	private static final char NEW_LINE = '\n';
@@ -28,7 +28,6 @@ public class Boj3671 {
 		
 		while(c-- > 0) {
 			char[] paper = br.readLine().toCharArray();
-			list = new LinkedList<>();
 			count = 0;
 			
 			for(int i = 0; i < paper.length; i++) {
