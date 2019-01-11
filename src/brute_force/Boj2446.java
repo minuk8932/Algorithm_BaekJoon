@@ -27,7 +27,7 @@ public class Boj2446 {
 		
 		staring(N, 2 * N - 3, -1, -1);
 		
-		System.out.println(sb.substring(0, sb.length() - 1));		// 규칙에 따라 별을 찍어보자
+		System.out.print(sb);		// 규칙에 따라 별을 찍어보자
 	}
 	
 	private static void midFill(int loop, char next) {
