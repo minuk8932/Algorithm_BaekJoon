@@ -5,11 +5,7 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Boj15683 {
-	private static boolean[][] isObserved = null;
-	private static int[][] map = null;
-	
-	private static CctvInfo[] cctv = null;
-	private static Queue<CctvInfo> q = new LinkedList<>();
+	private static int[][] res;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,8 +13,9 @@ public class Boj15683 {
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 		
-		map = new int[N][M];
-		isObserved = new boolean[N][M];
+		Queue<CctvInfo> q = new LinkedList<>();
+		int[][] map = new int[N][M];
+		boolean[][] isObserved = new boolean[N][M];
 		
 		int size = 0;
 		
@@ -39,19 +36,9 @@ public class Boj15683 {
 			}
 		}
 		
-		int qSize = q.size();
+		res = new int[size][4];
 		
-		boolean[][][] seq = new boolean[N][M][qSize];
-		for(int row = 0; row < N; row++) {
-			for(int col = 0; col < M; col++) {
-				if(!(map[row][col] > 0 && map[row][col] <= 6)) continue;
-				for(int i = 0; i < seq[row][col].length; i++) { 
-					seq[row][col][i] = true;
-				}
-			}
-		}
-		
-		System.out.println();
+		bfs(q, map, isObserved);
 	}
 	
 	private static class CctvInfo{
@@ -64,5 +51,9 @@ public class Boj15683 {
 			this.row = row;
 			this.col = col;
 		}
+	}
+	
+	private static void bfs(Queue<CctvInfo> q, int[][] arr, boolean[][] isObserved) {
+		
 	}
 }
