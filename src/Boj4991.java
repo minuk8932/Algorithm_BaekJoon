@@ -1,7 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Boj4991 {
@@ -11,19 +9,14 @@ public class Boj4991 {
 	private static final char START = 'o';
 	private static final char DIRT = '*';
 	private static final char BLOCK = 'x';
-	private static final char CLEAN = '.';
 
 	private static final int[][] DIRECTIONS = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
 	private static final int ROW = 0;
 	private static final int COL = 1;
-	private static final int MAX = 30;
-	private static final int INF = 10_001;
+	private static final int INF = 1_000_001;
 
-	private static Point start = null;
-	private static Point[] dust = new Point[10];
-
-	private static char[][] map = null;
-	private static int res = 0;
+	private static int res;
+	private static boolean[][] isVisited;
 
 	public static void main(String[] args) throws Exception {
 		StringBuilder sb = new StringBuilder();
@@ -39,36 +32,27 @@ public class Boj4991 {
 			}
 
 			int dustCnt = 0;
-			map = new char[MAX][MAX];
+			char[][] map = new char[h][w];
+			Point start = new Point(0, 0);
+			isVisited = new boolean[h][w];
 
 			for (int i = 0; i < h; i++) {
 				String line = br.readLine();
 				for (int j = 0; j < w; j++) {
 					map[i][j] = line.charAt(j);
 
-					if (map[i][j] == START) {
-						start = new Point(i, j);
-					}
-
-					if (map[i][j] == DIRT) {
-						dust[dustCnt] = new Point(i, j);
-						dustCnt++;
-					}
+					if (map[i][j] == START) start = new Point(i, j);
+					if (map[i][j] == DIRT) dustCnt++;
 				}
 			}
-
-			res = 0;
+					
+			res = INF;
 			
-			while(dustCnt-- > 0) {
-				bfs(map, h, w);
-				
-				if(res == INF) break;
-			}
-			
-			sb.append(res >= INF ? -1 : res).append(NEW_LINE);
+			bfs(map, h, w, start, dustCnt, 0);			
+			sb.append(res == INF ? -1 : res).append(NEW_LINE);
 		}
 
-		System.out.println(sb.toString());
+		System.out.println(sb);
 	}
 
 	private static class Point {
@@ -81,61 +65,7 @@ public class Boj4991 {
 		}
 	}
 
-	private static void bfs(char[][] map, int N, int M) {
-		int min = INF, tmpRow = 0, tmpCol = 0;
-
-		for (Point d : dust) {
-			if(d == null) continue;
-			if(d.row == -1 && d.col == -1) continue;
-			
-			int[][] isVisited = new int[MAX][MAX];
-
-			isVisited[d.row][d.col] = 1;
-			Queue<Point> q = new LinkedList<>();
-
-			q.offer(new Point(d.row, d.col));
-
-			while (!q.isEmpty()) {
-				Point current = q.poll();
-
-				for (final int[] DIRECTION : DIRECTIONS) {
-					int nextRow = current.row + DIRECTION[ROW];
-					int nextCol = current.col + DIRECTION[COL];
-
-					if (nextRow >= 0 && nextRow < N && nextCol >= 0 && nextCol < M) {
-						if (isVisited[nextRow][nextCol] == 0 && map[nextRow][nextCol] != BLOCK) {
-							isVisited[nextRow][nextCol] = isVisited[current.row][current.col] + 1;
-
-							if (map[nextRow][nextCol] == START) {
-								if(min > isVisited[nextRow][nextCol]) {
-									min = isVisited[nextRow][nextCol] - 1;
-									tmpRow = d.row;
-									tmpCol = d.col;
-								}
-							}
-
-							q.offer(new Point(nextRow, nextCol));
-						}
-					}
-				}
-			}
-		}
+	private static void bfs(char[][] arr, int h, int w, Point current, int count, int move) {
 		
-		if(min == INF) {
-			res = INF;
-			return;
-		}
-		
-		res += min;
-		map[start.row][start.col] = CLEAN;
-		start = new Point(tmpRow, tmpCol);
-		map[tmpRow][tmpCol] = START;
-		
-		
-		for(Point d: dust) {
-			if(d != null) {
-				if(tmpRow == d.row && tmpCol == d.col) d.row = d.col = -1;
-			}
-		}
 	}
 }
