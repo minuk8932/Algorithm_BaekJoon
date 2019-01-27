@@ -1,7 +1,7 @@
-package depth_first_search;
+package disjoint_set;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 
@@ -10,17 +10,14 @@ import java.util.InputMismatchException;
  * 	@author minchoba
  *	백준 16724번: 피리 부는 사나이
  *
- *	@see https://acmicpc.net/problem/16724/
+ *	@see https://www.acmicpc.net/problem/16724/
  *
  */
 public class Boj16724 {
-	private static int count;
-	private static boolean critical;
+	private static int[] parent;
 	private static boolean[][] isVisited;
 	
-	private static ArrayList<Point> pair = new ArrayList<>();
-	
-	private static final HashMap<Character, Point> hm = new HashMap<>();
+	private static HashMap<Character, Point> hm = new HashMap<>();
 	
 	private static class Point{
 		int row;
@@ -37,6 +34,7 @@ public class Boj16724 {
 		int N = in.readInt();
 		int M = in.readInt();
 		
+		parent = new int[N * M];
 		isVisited = new boolean[N][M];
 		init();
 		
@@ -51,11 +49,14 @@ public class Boj16724 {
 		for(int i = 0; i < N; i++) {
 			for(int j = 0; j < M; j++) {
 				if(isVisited[i][j]) continue;
-				if(!pair.isEmpty()) pair = new ArrayList<>();		// 집합 쌍 저장소 생성
-				
-				critical = false;
 				dfs(M, map, i, j);
 			}
+		}
+		
+		int count = 0;		
+		
+		for(int i = 0; i < parent.length; i++) {		// 집합 갯수
+			if(parent[i] < 0) count++;
 		}
 		
 		System.out.println(count);
@@ -66,32 +67,44 @@ public class Boj16724 {
 		hm.put('D', new Point(1, 0));
 		hm.put('R', new Point(0, 1));
 		hm.put('L', new Point(0, -1));
+		
+		Arrays.fill(parent, -1);
 	}
 	
 	private static void dfs(int m, char[][] arr, int row, int col) {
-		if(isVisited[row][col] || critical) return;
+		if(isVisited[row][col]) return;
 		isVisited[row][col] = true;
 		
-		Point current = hm.get(arr[row][col]);
+		Point direct = hm.get(arr[row][col]);
 		
-		pair.add(new Point(row ,col));
+		int nextRow = row + direct.row;
+		int nextCol = col + direct.col;
 		
-		int nextRow = row + current.row;
-		int nextCol = col + current.col;
+		int p = row * m + col;
+		int np = nextRow * m + nextCol;
 		
-		if(isCycle(nextRow, nextCol)) {		// 해당 쌍이 리스트에 존재하는 경우: 하나의 집합
-			critical = true;
-			count++;				// 집합 갯수 +1
-			
-			return;
-		}
-		
+		if(merge(p, np)) return;			// 집합 생성, 이미 집합이면 함수 반환
 		dfs(m, arr, nextRow, nextCol);
 	}
 	
-	private static boolean isCycle(int row, int col) {
-		for(Point p: pair) {
-			if(row == p.row && col == p.col) return true;
+	private static int find(int x) {
+		if(parent[x] < 0) return x;
+		else return parent[x] = find(parent[x]);
+	}
+	
+	private static boolean merge(int x, int y) {
+		x = find(x);
+		y = find(y);
+		
+		if(x == y) return true;
+		
+		if(parent[x] > parent[y]) {
+			parent[y] += parent[x];
+			parent[x] = y;
+		}
+		else {
+			parent[x] += parent[y];
+			parent[y] = x;
 		}
 		
 		return false;
