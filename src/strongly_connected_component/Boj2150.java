@@ -1,3 +1,5 @@
+package strongly_connected_component;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayDeque;
@@ -7,6 +9,14 @@ import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.List;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 2150번: Strongly Connected Component by Kosaraju's Algorithm
+ *
+ *	@see https://www.acmicpc.net/problem/2150/
+ *
+ */
 public class Boj2150 {
 	private static ArrayDeque<Integer> stack = new ArrayDeque<>();
 	private static ArrayList<ArrayList<Integer>> scc;
@@ -45,7 +55,7 @@ public class Boj2150 {
 			if(isVisited[i]) continue;
 			isVisited[i] = true;
 			
-			dfs(forward, i, true);
+			dfs(forward, i, true);			// 정방향 탐색 후 반환되는 노드 순으로 스택 저장
 			stack.push(i);
 		}
 		
@@ -58,7 +68,7 @@ public class Boj2150 {
 			if(isVisited[start]) continue;
 			
 			component.add(start);
-			dfs(backward, start, false);
+			dfs(backward, start, false);		// 스택에서 가져오며 역방향 탐색 순으로 scc list로 저장
 			scc.add(loop++, component);
 		}
 		
@@ -81,11 +91,11 @@ public class Boj2150 {
 	private static StringBuilder getRes(int size) {
 		StringBuilder sb = new StringBuilder();
 		
-		for(int i = 0; i < size; i++) {			
+		for(int i = 0; i < size; i++) {						// sorting inner list
 			Collections.sort(scc.get(i));
 		}
 		
-		Collections.sort(scc, new ListComparator<>());
+		Collections.sort(scc, new ListComparator<>());		// sorting list of list
 		
 		sb.append(size).append(NEW_LINE);
 		
@@ -105,13 +115,12 @@ public class Boj2150 {
 	private static class ListComparator<T extends Comparable<T>> implements Comparator<List<T>> {
 		@Override
 		public int compare(List<T> l1, List<T> l2) {
-			for (int i = 0; i < Math.min(l1.size(), l2.size()); i++) {
-				int c = l1.get(i).compareTo(l2.get(i));
-		      
-				if (c != 0) return c;
+			for (int i = 0; i < Math.min(l1.size(), l2.size()); i++) {		// 더 작은 사이즈를 받아와서
+				int c = l1.get(i).compareTo(l2.get(i));		// 각 리스트 내부를 비교
+				if (c != 0) return c;						// -1 또는 1로 나누어 앞으로 당기거나 뒤로 밀어줌
 			}
 		    
-			return Integer.compare(l1.size(), l2.size());
+			return Integer.compare(l1.size(), l2.size());	// c == 0 이면 최소 사이즈까지 같은 값이므로 두 리스트 중 짧은 것이 어느것인지 비교하여 반환
 		}
 	}
 	
