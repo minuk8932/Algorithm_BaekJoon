@@ -1,112 +1,75 @@
+package strongly_connected_component;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.PriorityQueue;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 15783번: 세진 바이러스
+ *
+ *	@see https://www.acmicpc.net/problem/15783/
+ *
+ */
 public class Boj15783 {
-	private static int[] parent;
+	private static boolean[] isVisited;
+	private static ArrayDeque<Integer> stack = new ArrayDeque<>();
 	
 	public static void main(String[] args) throws Exception {
 		InputReader in = new InputReader(System.in);
 		int N = in.readInt();
 		int M = in.readInt();
 		
-		init(N);
-
-		PriorityQueue<Node> map = new PriorityQueue<>();
+		ArrayList<Integer>[] map = new ArrayList[N];
+		ArrayList<Integer>[] revMap = new ArrayList[N];;
+		
+		for(int i = 0; i < N; i++) {
+			map[i] = new ArrayList<>();
+			revMap[i] = new ArrayList<>();
+		}
 
 		for (int i = 0; i < M; i++) {
 			int A = in.readInt();
 			int B = in.readInt();
 			
-			map.offer(new Node(A, B));
+			map[A].add(B);
+			revMap[B].add(A);
 		}
-
-		search(map);
-	}
-	
-	private static class Node implements Comparable<Node>{
-		int from;
-		int to;
 		
-		public Node(int from, int to) {
-			this.from = from;
-			this.to = to;
-		}
-
-		@Override
-		public int compareTo(Node n) {
-			if(this.from < n.from) {
-				return -1;
-			}
-			else if(this.from > n.from) {
-				return 1;
-			}
-			else {
-				if(this.to < n.to) return -1;
-				else if(this.to > n.to) return 1;
-				else return 0;
-			}
-		}
-	}
-	
-	private static void init(int N) {
-		parent = new int[N];
-		
+		isVisited = new boolean[N];
 		for(int i = 0; i < N; i++) {
-			parent[i] = i;
-		}
-	}
-	
-	private static int find(int n) {
-		if(parent[n] == n) return n;
-		else return find(parent[n]);
-	}
-	
-	private static void merge(int x, int y) {
-		x = find(x);
-		y = find(y);
-		
-		if(x < y) parent[y] = x;
-		else parent[x] = y;
-	}
-	
-	private static boolean isCycle(int x, int y) {
-		x = find(x);
-		y = find(y);
-		
-		if(x == y) return true;
-		else return false;
-	}
-	
-	private static void search(PriorityQueue<Node> pq) {
-		while(!pq.isEmpty()) {
-			Node next = pq.poll();
+			if(isVisited[i]) continue;
 			
-			if(!isCycle(next.from, next.to)) {
-				merge(next.from, next.to);
-				
-				System.out.println(next.from + " " + next.to); 
-			}
+			backTracking(map, i, true);		// 탐색하여 반환되는 순으로 스택 저장
+			stack.push(i);
 		}
 		
-		System.out.println(getRes());
+		isVisited = new boolean[N];
+		int scc = 0;
+		
+		while(!stack.isEmpty()) {
+			int start = stack.pop();
+			if(isVisited[start]) continue;
+			
+			backTracking(map, start, false);		// 스택에서 꺼내오면서 탐색
+			scc++;								// 탐색의 시작점 갯수
+		}
+		
+		System.out.println(scc);
 	}
 	
-	private static int getRes() {
-		boolean[] arr = new boolean[1_000_001];
-		int counts = 0;
+	private static void backTracking(ArrayList<Integer>[] arr, int current, boolean save) {
+		if(isVisited[current]) return;
+		isVisited[current] = true;
 		
-		for(int i = 0; i < parent.length; i++) {
-			arr[parent[i]] = true;
-//			System.out.println(parent[i]);
+		for(int next: arr[current]) {
+			if(isVisited[next]) continue;
+			
+			backTracking(arr, next, save);
+			if(save) stack.push(next);
 		}
-		
-		for(int i = 0; i < arr.length; i++) {
-			if(arr[i]) counts++;
-		}
-		
-		return counts;
 	}
 	
 	private static class InputReader {
