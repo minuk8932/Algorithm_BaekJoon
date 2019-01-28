@@ -2,18 +2,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.InputMismatchException;
-import java.util.LinkedList;
+import java.util.List;
 
 public class Boj2150 {
 	private static ArrayDeque<Integer> stack = new ArrayDeque<>();
-	private static ArrayList<Integer>[] res;
+	private static ArrayList<ArrayList<Integer>> scc;
+	private static ArrayList<Integer> component;
 	
 	private static boolean[] isVisited;
-	private static int counts = 0;
 	
-	private static final char NEW_LINE = '\n';
-	private static final char SPACE = ' ';
+	private static final String NEW_LINE = "\n";
+	private static final String SPACE = " ";
 	
 	public static void main(String[] args) throws Exception{
 		InputReader in = new InputReader(System.in);
@@ -22,11 +24,12 @@ public class Boj2150 {
 		
 		ArrayList<Integer>[] forward = new ArrayList[V + 1];
 		ArrayList<Integer>[] backward = new ArrayList[V + 1];
-		isVisited = new boolean[V + 1];
+		scc = new ArrayList<>();
 		
 		for(int i = 0; i < V + 1; i++) {
 			forward[i] = new ArrayList<>();
 			backward[i] = new ArrayList<>();
+			scc.add(i, new ArrayList<>());
 		}
 		
 		while(E-- > 0) {
@@ -37,49 +40,79 @@ public class Boj2150 {
 			backward[B].add(A);
 		}
 		
-		
-		DFS(forward, 1);
 		isVisited = new boolean[V + 1];
-		ArrayList<Integer>[] res = new ArrayList[V + 1];
-		for(int i = 0; i < V + 1; i++) {
-			res[i] = new ArrayList<>();
+		for(int i = 1; i < V + 1; i++) {
+			if(isVisited[i]) continue;
+			isVisited[i] = true;
+			
+			dfs(forward, i, true);
+			stack.push(i);
 		}
+		
+		isVisited = new boolean[V + 1];
+		int loop = 0;
 		
 		while(!stack.isEmpty()) {
+			component = new ArrayList<>();
 			int start = stack.pop();
-			
 			if(isVisited[start]) continue;
 			
-			SCC(backward, start);
-			counts++;
-		}
-	}
-	
-	private static void DFS(ArrayList<Integer>[] map, int current) {		
-		for(int next: map[current]) {
-			if(isVisited[next]) continue;
-			isVisited[next] = true;
-			
-			DFS(map, next);
-			stack.push(next);
-		}
-	}
-	
-	private static void SCC(ArrayList<Integer>[] map, int current) {		
-		for(int next: map[current]) {
-			if(isVisited[next]) continue;
-			isVisited[next] = true;
-			
-			SCC(map, next);
+			component.add(start);
+			dfs(backward, start, false);
+			scc.add(loop++, component);
 		}
 		
-		res[counts].add(current);
+		System.out.println(getRes(loop));
+	}
+	
+	private static void dfs(ArrayList<Integer>[] arr, int current, boolean save) {
+		isVisited[current] = true;
+		
+		for(int next: arr[current]) {
+			if(isVisited[next]) continue;
+			isVisited[next] = true;
+			
+			if(!save) component.add(next);
+			dfs(arr, next, save);
+			if(save) stack.push(next);
+		}
 	}
 
-	private static StringBuilder getRes() {
+	private static StringBuilder getRes(int size) {
 		StringBuilder sb = new StringBuilder();
 		
+		for(int i = 0; i < size; i++) {			
+			Collections.sort(scc.get(i));
+		}
+		
+		Collections.sort(scc, new ListComparator<>());
+		
+		sb.append(size).append(NEW_LINE);
+		
+		int loop = scc.size();
+		for(int i = 0; i < loop; i++) {
+			if(scc.get(i).size() == 0) continue;
+			
+			for(int element : scc.get(i)) {
+				sb.append(element).append(SPACE);
+			}
+			sb.append(-1).append(NEW_LINE);
+		}
+		
 		return sb;
+	}
+	
+	private static class ListComparator<T extends Comparable<T>> implements Comparator<List<T>> {
+		@Override
+		public int compare(List<T> l1, List<T> l2) {
+			for (int i = 0; i < Math.min(l1.size(), l2.size()); i++) {
+				int c = l1.get(i).compareTo(l2.get(i));
+		      
+				if (c != 0) return c;
+			}
+		    
+			return Integer.compare(l1.size(), l2.size());
+		}
 	}
 	
 	private static class InputReader {
