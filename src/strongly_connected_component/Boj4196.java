@@ -1,9 +1,18 @@
+package strongly_connected_component;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 4196번: 도미노
+ *
+ *	@see https://www.acmicpc.net/problem/4196/
+ *
+ */
 public class Boj4196 {
 	private static final String NEW_LINE = "\n";
 	
@@ -38,7 +47,7 @@ public class Boj4196 {
 				if(isVisited[i]) continue;
 				
 				backTracking(map, i, true);
-				stack.push(i);
+				stack.push(i);						// 탐색의 역순으로 스택에 저장
 			}
 			
 			int scc = 0;
@@ -49,7 +58,7 @@ public class Boj4196 {
 				if(isVisited[start]) continue;
 			
 				backTracking(map, start, false);
-				scc++;
+				scc++;								// 넘어뜨려야 하는 최소 갯수
 			}
 			
 			sb.append(scc).append(NEW_LINE);
@@ -65,7 +74,7 @@ public class Boj4196 {
 		for(int next: arr[current]) {
 			if(isVisited[next]) continue;
 			
-			backTracking(arr, next, save);
+			backTracking(arr, next, save);		// 함수 반환시 마다 해당 노드를 스택에 저장
 			if(save) stack.push(next);
 		}
 	}
