@@ -23,11 +23,9 @@ public class Boj15783 {
 		int M = in.readInt();
 		
 		ArrayList<Integer>[] map = new ArrayList[N];
-		ArrayList<Integer>[] revMap = new ArrayList[N];;
 		
 		for(int i = 0; i < N; i++) {
 			map[i] = new ArrayList<>();
-			revMap[i] = new ArrayList<>();
 		}
 
 		for (int i = 0; i < M; i++) {
@@ -35,7 +33,6 @@ public class Boj15783 {
 			int B = in.readInt();
 			
 			map[A].add(B);
-			revMap[B].add(A);
 		}
 		
 		isVisited = new boolean[N];
