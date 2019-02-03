@@ -1,15 +1,22 @@
+package back_tracking;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 3109번: 빵집
+ *
+ *	@see https://www.acmicpc.net/problem/3109/
+ *
+ */
 public class Boj3109 {
-	private static final int[][] DIRECTIONS = {{-1, 1}, {0, 1}, {1, 1}};
+	private static final int[][] DIRECTIONS = {{-1 ,1}, {0, 1}, {1, 1}};
 	private static final int ROW = 0;
 	private static final int COL = 1;
 	
 	private static boolean[][] isVisited;
-	private static int count;
-	private static boolean arrived = false;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,43 +33,36 @@ public class Boj3109 {
 				char spot = line.charAt(j);
 				
 				if(spot == '.') map[i][j] = true;
-				else map[i][j] = false;
 			}
 		}
 			
+		int count = 0;
 		isVisited = new boolean[R][C];
-		int res = 0;
 		
-		for(int i = 0; i < C; i++) {
-			arrived = false;
-			count = 0;
-			backTracking(R, C, map, 0, i);
+		for(int i = 0; i < R; i++) {
+			if(isVisited[i][0]) continue;
 			
-			res = Math.max(count, res);
+			count += backTracking(R, C, map, i, 0);		// 도달 한 경우
 		}
 		
-		System.out.println(res);
+		System.out.println(count);
 	}
 	
-	private static void backTracking(int r, int c, boolean[][] arr, int row, int col) {
-		if(isVisited[row][col] || !arr[row][col]) return;
-		if(col == c - 1) {
-			count++;
-			arrived = true;
-			return;
-		}
+	private static int backTracking(int r, int c, boolean[][] arr, int row, int col) {
+		isVisited[row][col] = true;
 		
-		if(arrived) return;
+		if(col == c - 1) return 1;		// 목적지 도착
 		
 		for(final int[] DIRECTION: DIRECTIONS) {
 			int nextRow = row + DIRECTION[ROW];
 			int nextCol = col + DIRECTION[COL];
 			
 			if(nextRow < 0 || nextRow >= r || nextCol < 0 || nextCol >= c) continue;
-			System.out.println(row + " " + col + " " + nextRow + " " + nextCol);
+			if(!arr[nextRow][nextCol] || isVisited[nextRow][nextCol]) continue;
 				
-			backTracking(r, c, arr, nextRow, nextCol);
-			isVisited[nextRow][nextCol] = false;
+			if(backTracking(r, c, arr, nextRow, nextCol) > 0) return 1;		// 목적지는 1개 도착했다면 1반환
 		}
+		
+		return 0;
 	}
 }
