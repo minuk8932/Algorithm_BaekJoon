@@ -26,9 +26,9 @@
 /simulation/
 /sliding_window/
 /sort/
+/stack/
 /string_handle/
 /strongly_connected_component/
 /topology_sort/
 /tree_search/
 /two_pointer/
-/stack/
