@@ -1,11 +1,20 @@
+package breadth_first_search;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 2234번: 성곽
+ *
+ *	@see https://www.acmicpc.net/problem/2234/
+ *
+ */
 public class Boj2234 {
-	private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+	private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};	// 이진수 형식에 맞게 동남북서
 	private static final int ROW = 0;
 	private static final int COL = 1;
 	
@@ -33,27 +42,25 @@ public class Boj2234 {
 		
 		int[][] map = new int[n][m];
 		
-		for(int i = 1; i < n; i += 2) {
+		for(int i = 1; i < n; i += 2) {					// 맵의 크기를 키워서 통로와 벽을 끼워넣음
 			st = new StringTokenizer(br.readLine());
-			String binary = "";
 			
 			for(int j = 1; j < m; j += 2) {
 				map[i][j] = ROOM;
-				binary = Integer.toBinaryString(Integer.parseInt(st.nextToken()));
+				String binary = Integer.toBinaryString(Integer.parseInt(st.nextToken()));
 
 				int leng = binary.length();
-				if(leng != 4) binary = resetBinary(leng, binary);
-					
-				for(int idx = 0; idx < leng; idx++) {						
+				if(leng != 4) binary = resetBinary(leng, binary);		// 길이가 4이하인 2진수를 길이에 맞게 0추가
+				
+				for(int idx = 0; idx < 4; idx++) {						
 					int nextRow = i + DIRECTIONS[idx][ROW];
 					int nextCol = j + DIRECTIONS[idx][COL];
-						
-					if(binary.charAt(idx) == '1') map[nextRow][nextCol] = BLOCK;
-					else map[nextRow][nextCol] = PASSAGE;
+
+					if(binary.charAt(idx) == '0') map[nextRow][nextCol] = PASSAGE;
 				}			
 			}
 		}
-
+		
 		System.out.println(bfs(n, m, map));
 	}
 	
@@ -80,10 +87,10 @@ public class Boj2234 {
 		
 		for(int row = 1; row < N; row += 2) {
 			for(int col = 1; col < M; col += 2) {
-				if(isVisited[row][col] != 0 || map[row][col] != ROOM) continue;
+				if(isVisited[row][col] != 0 || map[row][col] == BLOCK) continue;
 				int roomSize = 1;
-				isVisited[row][col] = ++roomCount;
-				
+				isVisited[row][col] = ++roomCount;		// 각 방마다 번호를 매김 -> 방의 갯수가 됨
+
 				Queue<Point> q = new LinkedList<>();
 				q.offer(new Point(row, col));
 				
@@ -95,14 +102,12 @@ public class Boj2234 {
 						int nextCol = current.col + DIRECTION[COL];
 						
 						if(nextRow < 0 || nextRow > N - 1 || nextCol < 0 || nextCol > M - 1) continue;
-						if(isVisited[nextRow][nextCol] != 0) continue;
+						if(isVisited[nextRow][nextCol] != 0 || map[nextRow][nextCol] == BLOCK) continue;
 						
-						if(map[nextRow][nextCol] == ROOM || map[nextRow][nextCol] == PASSAGE) {
-							isVisited[nextRow][nextCol] = roomCount;
+						isVisited[nextRow][nextCol] = roomCount;
 							
-							if(map[nextRow][nextCol] == ROOM) roomSize++;
-							q.offer(new Point(nextRow, nextCol));
-						}
+						if(map[nextRow][nextCol] == ROOM) roomSize++;
+						q.offer(new Point(nextRow, nextCol));
 					}
 				}
 				
@@ -111,14 +116,7 @@ public class Boj2234 {
 			}
 		}
 		
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				System.out.print(isVisited[i][j] + " ");
-			}
-			System.out.println();
-		}
-		
-		maxSum = getMaxSum(isVisited, sizes, map);
+		maxSum = getMaxSum(isVisited, sizes, maxRoom);
 		
 		sb.append(roomCount).append(NEW_LINE)
 		.append(maxRoom).append(NEW_LINE)
@@ -127,12 +125,12 @@ public class Boj2234 {
 		return sb;
 	}
 	
-	private static int getMaxSum(int[][] roomInfo, int[] roomSize, int[][] arr) {
-		int max = 0;
+	private static int getMaxSum(int[][] roomInfo, int[] roomSize, int init) {
+		int max = init;
 		
 		for(int i = 0; i < roomInfo.length; i++) {
 			for(int j = 0; j < roomInfo[i].length; j++) {
-				if(arr[i][j] != BLOCK) continue;
+				if(roomInfo[i][j] != BLOCK) continue;
 				if(rangeLimit(i, j, roomInfo.length - 1, roomInfo[i].length - 1)) continue;
 				
 				int[] up = {i + DIRECTIONS[2][ROW], j + DIRECTIONS[2][COL]};
@@ -140,7 +138,7 @@ public class Boj2234 {
 				int[] left = {i + DIRECTIONS[3][ROW], j + DIRECTIONS[3][COL]};
 				int[] right = {i + DIRECTIONS[1][ROW], j + DIRECTIONS[1][COL]};
 				
-				max = getSum(roomInfo, roomSize, up, down, max);
+				max = getSum(roomInfo, roomSize, up, down, max);		// 인접한 방의 크기 합 중 최대
 				max = getSum(roomInfo, roomSize, left, right, max);
 			}
 		}
