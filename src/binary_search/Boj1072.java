@@ -11,9 +11,7 @@ import java.util.StringTokenizer;
  *	@see https://www.acmicpc.net/problem/1072/
  *
  */
-public class Boj1072 {
-	private static int INF = 1_000_000_000;
-	
+public class Boj1072 {	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -25,8 +23,8 @@ public class Boj1072 {
 	}
 	
 	private static int binarySearch(long x, long y, long target) {
-		int start = 1, end = INF, result = 0;
-		if(getWinRate(x + INF, y + INF) == target) return -1;		// 승률이 안오르는 경우
+		int start = 1, end = (int) x, result = 0;
+		if(getWinRate(x + x, y + x) == target) return -1;		// 승률이 안오르는 경우
 		
 		while(start <= end) {
 			int mid = (start + end) / 2;
