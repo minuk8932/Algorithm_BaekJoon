@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -12,13 +14,20 @@ public class Boj3697 {
 	
 	private static int[] parent;
 	
-	private static class Point{
+	private static class Point implements Comparable<Point>{
 		int row;
 		int col;
+		int h;
 		
-		public Point(int row, int col) {
+		public Point(int row, int col, int h) {
 			this.row = row;
 			this.col = col;
+			this.h = h;
+		}
+
+		@Override
+		public int compareTo(Point p) {
+			return this.h > p.h ? -1 : 1;
 		}
 	}
 	
@@ -33,7 +42,9 @@ public class Boj3697 {
 			int m = Integer.parseInt(st.nextToken());
 			int d = Integer.parseInt(st.nextToken());
 			
+			PriorityQueue<Point> height = new PriorityQueue<>();
 			int[][] map = new int[n][m];
+			
 			init(n, m);
 			
 			for(int i = 0; i < n; i++) {
@@ -41,10 +52,11 @@ public class Boj3697 {
 				
 				for(int j = 0; j < m; j++) {
 					map[i][j] = Integer.parseInt(st.nextToken());
+					height.add(new Point(i, j, map[i][j]));
 				}
 			}
 			
-			sb.append(bfs(n, m, d, map)).append(NEW_LINE);
+			sb.append(search(n, m, d, height)).append(NEW_LINE);
 		}
 		
 		System.out.println(sb);
@@ -77,44 +89,17 @@ public class Boj3697 {
 		}
 	}
 	
-	private static int bfs(int N, int M, int D, int[][] h) {
-		boolean[][] isVisited = new boolean[N][M];
+	private static int search(int N, int M, int D, PriorityQueue<Point> summit) {
 		
-		for(int row = 0; row < N; row++) {
-			for(int col = 0; col < M; col++) {				
-				if(isVisited[row][col]) continue;
-				isVisited[row][col] = true;
-				
-				int dSummit = h[row][col] - D;
-				boolean isPassed = false;
-				
-				Queue<Point> q = new LinkedList<>();
-				q.offer(new Point(row, col));
-				
-				while(!q.isEmpty()) {
-					Point current = q.poll();
-					
-					for(final int[] DIRECTION: DIRECTIONS) {
-						int nextRow = current.row + DIRECTION[ROW];
-						int nextCol = current.col + DIRECTION[COL];
-						
-						int pCurr = row * M + col;
-						int pNext = nextRow * M + nextCol;
-						
-						if(nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= M) continue;
-						if(isVisited[nextRow][nextCol]) continue;
-							
-						if(dSummit >= h[nextRow][nextCol]) isPassed = true;
-							
-						if(isPassed && h[nextRow][nextCol] > h[row][col]) {
-							isVisited[nextRow][nextCol] = true;
-							merge(pCurr, pNext);
-						}
-						q.offer(new Point(nextRow, nextCol));
-					}
-				}
-			}
+		Point peek = summit.poll();
+		
+		while(!summit.isEmpty()) {
+			Point next = summit.poll();
+			
+			if(peek.h == next.h) merge(peek.row * N + peek.col, next.row * N + next.col);
+			peek = next;
 		}
+		
 		
 		return getDminus();
 	}

@@ -1,9 +1,18 @@
+package breadth_first_search;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 import java.io.BufferedReader;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 16940번: 두 동전
+ *
+ *	@see https://www.acmicpc.net/problem/16940/
+ *
+ */
 public class Boj16197 {
 	private static final char BLOCK = '#';
 	private static final char COIN = 'o';
@@ -81,22 +90,31 @@ public class Boj16197 {
 					int nextRow2 = current2.row;
 					int nextCol2 = current2.col;
 					
-					if(isOut(nextRow1 + DIRECTION[ROW], nextCol1 + DIRECTION[COL], n, m) && isOut(nextRow2 + DIRECTION[ROW], nextCol2, n, m)) continue;
+					if(isOut(nextRow1 + DIRECTION[ROW], nextCol1 + DIRECTION[COL], n, m)			// 둘다 나가는 경우
+							&& isOut(nextRow2 + DIRECTION[ROW], nextCol2 + DIRECTION[COL], n, m)) continue;
+					if(!isOut(nextRow1 + DIRECTION[ROW], nextCol1 + DIRECTION[COL], n, m) 			// 둘중 하나만 나가는 경우
+							&& isOut(nextRow2 + DIRECTION[ROW], nextCol2 + DIRECTION[COL], n, m)) return move;
+					if(isOut(nextRow1 + DIRECTION[ROW], nextCol1 + DIRECTION[COL], n, m) 			// 둘중 하나만 나가는 경우
+							&& !isOut(nextRow2 + DIRECTION[ROW], nextCol2 + DIRECTION[COL], n, m)) return move;
 					
-					if((isOut(nextRow1 + DIRECTION[ROW], nextCol1 + DIRECTION[COL], n, m) && !isOut(nextRow2 + DIRECTION[ROW], nextCol2, n, m))
-							|| (!isOut(nextRow1 + DIRECTION[ROW], nextCol1 + DIRECTION[COL], n, m) && isOut(nextRow2 + DIRECTION[ROW], nextCol2 + DIRECTION[COL], n, m)))
-						return move;
+					if(arr[nextRow1 + DIRECTION[ROW]][nextCol1 + DIRECTION[COL]] == BLOCK			// 둘다 막힌 경우
+							&& arr[nextRow2 + DIRECTION[ROW]][nextCol2 + DIRECTION[COL]] == BLOCK) continue;
 					
-					if(!isOut(nextRow1 + DIRECTION[ROW], nextCol1 + DIRECTION[COL], n, m) && 
-							arr[nextRow2 + DIRECTION[ROW]][nextCol2 + DIRECTION[COL]] != BLOCK) {
-						nextRow2 += DIRECTION[ROW];
-						nextCol2 += DIRECTION[COL];
+					if(arr[nextRow1 + DIRECTION[ROW]][nextCol1 + DIRECTION[COL]] == BLOCK) { 		// 하나만 막힌 경우
+						nextRow2 = current2.row + DIRECTION[ROW];
+						nextCol2 = current2.col + DIRECTION[COL];
 					}
-							
-					if(!isOut(nextRow2 + DIRECTION[ROW], nextCol2 + DIRECTION[COL], n, m) && 
-							arr[nextRow1 + DIRECTION[ROW]][nextCol1 + DIRECTION[COL]] != BLOCK) {
-						nextRow1 += DIRECTION[ROW];
-						nextCol1 += DIRECTION[COL];
+					
+					else if(arr[nextRow2 + DIRECTION[ROW]][nextCol2 + DIRECTION[COL]] == BLOCK) {	// 하나만 막힌 경우
+						nextRow1 = current1.row + DIRECTION[ROW];
+						nextCol1 = current1.col + DIRECTION[COL];
+					}
+					else if(arr[nextRow1 + DIRECTION[ROW]][nextCol1 + DIRECTION[COL]] != BLOCK			// 둘다 안막힌 경우
+							&& arr[nextRow2 + DIRECTION[ROW]][nextCol2 + DIRECTION[COL]] != BLOCK) {
+						nextRow1 = current1.row + DIRECTION[ROW];
+						nextCol1 = current1.col + DIRECTION[COL];
+						nextRow2 = current2.row + DIRECTION[ROW];
+						nextCol2 = current2.col + DIRECTION[COL];
 					}
 					
 					if(!isVisited[nextRow1][nextCol1][nextRow2][nextCol2]) {
@@ -107,8 +125,8 @@ public class Boj16197 {
 				}
 			}
 			
+			move++;						// 움직임 + 1
 			if(move > 10) return -1;
-			move++;
 		}
 
 		return -1;
