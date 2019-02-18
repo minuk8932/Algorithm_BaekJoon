@@ -40,12 +40,6 @@ public class Boj15586 {
 			merge(x, y);
 		}
 		
-		int head = 0;
-		
-		for(int i = 0; i < parent.length; i++) {
-			if(parent[i] < 0) head = i;
-		}
-		
 		StringBuilder sb = new StringBuilder();
 		
 		while(Q-- > 0) {
@@ -54,23 +48,8 @@ public class Boj15586 {
 			int v = Integer.parseInt(st.nextToken()) - 1;
 			int res = 0;
 			
-			if(v == head) {
-				for(Node son: arr[head]) {
-					if(k <= son.cost) res++;
-				}
-			}
-			else {
-				int cost = 0;
-				
-				for(Node son: arr[head]) {
-					if(son.node == v) cost = son.cost;
-				}
-				
-				for(Node son: arr[head]) {
-					int min = Math.min(cost, son.cost);
-					if(k <= min) res++;
-				}
-			}
+			
+			
 			
 			sb.append(res).append(NEW_LINE);
 		}
