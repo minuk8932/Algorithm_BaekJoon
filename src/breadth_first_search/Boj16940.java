@@ -1,3 +1,4 @@
+package breadth_first_search;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -5,8 +6,17 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 16940번: BFS 스페셜 저지
+ *
+ *	@see https://acmicpc.net/problem/16940/
+ *
+ */
 public class Boj16940 {	
-	private static int[] isVisited;
+	private static boolean[] isVisited;
+	private static int[] parent;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,78 +27,70 @@ public class Boj16940 {
 			tree[i] = new ArrayList<>();
 		}
 		
-		int[] count = new int[N + 1];
+		parent = new int[N + 1];
 		
 		for(int i = 1; i < N; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			int from = Integer.parseInt(st.nextToken());
 			int to = Integer.parseInt(st.nextToken());
 			
-			count[to]++;
 			tree[from].add(to);
+			tree[to].add(from);
 		}
 		
-		int root = getRoot(count);
-		
-		int[] sequence = new int[N + 1];
+		int[] sequence = new int[N];
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		for(int i = 1; i < N + 1; i++) {
+		for(int i = 0; i < N; i++) {
 			sequence[i] = Integer.parseInt(st.nextToken());
 		}
-		
-		getParent(N, tree, sequence, root);
+
+		getParent(N, tree, sequence);
 		System.out.println(getResult(N, tree, sequence));
 	}
 	
-	private static int getRoot(int[] arr) {		
-		for(int i = 1; i < arr.length; i++) {
-			if(arr[i] == 0) {
-				return i;
-			}
-		}
-		
-		return -1;
-	}
-	
-	private static void getParent(int n, ArrayList<Integer>[] list, int[] seq, int start) {
-		isVisited = new int[n + 1];
+	private static void getParent(int n, ArrayList<Integer>[] list, int[] seq) {
+		isVisited = new boolean[n + 1];
 		
 		Queue<Integer> q = new LinkedList<>();
-		q.offer(start);
+		q.offer(1);
 		
-		isVisited[start] = 0;
+		isVisited[1] = true;
 		
 		while(!q.isEmpty()) {
 			int current = q.poll();
 			
 			for(int next: list[current]) {
-				if(isVisited[next] != 0) continue;
-				isVisited[next] = current;
+				if(isVisited[next]) continue;
+				isVisited[next] = true;
+				parent[next] = current;			// 각 노드 별 부모 노드 값 저장
 				
 				q.offer(next);
 			}
 		}
 	}
 	
-	private static int getResult(int n, ArrayList<Integer>[] list, int[] seq) {		
-		Queue<Integer> q = new LinkedList<>();
-		q.offer(seq[1]);
+	private static int getResult(int n, ArrayList<Integer>[] list, int[] seq) {
+		isVisited = new boolean[n + 1];
 		
-		int index = 1, count = 0;
+		Queue<Integer> q = new LinkedList<>();
+		q.offer(1);
+		isVisited[1] = true;
+		
+		int index = 1, count = 1;
 		
 		while(!q.isEmpty()) {
 			int current = q.poll();
-			int loop = list[current].size();
 			
-			while(loop-- > 0) {
-				index++;
-				if(current != isVisited[seq[index]]) return 0;
-					
+			while(index < n) {
+				if(parent[seq[index]] != current) break;		// 이번 차례 노드의 부모 노드 값과 현재 값이 다른경우
+				if(isVisited[seq[index]]) continue;
+				isVisited[seq[index]] = true;
 				count++;
-				q.offer(seq[index]);
+				
+				q.offer(seq[index++]);		// 다음 인덱스 탐색
 			}
 		}
-		
-		return count != n - 1 ? 0 : 1;
+
+		return count == n ? 1 : 0;
 	}
 }
