@@ -17,12 +17,13 @@ import java.util.StringTokenizer;
 public class Boj16167 {
 	private static final String NO_ANSWER = "It is not a great way.";
 	private static final String SPACE = " ";
+	private static final int INF = 100_000;
 	
 	private static class Node implements Comparable<Node>{
 		int edge;
-		int cost;
+		long cost;
 		
-		public Node(int edge, int cost) {
+		public Node(int edge, long cost) {
 			this.edge = edge;
 			this.cost = cost;
 		}
@@ -30,16 +31,6 @@ public class Boj16167 {
 		@Override
 		public int compareTo(Node n) {
 			return this.cost < n.cost ? -1: 1;
-		}
-	}
-	
-	private static class Result{
-		int cost;
-		int count;
-		
-		public Result(int cost, int count) {
-			this.cost = cost;
-			this.count = count;
 		}
 	}
 	
@@ -62,8 +53,8 @@ public class Boj16167 {
 			int minutes = Integer.parseInt(st.nextToken());
 			int time = Integer.parseInt(st.nextToken());
 			
-			int cost = time <= 10 ? basic : basic + (time - 10) * minutes;		// 경로의 비용을 미리 구함
-			graph[from].add(new Node(to, cost));
+			int cost = time <= 10 ? basic : basic + (time - 10) * minutes;		// 경로의 비용
+			graph[from].add(new Node(to, cost * INF + 1));						// 노드수 합산
 		}
 		
 		System.out.println(dijkstra(N, graph));
@@ -71,45 +62,27 @@ public class Boj16167 {
 	
 	private static StringBuilder dijkstra(int n, ArrayList<Node>[] list) {
 		StringBuilder sb = new StringBuilder();
-		
-		int[] isVisited = new int[n + 1];
-		int[] counts = new int[n + 1];
-		Arrays.fill(isVisited, Integer.MAX_VALUE);
-		
-		ArrayList<Result> arr = new ArrayList<>();
+		long[] isVisited = new long[n + 1];
+		Arrays.fill(isVisited, Long.MAX_VALUE);
 		
 		PriorityQueue<Node> pq = new PriorityQueue<>();
 		pq.offer(new Node(1, 0));
 			
 		isVisited[1] = 0;
-		counts[1] = 1;
 			
 		while(!pq.isEmpty()) {
 			Node current = pq.poll();
+			if(isVisited[current.edge] != current.cost) continue;
 			
 			for(Node next: list[current.edge]) {
 				if(isVisited[next.edge] >= isVisited[current.edge] + next.cost) {
-					isVisited[next.edge] = isVisited[current.edge] + next.cost;	// 비용
-					counts[next.edge] = counts[current.edge] + 1;				// 노드를 지나는 횟수
+					isVisited[next.edge] = isVisited[current.edge] + next.cost;		// 비용과 노드 갯수
 					
-					if(next.edge == n) arr.add(new Result(isVisited[next.edge], counts[next.edge]));
 					pq.offer(new Node(next.edge, isVisited[next.edge]));
 				}
 			}
 		}
 		
-		int minCost = Integer.MAX_VALUE, routers = Integer.MAX_VALUE;
-		
-		for(Result values: arr) {
-			if(minCost > values.cost) minCost = values.cost;		// 비용의 최소
-		}
-		
-		for(Result values: arr) {
-			if(minCost == values.cost) {
-				if(routers > values.count) routers = values.count;	// 비용의 최소를 기반으로 거치는 노드의 최소 갯수 구하기
-			}
-		}
-
-		return routers == Integer.MAX_VALUE ? sb.append(NO_ANSWER) : sb.append(minCost).append(SPACE).append(routers);
+		return isVisited[n] == Long.MAX_VALUE ? sb.append(NO_ANSWER) : sb.append(isVisited[n] / INF).append(SPACE).append(isVisited[n] % INF + 1);
 	}
 }
