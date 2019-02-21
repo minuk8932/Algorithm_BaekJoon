@@ -30,7 +30,7 @@ public class Boj2842 {
 		int N = Integer.parseInt(br.readLine());
 		
 		char[][] map = new char[N][N];
-		Point post = new Point(-1, -1); 
+		Point post = new Point(-1, -1);
 		ArrayList<Point> edge = new ArrayList<>();
 		
 		for(int i = 0; i < N; i++) {
