@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 /**
  * 
  * 	@author minchoba
- *	백준 16235번: 나무 재태크
+ *	백준 16235번: 나무 재테크
  *
  *	@see https://www.acmicpc.net/problem/16235/
  *
