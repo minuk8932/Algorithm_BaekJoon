@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -28,23 +29,45 @@ public class Boj15875 {
 		int W = Integer.parseInt(st.nextToken());
 		
 		int[][] map = new int[H + 2][W + 2];
-		int right = 0;
+		int[] depth = new int[H * W];
+		int idx = 0;
 		
 		parent = new int[(H + 2) * (W + 2)];
+		init(H, W);
 		
 		for(int i = 1; i < H + 1; i++) {
 			st = new StringTokenizer(br.readLine());
 			
 			for(int j = 1; j < W + 1; j++) {
-				map[i][j] = Integer.parseInt(st.nextToken());
-				if(map[i][j] > right) right = map[i][j];
+				map[i][j] = Integer.parseInt(st.nextToken());				
+				depth[idx++] = map[i][j];
 			}
 		}
 		
-		System.out.println(bfs(H, W, map));
+		
+		int max = 0;
+		Arrays.sort(depth);
+		
+		for(int i = 0; i < depth.length; i++) {
+			bfs(H, W, map, depth[i]);
+			
+			for(int set = 0; set < parent.length; set++) {
+				if(max < -parent[set]) max = -parent[set];
+			}
+			
+			for(int row = 0; row < H + 2; row++) {
+				for(int col = 0; col < W + 2; col++) {
+					System.out.print(parent[row * (W + 2) + col] + " ");
+				}
+				System.out.println();
+			}
+			System.out.println();
+		}
+		
+		System.out.println(max);
 	}
 	
-	private static void init() {
+	private static void init(int h, int w) {
 		for(int i = 0; i < parent.length; i++) {
 			parent[i] = -1;
 		}
@@ -60,6 +83,7 @@ public class Boj15875 {
 		y = find(y);
 		
 		if(x == y) return;
+		
 		if(parent[x] < parent[y]) {
 			parent[x] += parent[y];
 			parent[y] = x;
@@ -70,18 +94,14 @@ public class Boj15875 {
 		}
 	}
 	
-	private static int bfs(int h, int w, int[][] arr) {
+	private static void bfs(int h, int w, int[][] arr, int limit) {
 		boolean[][] isVisited = new boolean[h + 2][w + 2];
-		int pond = 0;
-		int limit = 0;
+		LinkedList<Integer> del = new LinkedList<>();
 
 		for(int row = 1; row < h + 1; row++) {
 			for(int col = 1; col < w + 1; col++) {
 				if(isVisited[row][col] || arr[row][col] > limit) continue;
 				isVisited[row][col] = true;
-				
-				boolean isLeaked = false;
-				int value = 1;
 				
 				Queue<Point> q = new LinkedList<>();
 				q.offer(new Point(row, col));
@@ -97,17 +117,25 @@ public class Boj15875 {
 						if(isVisited[nextRow][nextCol] || arr[nextRow][nextCol] > limit) continue;
 						isVisited[nextRow][nextCol] = true;
 						
-						if(nextRow == 0 || nextCol == 0 || nextRow == h + 1 || nextCol == w + 1) isLeaked = true;
-						value++;
+						merge(current.row * (w + 2) + current.col, nextRow * (w + 2) + nextCol);
 						
+						if(nextRow == 1 || nextCol == 1 || nextRow == h || nextCol == w) {
+							del.add(parent[find(nextRow * (w + 2) + nextCol)]);
+							break;
+						}
+
 						q.offer(new Point(nextRow, nextCol));
 					}
 				}
-				
-				if(!isLeaked) pond += value;
 			}
 		}
 		
-		return pond;
+		while(!del.isEmpty()) {
+			int cut = del.remove();
+			
+			for(int i = 0; i < parent.length; i++) {
+				if(parent[i] == cut) parent[i] = -1;
+			}
+		}
 	}
 }
