@@ -51,7 +51,7 @@ public class Boj16930 {
 		System.out.println(bfs(N, M, K, map, start, end));
 	}
 	
-	private static int bfs(int n, int m, int k, boolean[][] arr, Point s, Point e) {
+	private static int bfs(int n, int m, int k, boolean[][] arr, Point start, Point end) {
 		int[][] isVisited = new int[n][m];
 		for(int i = 0; i < n; i++) {
 			Arrays.fill(isVisited[i], INF);
@@ -60,9 +60,9 @@ public class Boj16930 {
 		int[][] move = new int[n][m];
 		
 		Queue<Point> q = new LinkedList<>();
-		q.offer(new Point(s.row, s.col, -1));
-		isVisited[s.row][s.col] = 1;
-		move[s.row][s.col] = 0;
+		q.offer(new Point(start.row, start.col, -1));
+		isVisited[start.row][start.col] = 1;
+		move[start.row][start.col] = 0;
 		
 		while(!q.isEmpty()) {
 			Point current = q.poll();
@@ -95,18 +95,10 @@ public class Boj16930 {
 							q.offer(new Point(nextRow, nextCol, dir));
 						}
 					}
-//					
-//					for(int i = 0; i < n; i++) {
-//						for(int j = 0; j < m; j++) {
-//							System.out.print((isVisited[i][j] == INF ? "#" : isVisited[i][j]) + " ");
-//						}
-//						System.out.println();
-//					}
-//					System.out.println();
 				}
 			}
 		}
 		
-		return isVisited[e.row][e.col] == INF ? -1 : isVisited[e.row][e.col] - 1;
+		return isVisited[end.row][end.col] == INF ? -1 : isVisited[end.row][end.col] - 1;
 	}
 }

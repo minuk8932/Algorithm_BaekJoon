@@ -44,27 +44,8 @@ public class Boj15875 {
 			}
 		}
 		
-		
-		int max = 0;
 		Arrays.sort(depth);
-		
-		for(int i = 0; i < depth.length; i++) {
-			bfs(H, W, map, depth[i]);
-			
-			for(int set = 0; set < parent.length; set++) {
-				if(max < -parent[set]) max = -parent[set];
-			}
-			
-			for(int row = 0; row < H + 2; row++) {
-				for(int col = 0; col < W + 2; col++) {
-					System.out.print(parent[row * (W + 2) + col] + " ");
-				}
-				System.out.println();
-			}
-			System.out.println();
-		}
-		
-		System.out.println(max);
+		System.out.println(search(H, W, map, depth));
 	}
 	
 	private static void init(int h, int w) {
@@ -94,48 +75,69 @@ public class Boj15875 {
 		}
 	}
 	
-	private static void bfs(int h, int w, int[][] arr, int limit) {
-		boolean[][] isVisited = new boolean[h + 2][w + 2];
-		LinkedList<Integer> del = new LinkedList<>();
-
-		for(int row = 1; row < h + 1; row++) {
-			for(int col = 1; col < w + 1; col++) {
-				if(isVisited[row][col] || arr[row][col] > limit) continue;
-				isVisited[row][col] = true;
-				
-				Queue<Point> q = new LinkedList<>();
-				q.offer(new Point(row, col));
-				
-				while(!q.isEmpty()) {
-					Point current = q.poll();
+	private static int search(int h, int w, int[][] arr, int[] depth) {	
+		int max = 0;
+		int comp = 0;
+		
+		for(int size = 0; size < depth.length; size++) {
+			if(depth[size] == comp || parent[size] != -1) continue;
+			comp = depth[size];
+			
+			boolean[][] isVisited = new boolean[h + 2][w + 2];	
+			
+			for(int row = 1; row < h + 1; row++) {
+				for(int col = 1; col < w + 1; col++) {
+					if(parent[row * (w + 2) + col] != -1) continue;
+					if(isVisited[row][col] || arr[row][col] > depth[size]) continue;
+					isVisited[row][col] = true;
 					
-					for(final int[] DIRECTION: DIRECTIONS) {
-						int nextRow = current.row + DIRECTION[ROW];
-						int nextCol = current.col + DIRECTION[COL];
-							
-						if(nextRow < 0 || nextRow > h + 1 || nextCol < 0 || nextCol > w + 1) continue;
-						if(isVisited[nextRow][nextCol] || arr[nextRow][nextCol] > limit) continue;
-						isVisited[nextRow][nextCol] = true;
-						
-						merge(current.row * (w + 2) + current.col, nextRow * (w + 2) + nextCol);
-						
-						if(nextRow == 1 || nextCol == 1 || nextRow == h || nextCol == w) {
-							del.add(parent[find(nextRow * (w + 2) + nextCol)]);
-							break;
+					Queue<Point> q = new LinkedList<>();
+					q.offer(new Point(row, col));
+					
+					while(!q.isEmpty()) {
+						Point current = q.poll();
+								
+						for(final int[] DIRECTION: DIRECTIONS) {
+							int nextRow = current.row + DIRECTION[ROW];
+							int nextCol = current.col + DIRECTION[COL];
+										
+							if(nextRow < 0 || nextRow > h + 1 || nextCol < 0 || nextCol > w + 1) continue;
+							if(isVisited[nextRow][nextCol] || arr[nextRow][nextCol] > depth[size]) continue;
+							isVisited[nextRow][nextCol] = true;
+									
+							merge(current.row * (w + 2) + current.col, nextRow * (w + 2) + nextCol);
+							q.offer(new Point(nextRow, nextCol));
 						}
-
-						q.offer(new Point(nextRow, nextCol));
 					}
 				}
 			}
-		}
-		
-		while(!del.isEmpty()) {
-			int cut = del.remove();
 			
-			for(int i = 0; i < parent.length; i++) {
-				if(parent[i] == cut) parent[i] = -1;
+			int pond = getPond();
+			if(pond > max) max = pond;
+			
+			System.out.println(depth[size]);
+			for(int x = 0; x < h + 2; x++) {
+				for(int y = 0; y < w + 2; y++) {
+					System.out.print(parent[x * (w + 2) + y] + " ");
+				}
+				System.out.println();
 			}
 		}
+		
+		return max;
+	}
+	
+	private static int getPond() {
+		int size = 0;
+		
+		int except = parent[0];
+		except = except == -1 ? 0 : except;
+		
+		for(int pos = 0; pos < parent.length; pos++) {
+			if(parent[pos] == -1 || except == parent[pos]) continue;
+			if(-parent[pos] > size && parent[except] != parent[pos]) size = -parent[pos];
+		}
+		
+		return size;
 	}
 }
