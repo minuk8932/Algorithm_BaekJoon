@@ -1,9 +1,11 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class Boj1494 {
 	private static final String NEW_LINE = "\n";
+	private static long loop = 0;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,38 +15,44 @@ public class Boj1494 {
 		int N = Integer.parseInt(st.nextToken());
 		
 		StringBuilder sb = new StringBuilder();
+		long limit = Process(first, second);
 		
 		while(N-- > 0) {
-			sb.append(Process(first, second, Long.parseLong(br.readLine()))).append(NEW_LINE);
+			sb.append(Long.parseLong(br.readLine())).append(NEW_LINE);
 		}
 		
 		System.out.println(sb);
 	}
 	
-	private static long Process(long f, long s, long idx) {
-		long max = Math.max(f, s);
-		long min = Math.min(f, s);
+	private static long Process(long f, long s) {		
+		ArrayList<Long> list = new ArrayList<>();
+		list.add(f);
+		list.add(s);
 		
-		if(idx == 0) return f;
-		if(idx == 1) return s;
+		long value = Math.abs(f - s);
+		long count = 2;
 		
-		long limit = max / min + 1;
-		long mod = max % min;
-		
-		long res = 0;
-		
-		if(idx < limit) {
-			res = Math.abs(max - (min * idx));
-		}
-		else {
-			if((limit - idx) % 2 == 0) {
-				res = Math.abs(min - mod);
-			}
-			else {
-				res = mod;
-			}
+		while(!list.contains(value)) {
+			list.add(value);
+
+			f = s;
+			s = value;
+			value = Math.abs(f - s);
+			count++;
 		}
 		
-		return res;
+		int size = list.size();
+		int start = 0;
+		
+		for(int i = 0; i < size; i++) {
+			if(list.get(i) == value) {
+				start = i;
+				break;
+			}
+		}
+		
+		loop = count - value + 1;
+		
+		return start;
 	}
 }
