@@ -86,9 +86,7 @@ public class Boj14488 {
 		return 1;
 	}
 	
-	private static double truncate(String str) {
-		if(!str.contains(DOT)) return Double.parseDouble(str);
-		
+	private static double truncate(String str) {		
 		StringTokenizer st = new StringTokenizer(str, DOT);
 		StringBuilder sb = new StringBuilder();
 		
