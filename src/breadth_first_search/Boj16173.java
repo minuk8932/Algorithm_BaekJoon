@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
  *	@see https://www.acmicpc.net/problem/16137/
  *
  */
-public class Boj16137 {
+public class Boj16173 {
 	private static final int ROW = 0, COL = 1;
 	
 	private static class Point{
