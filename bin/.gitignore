@@ -14,6 +14,7 @@
 /disjoint_set/
 /dynamic_programming/
 /greedy/
+/hashing/
 /heap/
 /implementation/
 /math/
@@ -32,4 +33,3 @@
 /topology_sort/
 /tree_search/
 /two_pointer/
-/hashing/
