@@ -9,17 +9,21 @@ public class Boj1215 {
 		int n = Integer.parseInt(st.nextToken());
 		int k = Integer.parseInt(st.nextToken());
 		
-		System.out.println(josephsSequence(1, k, n, k));
+		System.out.println(n == 1 ? 0 : josephs(n, k));
 	}
 	
-	private static long josephsSequence(int i, int r, int N, int K) {
-		if (i > N) {
-			return 0;
+	private static long josephs(long N, long K) {
+		long res = N > K ? (N - K) * K : 0;
+		long half = K / 2;
+		if(K % 2 == 0) half--;
+		
+		res += half < N ? (1 + half) * half / 2 : 0;
+		long loop = K / 2 > N ? N : K / 2;
+		
+		for(long i = 1; i <= loop; i++) {			// 개선해야함
+			res += (K % i);
 		}
-		else {
-			if(i > K) return K;
-			else if(i == K) return 0;
-			else return josephsSequence(i * 2, r % i, N, K) + josephsSequence(i * 2 + 1, r % i, N, K) + K % i;
-		}
+		
+		return res;
 	}
 }
