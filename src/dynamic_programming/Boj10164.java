@@ -31,24 +31,19 @@ public class Boj10164 {
 		int M = Integer.parseInt(st.nextToken());
 		int K = Integer.parseInt(st.nextToken());
 		
-		int[][] arr = new int[N][M];
 		Point target = new Point(-1, -1);
 		
 		for(int i = 0; i < N; i++) {
 			for(int j = 0; j < M; j++) {
-				int value = i * M + j + 1;
-				arr[i][j] = value;
-				
-				if(value == K) {
-					target = new Point(i, j);
-				}
+				int value = i * M + j + 1;				
+				if(value == K) target = new Point(i, j);
 			}
 		}
 		
-		System.out.println(N == 1 || M == 1 ? 1 : move(N, M, arr, target));		// N, M 둘 중 하나가 1이면 무조건 1
+		System.out.println(N == 1 || M == 1 ? 1 : move(N, M, target));		// N, M 둘 중 하나가 1이면 무조건 1
 	}
 	
-	private static int move(int n, int m, int[][] arr, Point target) {
+	private static int move(int n, int m, Point target) {
 		dp = new int[n][m];
 		
 		if(target.x <= 0 && target.y <= 0) {			// 시작점이 목표경로 또는 목표 경로가 없는 경우
