@@ -8,20 +8,12 @@ public class Boj4149 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		long N = Long.parseLong(br.readLine());
 		
-		System.out.println(getPrimeFactor(N));
+		System.out.print(getPrimeFactor(N));
 	}
 	
 	private static StringBuilder getPrimeFactor(long n) {
 		StringBuilder sb = new StringBuilder();
 		
-		for(int i = 2; i * i < n + 1; i++) {
-			while (n % i == 0) {
-				n /= i;
-				sb.append(i).append(NEW_LINE);
-			}
-		}
-		
-		if(n != 1) sb.append(n).append(NEW_LINE);
 		
 		return sb;
 	}
