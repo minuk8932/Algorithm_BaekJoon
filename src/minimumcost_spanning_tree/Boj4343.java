@@ -1,7 +1,7 @@
 package minimumcost_spanning_tree;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -117,8 +117,7 @@ public class Boj4343 {
 	}
 	
 	private static double kruskal(int size, int sat, PriorityQueue<Communication> pq) {
-		double max = 0;
-		LinkedList<Double> list = new LinkedList<>();
+		ArrayList<Double> list = new ArrayList<>();
 		
 		while(!pq.isEmpty()) {
 			Communication current = pq.poll();
@@ -128,12 +127,9 @@ public class Boj4343 {
 			}
 		}
 		
-		if(sat == 1) return list.removeLast();			// 1인 경우 위성 통신 불가
+		int length = list.size();
+		if(sat == 1) return list.get(length - 1);			// 1인 경우 위성 통신 불가
 		
-		while(sat-- > 0) {								// 통신에 가장 오래 걸리는 것 중 위성 설치 갯수 만큼 제외
-			max = list.removeLast();					// 마지막 값이 연결하는데 필요한 비용 중 최대
-		}
-		
-		return max;
+		return list.get(length - sat);				// 사용 가능한 위성 갯수 만큼 제외 후 남은 것 중 최대 비용
 	}
 }
