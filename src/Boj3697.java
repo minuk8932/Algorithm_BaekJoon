@@ -27,7 +27,7 @@ public class Boj3697 {
 
 		@Override
 		public int compareTo(Point p) {
-			return this.h > p.h ? -1 : 1;
+			return this.h > p.h ? -1: 1;
 		}
 	}
 	
@@ -41,9 +41,9 @@ public class Boj3697 {
 			int n = Integer.parseInt(st.nextToken());
 			int m = Integer.parseInt(st.nextToken());
 			int d = Integer.parseInt(st.nextToken());
-			
-			PriorityQueue<Point> height = new PriorityQueue<>();
+
 			int[][] map = new int[n][m];
+			PriorityQueue<Point> summit = new PriorityQueue<>();
 			
 			init(n, m);
 			
@@ -52,11 +52,11 @@ public class Boj3697 {
 				
 				for(int j = 0; j < m; j++) {
 					map[i][j] = Integer.parseInt(st.nextToken());
-					height.add(new Point(i, j, map[i][j]));
+					summit.add(new Point(i, j, map[i][j]));
 				}
 			}
 			
-			sb.append(search(n, m, d, height)).append(NEW_LINE);
+			sb.append(1).append(NEW_LINE);
 		}
 		
 		System.out.println(sb);
@@ -87,31 +87,5 @@ public class Boj3697 {
 			parent[y] += parent[x];
 			parent[x] = y;
 		}
-	}
-	
-	private static int search(int N, int M, int D, PriorityQueue<Point> summit) {
-		
-		Point peek = summit.poll();
-		
-		while(!summit.isEmpty()) {
-			Point next = summit.poll();
-			
-			if(peek.h == next.h) merge(peek.row * N + peek.col, next.row * N + next.col);
-			peek = next;
-		}
-		
-		
-		return getDminus();
-	}
-	
-	private static int getDminus() {
-		int count = 0;
-		
-		for(int i = 0; i < parent.length; i++) {
-			System.out.println(parent[i]);
-			if(parent[i] < 0) count += parent[i];
-		}
-		
-		return -count;
 	}
 }
