@@ -53,10 +53,10 @@ public class Boj14503 {
 			}
 		}
 		
-		System.out.println(bfs(N, M, map, new Point(r, c), d));
+		System.out.println(bfs(map, new Point(r, c), d));
 	}
 	
-	private static int bfs(int n, int m, int[][] arr, Point start, int dir) {
+	private static int bfs(int[][] arr, Point start, int dir) {
 		int result = 1;
 		
 		Queue<Point> q = new LinkedList<>();
@@ -72,9 +72,7 @@ public class Boj14503 {
 			
 			int loop = 0;
 			
-			while(arr[nextRow][nextCol] == BLOCK || arr[nextRow][nextCol] == CLEANED) {		// 사방 검사
-				if(loop == 4) break;
-				
+			while(loop != 4 && arr[nextRow][nextCol] >= BLOCK) {		// 사방 검사				
 				nextDir = (nextDir + 3) % 4;
 				nextRow = current.row + DIRECTIONS[nextDir][ROW];
 				nextCol = current.col + DIRECTIONS[nextDir][COL];
@@ -86,16 +84,15 @@ public class Boj14503 {
 				nextRow = current.row + DIRECTIONS[dir][ROW] * -1;	// 뒷길 확인
 				nextCol = current.col + DIRECTIONS[dir][COL] * -1;
 
-				if(arr[nextRow][nextCol] == BLOCK) break;
-				q.offer(new Point(nextRow, nextCol));				// 뒷길이 벽으로 막혀있지 않으면 후진
+				if(arr[nextRow][nextCol] == BLOCK) return result;
 			}
 			else {
-				arr[nextRow][nextCol] = CLEANED;		// 청소 안한 경우
+				arr[nextRow][nextCol] = CLEANED;		// 청소
 				dir = nextDir;							// 움직인 방향으로 방향 갱신
 				result++;
-				
-				q.offer(new Point(nextRow, nextCol));
 			}
+			
+			q.offer(new Point(nextRow, nextCol));		// 후진 또는 전진
 		}
 		
 		return result;
