@@ -19,6 +19,7 @@
 /implementation/
 /math/
 /minimumcost_spanning_tree/
+/network_flow/
 /next_permutation/
 /parsing/
 /queue/
@@ -33,4 +34,3 @@
 /topology_sort/
 /tree_search/
 /two_pointer/
-/network_flow/
