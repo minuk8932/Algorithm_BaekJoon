@@ -14,7 +14,6 @@ public class Boj2231 {
 	private static final char MAKER = '9';
 	
 	public static void main(String[] args) throws Exception{
-		// 버퍼를 통한 값 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String input = br.readLine();
 		int N = Integer.parseInt(input);
@@ -26,25 +25,32 @@ public class Boj2231 {
 			nine += MAKER;
 		}
 		
-		int tmp = N - Integer.parseInt(nine); // 최소 시작 값을 구함
-		int start = tmp < 0 ? 0 : tmp;			// 0보다 작으면 0을 입력
+		System.out.println(resolve(N, nine));
+	}
+	
+	private static int resolve(int n, String str) {
+		if(str.equals("")) return 0;
+		
+		int tmp = n - Integer.parseInt(str); 		// 최소 시작 값
+		int start = tmp < 0 ? 0 : tmp;				// 0보다 작으면 0을 입력
 		
 		int res = 0;
-		for(int i = start; i < N + 1; i++) {	// 각 숫자를 문자열로 받아온 후
+		for(int i = start; i < n + 1; i++) {
 			String nums = String.valueOf(i);
 			int sum = 0;
 			
-			for(char n: nums.toCharArray()) {	// 한자리마다 더해주고
-				sum += n - (MAKER - 9);
+			for(char c: nums.toCharArray()) {
+				sum += c - (MAKER - 9);
 			}
 			
-			sum += i;					// 최종 해당 값을 더한 후
-			if(sum == N) {				// 그 값이 N과 같으면
-				res = i;			// 저장 후 종료
+			sum += i;						// 최종 해당 값 더하기
+			
+			if(sum == n) {
+				res = i;
 				break;
 			}
 		}
 		
-		System.out.println(res);		// 결과 값 출력
+		return res;
 	}
 }
