@@ -23,15 +23,15 @@ public class Boj1680 {
 				spot[Integer.parseInt(st.nextToken())] = Integer.parseInt(st.nextToken());
 			}
 			
-			sb.append(gathering(W, spot)).append(NEW_LINE);
+			sb.append(collect(W, spot)).append(NEW_LINE);
 		}
 		
 		System.out.println(sb);
 	}
 	
-	private static long gathering(int limit, int[] arr) {
+	private static long collect(int limit, int[] arr) {
 		long result = 0;
-		long back = 0;
+		long spare = 0;
 		int waste = 0;
 		
 		for(int i = 0; i < arr.length;) {
@@ -45,20 +45,20 @@ public class Boj1680 {
 			if(waste > limit) {
 				result += (i * 2);
 				waste = 0;
-				back = 0;
+				spare = 0;
 			}
 			else if(waste == limit) {
 				result += (i * 2);
 				waste = 0;
-				back = 0;
+				spare = 0;
 				i++;
 			}
 			else {
-				back = i;
+				spare = i;
 				i++;
 			}
 		}
-		
-		return result + (back * 2);
+
+		return result + (spare * 2);
 	}
 }
