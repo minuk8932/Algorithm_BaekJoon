@@ -12,6 +12,7 @@
 /deque/
 /dijkstra/
 /disjoint_set/
+/divide_and_conquer/
 /dynamic_programming/
 /greedy/
 /hashing/
@@ -30,8 +31,3 @@
 /sort/
 /stack/
 /string_handle/
-/strongly_connected_component/
-/topology_sort/
-/tree_search/
-/two_pointer/
-/divide_and_conquer/
