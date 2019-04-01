@@ -26,6 +26,7 @@
 /queue/
 /search/
 /segment_tree/
+/shortest_path_faster_algorithm/
 /simulation/
 /sliding_window/
 /sort/
@@ -35,4 +36,3 @@
 /topology_sort/
 /tree_search/
 /two_pointer/
-/shortest_path_faster_algorithm/
