@@ -26,7 +26,6 @@ public class Boj11025 {
 			
 		for(int i = 1; i < n + 1; i++) {
 			r = (r + k) % i;
-			System.out.println(r);
 		}
 		
 		return r + 1;

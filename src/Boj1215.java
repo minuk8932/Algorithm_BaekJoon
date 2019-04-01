@@ -13,16 +13,8 @@ public class Boj1215 {
 	}
 	
 	private static long josephs(long N, long K) {
-		long res = N > K ? (N - K) * K : 0;
-		long half = K / 2;
-		if(K % 2 == 0) half--;
-		
-		res += half < N ? (1 + half) * half / 2 : 0;
-		long loop = K / 2 > N ? N : K / 2;
-		
-		for(long i = 1; i <= loop; i++) {			// 개선해야함
-			res += (K % i);
-		}
+		long res = K * (N - K); 			// K ~ N 사이 나머지
+		res += ((K / 2) + 1 + 1) * (K / 2) / 2;		// K/2 + 1 ~ K 사이 나머지 총 합
 		
 		return res;
 	}
