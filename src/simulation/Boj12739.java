@@ -3,6 +3,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 12739번: 돌림판
+ *
+ *	@see https://www.acmicpc.net/problem/12739/
+ *
+ */
 public class Boj12739 {
 	private static final String SPACE = " ";
 	
@@ -36,17 +44,17 @@ public class Boj12739 {
 				int prev = index == 0 ? n - 1: index - 1;
 				int post = (index + 1) % n;
 				
-				color = new int[3];		// R 2, G 1, B 0
+				color = new int[3];				// R 2, G 1, B 0
 				color[arr[prev]]++;
 				color[arr[post]]++;
 				color[arr[index]]++;
 				
-				if(isBlue(color)) tmp[index] = 0;
+				if(isBlue(color)) tmp[index] = 0;			// 문제 조건에 따라 색칠
 				else if(isRed(color)) tmp[index] = 2;
 				else tmp[index] = 1;
 			}
 			
-			for(int i = 0; i < n; i++) {
+			for(int i = 0; i < n; i++) {					// 색 갱신
 				arr[i] = tmp[i];
 			}
 		}
