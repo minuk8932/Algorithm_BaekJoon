@@ -1,67 +1,82 @@
 package baekjoon_contest;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.InputMismatchException;
 
 public class BSIS_ProblemF {
 	private static final String NEW_LINE = "\n";
-	private static final int INF = 1_000_001;
-	
-	private static StringBuilder sb = new StringBuilder();
-	private static long[] damageSet = new long[INF];
-	
-	private static InputReader in = new InputReader(System.in);
-	private static OutputWriter out = new OutputWriter(System.out);
+	private static long[] tree;
 	
 	public static void main(String[] args) throws Exception{		
+		InputReader in = new InputReader(System.in);
+		StringBuilder sb = new StringBuilder();
+		
 		int N = in.readInt();
 		int Q1 = in.readInt();
 		int Q2 = in.readInt();
 		
-		long[] tmp = new long[N + 1];
+		int S = 1;
+		while(S < N) S <<= 1;
 		
-		for(int i = 1; i < N + 1; i++) {
-			long d = in.readLong();
-			damageSet[i] = d;
-			tmp[i] = damageSet[i];
-			damageSet[i] += damageSet[i - 1];
+		tree = new long[S * 2];
+		for(int i = S; i < S + N; i++) {
+			tree[i] = in.readInt();
 		}
+		
+		init();
 		
 		int loop = Q1 + Q2;
-		
 		while(loop-- > 0) {
-			int q = in.readInt();
-			int from = in.readInt();
-			int to = in.readInt();
-			int add = 0;
+			int cmd = in.readInt();
+			int from = 0;
+			int to = 0;
 			
-			long res = 0;
-			
-			if(q == 1) Query1(N, from, to, res);			
-			else Query2(N, from, to, add);
+			if(cmd == 1) {
+				from = in.readInt();
+				to = in.readInt();
+				
+				sb.append(getSum(from + S - 1, to + S - 1)).append(NEW_LINE);
+			}
+			else {
+				from = in.readInt();
+				to = in.readInt();
+				int cost = in.readInt();
+				
+				update(from + S - 1, to + S - 1, cost);
+			}
 		}
 		
-		out.print(sb.toString());
+		System.out.println(sb);
 	}
 	
-	private static void Query1(int N, int from, int to, long result) {
-		result = damageSet[to] - damageSet[from - 1];			
-		sb.append(result).append(NEW_LINE);
+	private static void init() {
+		for(int i = tree.length - 1; i > 1; i -= 2) {
+			tree[i / 2] = tree[i] + tree[i - 1];
+		}
 	}
 	
-	private static void Query2(int N, int from, int to, int add) {
-		add = in.readInt();
-		int rep = 0;
-		
-		for(int i = from; i < N + 1; i++) {
-			if(i < to + 1) rep++;
+	private static long getSum(int left, int right) {
+		long total = 0;
+
+		while(left <= right) {
+			if(right % 2 == 0) total += tree[right--];
+			if(left % 2 == 1) total += tree[left++];
 			
-			damageSet[i] += (add * rep);
+			right /= 2;
+			left /= 2;
+		}
+		
+		return total;
+	}
+	
+	private static void update(int left, int right, int hit) {
+		for(int i = left; i < right + 1; i++) {
+			tree[i] += hit;
+		}
+		
+		for(int i = tree.length - 1; i > 1; i -= 2) {
+			tree[i / 2] = tree[i] + tree[i - 1];
 		}
 	}
 	
@@ -147,24 +162,6 @@ public class BSIS_ProblemF {
 
 		public interface SpaceCharFilter {
 			public boolean isSpaceChar(int ch);
-		}
-	}
-
-	private static class OutputWriter {
-		private final PrintWriter writer;
-
-		public OutputWriter(OutputStream outputStream) {
-			writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(outputStream)));
-		}
-
-		public void print(Object... objects) {
-			for (int i = 0; i < objects.length; i++) {
-				if (i != 0) {
-					writer.print(' ');
-				}
-				writer.print(objects[i]);
-			}
-			writer.flush();
 		}
 	}
 }
