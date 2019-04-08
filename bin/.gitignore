@@ -1,5 +1,6 @@
 /.DS_Store
 /Floyd_Washall/
+/articulation/
 /back_tracking/
 /baekjoon_contest/
 /bellman_ford/
@@ -35,5 +36,3 @@
 /strongly_connected_component/
 /topology_sort/
 /tree_search/
-/two_pointer/
-/articulation/
