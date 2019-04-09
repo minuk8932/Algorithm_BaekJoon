@@ -1,3 +1,4 @@
+package breadth_first_search;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
@@ -5,6 +6,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 16930번: 달리기
+ *
+ *	@see https://www.acmicpc.net/problem/16930/
+ *
+ */
 public class Boj16930 {
 	private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 	private static final int ROW = 0;
@@ -14,19 +23,10 @@ public class Boj16930 {
 	private static class Point{
 		int row;
 		int col;
-		int dir;
-		int move;
 		
 		public Point(int row, int col) {
 			this.row = row;
 			this.col = col;
-		}
-		
-		public Point(int row, int col, int dir, int move) {
-			this.row = row;
-			this.col = col;
-			this.dir = dir;
-			this.move = move;
 		}
 	}
 	
@@ -54,44 +54,41 @@ public class Boj16930 {
 	}
 	
 	private static int bfs(int n, int m, int k, boolean[][] arr, Point start, Point end) {
-		int[][] isVisited = new int[n][m];
+		int[][] visit = new int[n][m];
 		for(int i = 0; i < n; i++) {
-			Arrays.fill(isVisited[i], INF);
+			Arrays.fill(visit[i], INF);
 		}
 		
 		Queue<Point> q = new LinkedList<>();
-		q.offer(new Point(start.row, start.col, -1, 0));
-		isVisited[start.row][start.col] = 1;
+		q.offer(new Point(start.row, start.col));
+		visit[start.row][start.col] = 1;
 		
 		while(!q.isEmpty()) {
 			Point current = q.poll();
 				
-			for(int dir = 0; dir < 4; dir++) {
-				int nextRow = current.row + DIRECTIONS[dir][ROW];
-				int nextCol = current.col + DIRECTIONS[dir][COL];
-				int nextMove = current.move;
+			for(final int[] DIRECTION: DIRECTIONS) {
+				int nextRow = current.row + DIRECTION[ROW];
+				int nextCol = current.col + DIRECTION[COL];
+				int move = 0;
 					
-				if(nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= m || !arr[nextRow][nextCol]) continue;				
-				if(isVisited[nextRow][nextCol] > isVisited[current.row][current.col]) {
-					isVisited[nextRow][nextCol] = isVisited[current.row][current.col];
-					
-					if(nextMove == k || dir != current.dir) {
-						nextMove = 0;
-						isVisited[nextRow][nextCol]++;
+				// 움직인 횟수가 같은 배열은 방문하지 않음
+				while(move < k && range(n, m, nextRow, nextCol) && arr[nextRow][nextCol] && visit[nextRow][nextCol] > visit[current.row][current.col]) {
+					if(visit[nextRow][nextCol] == INF) {			// 미방문 정점인 경우
+						visit[nextRow][nextCol] = visit[current.row][current.col] + 1;
+						q.offer(new Point(nextRow, nextCol));
 					}
-
-					q.offer(new Point(nextRow, nextCol, dir, nextMove + 1));
+					
+					nextRow += DIRECTION[ROW];	// 달릴 수 있는 만큼 달려준다.
+					nextCol += DIRECTION[COL];
+					move++;
 				}
 			}
 		}
 		
-		for(int i = 0; i < n; i++) {
-			for(int j = 0; j < m; j++) {
-				System.out.print((isVisited[i][j] == INF ? 0 : isVisited[i][j]) + " ");
-			}
-			System.out.println();
-		}
-		
-		return isVisited[end.row][end.col] == INF ? -1 : isVisited[end.row][end.col] - 1;
+		return visit[end.row][end.col] == INF ? -1 : visit[end.row][end.col] - 1;
+	}
+	
+	private static boolean range(int n, int m, int row, int col) {
+		return row >= 0 && row < n && col >= 0 && col < m ? true: false;
 	}
 }
