@@ -6,6 +6,7 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Boj14868 {
+	private static int[][] visit;
 	private static int[] parent;
 	private static ArrayList<Point> fix;
 	
@@ -32,7 +33,10 @@ public class Boj14868 {
 		
 		Queue<Point> civil = new LinkedList<>();
 		fix = new ArrayList<>();
-		int[][] isVisited = new int[N][N];
+		int[][] countries = new int[N][N];
+		visit = new int[N][N];
+		
+		int rep = 1;
 		
 		while(K-- > 0) {
 			st = new StringTokenizer(br.readLine());
@@ -41,10 +45,11 @@ public class Boj14868 {
 			
 			fix.add(new Point(row, col));
 			civil.offer(new Point(row, col));
-			isVisited[row][col] = 1;
+			countries[row][col] = rep++;
+			visit[row][col] = 1;
 		}
 		
-		System.out.println(bfs(N, civil, isVisited));
+		System.out.println(bfs(N, civil, countries));
 	}
 	
 	private static void init(int n) {
@@ -59,11 +64,18 @@ public class Boj14868 {
 		return parent[x] = find(parent[x]);
 	}
 	
-	private static boolean merge(int x, int y) {
+	private static boolean isCycle(int x, int y) {
 		x = find(x);
 		y = find(y);
 		
-		if(x == y) return false;;
+		return x == y ? true: false;
+	}
+	
+	private static void merge(int x, int y) {
+		x = find(x);
+		y = find(y);
+		
+		if(x == y) return;
 		
 		if(parent[x] < parent[y]) {
 			parent[x] += parent[y];
@@ -73,28 +85,32 @@ public class Boj14868 {
 			parent[y] += parent[x];
 			parent[x] = y;
 		}
-		
-		return true;
 	}
 	
-	private static int bfs(int n, Queue<Point> q, int[][] visit) {
+	private static int bfs(int n, Queue<Point> q, int[][] country) {
 		int year = 0;
 		
 		while(!q.isEmpty()) {
 			Point current = q.poll();
-				
+			
 			for(final int[] DIRECTION: DIRECTIONS) {
 				int nextRow = current.row + DIRECTION[ROW];
 				int nextCol = current.col + DIRECTION[COL];
 					
 				if(nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= n) continue;
-				if(!merge(current.row * n + current.col, nextRow * n + nextCol)) continue;
-				visit[nextRow][nextCol] = visit[current.row][current.col] + 1;
-				year = visit[nextRow][nextCol];
+				if(isCycle(current.row * n + current.col, nextRow * n + nextCol)) continue;
+				
+				if(visit[nextRow][nextCol] == 0) {
+					visit[nextRow][nextCol] = visit[current.row][current.col] + 1;
+					country[nextRow][nextCol] = country[current.row][current.col];
 					
-				q.offer(new Point(nextRow, nextCol));
+					q.offer(new Point(nextRow, nextCol));
+				}
+				
+				if(visit[nextRow][nextCol] != 0 && country[nextRow][nextCol] != country[current.row][current.col]) {
+					merge(current.row * n + current.col, nextRow * n + nextCol);
+				}
 			}
-			
 		}
 		
 		return year - 1;
