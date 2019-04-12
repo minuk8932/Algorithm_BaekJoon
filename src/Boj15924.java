@@ -3,6 +3,13 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Boj15924 {
+	private static final int MOD = 1_000_000_009;
+	
+	private static final char EAST = 'E';
+	private static final char SOUTH = 'S';
+	private static final char BOTH = 'B';
+	private static final char DESTINATION = 'X';
+	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -22,19 +29,30 @@ public class Boj15924 {
 	}
 	
 	private static long path(int n, int m, char[][] arr) {
-		long[][][] dp = new long[2][n][m];
-		
-		char tmp = arr[0][0];
-		dp[0][0][0] = tmp == 'E' || tmp == 'B' ? 1: 0;
-		dp[1][0][0] = tmp == 'S' || tmp == 'B' ? 1: 0;
+		long[][] dp = new long[n][m];
+		dp[0][0] = 1;
 		
 		for(int i = 1; i < m; i++) {
-			char way = arr[0][i];
 			
-			dp[0][0][i] = (way == 'E' || way == 'B' ? 1: 0) + dp[0][0][i - 1];
-			dp[1][0][i] = 0;
 		}
 		
-		return dp[0][n - 1][m - 1] + dp[1][n - 1][m - 1];
+		for(int i = 1; i < n; i++) {
+			
+		}
+		
+		for(int i = 1; i < n; i++) {
+			for(int j = 1; j < m; j++) {
+				
+			}
+		}
+		
+//		for(int i = 0; i < n; i++) {
+//			for(int j = 0; j < m; j++) {
+//				System.out.print(dp[i][j] + " ");
+//			}
+//			System.out.println();
+//		}
+		
+		return dp[n - 1][m - 1] % MOD;
 	}
 }
