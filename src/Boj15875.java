@@ -1,9 +1,9 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.StringTokenizer;
 
 public class Boj15875 {
 	private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
@@ -11,44 +11,55 @@ public class Boj15875 {
 	private static final int COL = 1;
 	
 	private static int[] parent;
+	private static boolean[][] outLine;
+	private static boolean flag = false;
 	
-	private static class Point{
+	private static class Point implements Comparable<Point>{
 		int row;
 		int col;
+		int depth;
 		
 		public Point(int row, int col) {
 			this.row = row;
 			this.col = col;
 		}
+		
+		public Point(int row, int col, int depth) {
+			this.row = row;
+			this.col = col;
+			this.depth = depth;
+		}
+
+		@Override
+		public int compareTo(Point p) {
+			return this.depth < p.depth ? -1: 1;
+		}
 	}
 	
 	public static void main(String[] args) throws Exception{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int H = Integer.parseInt(st.nextToken());
-		int W = Integer.parseInt(st.nextToken());
+		InputReader in = new InputReader(System.in);
+		int H = in.readInt();
+		int W = in.readInt();
 		
-		int[][] map = new int[H + 2][W + 2];
-		int[] depth = new int[H * W];
-		int idx = 0;
-		
-		parent = new int[(H + 2) * (W + 2)];
+		PriorityQueue<Point> saved = new PriorityQueue<>();
+		int[][] map = new int[H][W];
+		outLine = new boolean[H][W];
+
 		init(H, W);
 		
-		for(int i = 1; i < H + 1; i++) {
-			st = new StringTokenizer(br.readLine());
-			
-			for(int j = 1; j < W + 1; j++) {
-				map[i][j] = Integer.parseInt(st.nextToken());				
-				depth[idx++] = map[i][j];
+		for(int i = 0; i < H; i++) {
+			for(int j = 0; j < W; j++) {
+				map[i][j] = in.readInt();
+				saved.add(new Point(i, j, map[i][j]));
 			}
 		}
 		
-		Arrays.sort(depth);
-		System.out.println(search(H, W, map, depth));
+		System.out.println(search(H, W, map, saved));
 	}
 	
 	private static void init(int h, int w) {
+		parent = new int[h * w];
+		
 		for(int i = 0; i < parent.length; i++) {
 			parent[i] = -1;
 		}
@@ -75,69 +86,145 @@ public class Boj15875 {
 		}
 	}
 	
-	private static int search(int h, int w, int[][] arr, int[] depth) {	
-		int max = 0;
-		int comp = 0;
+	private static boolean isCycle(int x, int y) {
+		x = find(x);
+		y = find(y);
 		
-		for(int size = 0; size < depth.length; size++) {
-			if(depth[size] == comp || parent[size] != -1) continue;
-			comp = depth[size];
-			
-			boolean[][] isVisited = new boolean[h + 2][w + 2];	
-			
-			for(int row = 1; row < h + 1; row++) {
-				for(int col = 1; col < w + 1; col++) {
-					if(parent[row * (w + 2) + col] != -1) continue;
-					if(isVisited[row][col] || arr[row][col] > depth[size]) continue;
-					isVisited[row][col] = true;
-					
-					Queue<Point> q = new LinkedList<>();
-					q.offer(new Point(row, col));
-					
-					while(!q.isEmpty()) {
-						Point current = q.poll();
-								
-						for(final int[] DIRECTION: DIRECTIONS) {
-							int nextRow = current.row + DIRECTION[ROW];
-							int nextCol = current.col + DIRECTION[COL];
-										
-							if(nextRow < 0 || nextRow > h + 1 || nextCol < 0 || nextCol > w + 1) continue;
-							if(isVisited[nextRow][nextCol] || arr[nextRow][nextCol] > depth[size]) continue;
-							isVisited[nextRow][nextCol] = true;
-									
-							merge(current.row * (w + 2) + current.col, nextRow * (w + 2) + nextCol);
-							q.offer(new Point(nextRow, nextCol));
-						}
-					}
-				}
-			}
-			
-			int pond = getPond();
-			if(pond > max) max = pond;
-			
-			System.out.println(depth[size]);
-			for(int x = 0; x < h + 2; x++) {
-				for(int y = 0; y < w + 2; y++) {
-					System.out.print(parent[x * (w + 2) + y] + " ");
-				}
-				System.out.println();
-			}
-		}
-		
-		return max;
+		return x == y ? true: false;
 	}
 	
-	private static int getPond() {
-		int size = 0;
+	private static int search(int h, int w, int[][] arr, PriorityQueue<Point> pq) {	
+		int max = 0;
 		
-		int except = parent[0];
-		except = except == -1 ? 0 : except;
+		while(!pq.isEmpty()) {
+			Point current = pq.poll();
+			if(parent[find(current.row * w + current.col)] != -1 || outLine[current.row][current.col]) continue;
+			
+			boolean isPond = setPond(h, w, arr, current);
+			
+			if(isPond) {
+				int size = parent[find(current.row * w + current.col)];
+				max = Math.max(max, size == -1 ? 0 : -size);
+			}
+			
+//			for(int i = 0; i < parent.length; i++) {
+//				System.out.print(parent[i] + " ");
+//				if((i + 1) % 5 == 0) System.out.println();
+//			}
+//			System.out.println();
+		}
+
+		return max == 0 && flag ? 1: max;
+	}
+	
+	private static boolean setPond(int h, int w, int[][] arr, Point start) {
+		boolean[][] visit = new boolean[h][w];
+		LinkedList<Point> tmp = new LinkedList<>();
 		
-		for(int pos = 0; pos < parent.length; pos++) {
-			if(parent[pos] == -1 || except == parent[pos]) continue;
-			if(-parent[pos] > size && parent[except] != parent[pos]) size = -parent[pos];
+		Queue<Point> q = new LinkedList<>();
+		q.offer(start);
+		
+		visit[start.row][start.col] = true;
+		outLine[start.row][start.col] = true;
+		
+		while(!q.isEmpty()) {
+			Point current = q.poll();
+			
+			outLine[current.row][current.col] = true;
+			if(current.row == 0 || current.row == h - 1 || current.col == 0 || current.col == w - 1) return false;
+			
+			for(final int[] DIRECTION: DIRECTIONS) {
+				int nextRow = current.row + DIRECTION[ROW];
+				int nextCol = current.col + DIRECTION[COL];
+				
+				if(nextRow < 0 || nextCol < 0 || nextRow >= h || nextCol >= w) continue;
+				if(visit[nextRow][nextCol] || isCycle(current.row * w + current.col, nextRow * w + nextCol)) continue;
+				
+				if(arr[nextRow][nextCol] <= start.depth) {
+					visit[nextRow][nextCol] = true;
+
+					tmp.add(new Point(nextRow, nextCol));
+					q.offer(new Point(nextRow, nextCol));
+				}
+			}
 		}
 		
-		return size;
+		flag = true;
+		outLine[start.row][start.col] = false;
+		
+		for(Point p: tmp) {
+            int x = start.row * w + start.col;
+            int y = p.row * w + p.col;
+            
+			if(!isCycle(x, y)) {
+				merge(x, y);
+				outLine[p.row][p.col] = false;
+			}
+		}
+		
+		return true;
+	}
+	
+	private static class InputReader {
+		private InputStream stream;
+		private byte[] buf = new byte[1024];
+		private int curChar;
+		private int numChars;
+		private SpaceCharFilter filter;
+
+		public InputReader(InputStream stream) {
+			this.stream = stream;
+		}
+
+		public int read() {
+			if (numChars == -1) {
+				throw new InputMismatchException();
+			}
+			if (curChar >= numChars) {
+				curChar = 0;
+				try {
+					numChars = stream.read(buf);
+				} catch (IOException e) {
+					throw new InputMismatchException();
+				}
+				if (numChars <= 0) {
+					return -1;
+				}
+			}
+			return buf[curChar++];
+		}
+
+		public int readInt() {
+			int c = read();
+			while (isSpaceChar(c)) {
+				c = read();
+			}
+			int sgn = 1;
+			if (c == '-') {
+				sgn = -1;
+				c = read();
+			}
+			int res = 0;
+			do {
+				if (c < '0' || c > '9') {
+					throw new InputMismatchException();
+				}
+				res *= 10;
+				res += c - '0';
+				c = read();
+			} while (!isSpaceChar(c));
+			return res * sgn;
+		}
+
+		public boolean isSpaceChar(int c) {
+			if (filter != null) {
+				return filter.isSpaceChar(c);
+			}
+			return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+		}
+
+		public interface SpaceCharFilter {
+			public boolean isSpaceChar(int ch);
+		}
 	}
 }
