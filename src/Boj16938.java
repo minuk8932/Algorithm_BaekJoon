@@ -10,7 +10,6 @@ public class Boj16938 {
 		int L = Integer.parseInt(st.nextToken());
 		int R = Integer.parseInt(st.nextToken());
 		int X = Integer.parseInt(st.nextToken());
-		
-		
+
 	}
 }

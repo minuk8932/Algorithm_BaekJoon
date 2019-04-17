@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 public class Boj2261 {
 	
@@ -16,7 +18,9 @@ public class Boj2261 {
 
 		@Override
 		public int compareTo(Pair p) {
-			return this.x < p.x ? -1 : 1;
+			if(this.x < p.x) return -1;
+			else if(this.x > p.x) return 1;
+			else return 0;
 		}
 	}
 	
@@ -24,30 +28,20 @@ public class Boj2261 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
 		
-		Pair[] pair = new Pair[N];
+		ArrayList<Pair> pair = new ArrayList<>();
 		
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		for(int i = 0; i < N; i++) {
-			pair[i] = new Pair(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+			pair.add(new Pair(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
 		}
 		
-		Arrays.sort(pair);
-		
+		Collections.sort(pair);		
 		System.out.println(getTheClosestDistance(N, pair));
 	}
 	
-	private static int getTheClosestDistance(int n, Pair[] p) {
-		Pair[] bound = new Pair[2];
-		bound[0] = new Pair(p[0].x, p[0].y);
-		bound[1] = new Pair(p[n - 1].x, p[n - 1].y);
+	private static int getTheClosestDistance(int n, ArrayList<Pair> p) {
+		int min = getDistance(p.get(0), p.get(1));
 		
-		Pair[] mid = new Pair[2];
-		mid[0] = new Pair(p[(n - 1) / 2].x, p[(n - 1) / 2].y);
-		mid[1] = new Pair(p[n / 2].x, p[n / 2].y);
-		
-		int min = getDistance(mid);
-		int lowerBound = binarySearch(bound[0], mid[0], min);
-		int upperBound = binarySearch(mid[1], bound[1], min);
 		
 		return 0;
 	}
@@ -58,7 +52,7 @@ public class Boj2261 {
 		return 0;
 	}
 	
-	private static int getDistance(Pair[] p) {
-		return (int) (Math.pow(p[0].x - p[1].x, 2) + Math.pow(p[0].y, p[1].y));
+	private static int getDistance(Pair p1, Pair p2) {
+		return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
 	}
 }
