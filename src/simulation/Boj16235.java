@@ -2,7 +2,6 @@ package simulation;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 /**
@@ -14,11 +13,13 @@ import java.util.StringTokenizer;
  *
  */
 public class Boj16235 {
+	private static LinkedList<Trees> tree = new LinkedList<>();
+	
 	private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
 	private static final int ROW = 0;
 	private static final int COL = 1;
 	
-	private static class Trees implements Comparable<Trees>{
+	private static class Trees{
 		int row;
 		int col;
 		int age;
@@ -27,11 +28,6 @@ public class Boj16235 {
 			this.row = row;
 			this.col = col;
 			this.age = age;
-		}
-
-		@Override
-		public int compareTo(Trees t) {
-			return this.age < t.age ? -1 : 1;
 		}
 	}
 	
@@ -53,8 +49,6 @@ public class Boj16235 {
 			}
 		}
 		
-		PriorityQueue<Trees> tree = new PriorityQueue<>();
-		
 		while(M-- > 0) {
 			st = new StringTokenizer(br.readLine());
 			int x = Integer.parseInt(st.nextToken());
@@ -64,65 +58,54 @@ public class Boj16235 {
 			tree.add(new Trees(x, y, z));
 		}
 		
-		System.out.println(getSurvivor(N, K, A, fix, tree));
+		System.out.println(getSurvivor(N, K, A, fix));
 	}
 	
-	private static int getSurvivor(int n, int k, int[][] a, int[][] adder, PriorityQueue<Trees> pq) {		
+	private static int getSurvivor(int n, int k, int[][] a, int[][] adder) {
+		LinkedList<Trees> dead = new LinkedList<>();
+		LinkedList<Trees> surv = new LinkedList<>();
+		
 		while(k-- > 0) {
-			int size = pq.size();
-			LinkedList<Trees> surv = new LinkedList<>();
-			LinkedList<Trees> isDead = new LinkedList<>();
-			
-			while(size-- > 0) {						// 봄: 죽일것 죽이고, 산것은 나이 +1
-				Trees current = pq.poll();
+			while(!tree.isEmpty()) {								// 봄: 죽일것 죽이고, 산것은 나이 +1	
+				Trees t = tree.remove();
 				
-				if(a[current.row][current.col] < current.age) {
-					isDead.add(current);
-					continue;
+				if(a[t.row][t.col] < t.age) {
+					dead.add(t);
 				}
-				
-				surv.add(new Trees(current.row, current.col, current.age + 1));
-				a[current.row][current.col] -= current.age;
+				else {
+					surv.add(new Trees(t.row, t.col, t.age + 1));
+					a[t.row][t.col] -= t.age;
+				}
 			}
 			
-			while(!surv.isEmpty()) {
-				pq.offer(surv.remove());
+			while(!dead.isEmpty()) {								// 여름: (죽인 것의 나이 / 2) 만큼 양분 +
+				Trees t = dead.remove();
+				a[t.row][t.col] += (t.age / 2);
 			}
 			
-			for(Trees dead: isDead) {						// 여름: (죽인 것의 나이 / 2) 만큼 양분 +
-				a[dead.row][dead.col] += (dead.age / 2);
-			}
-			
-			size = pq.size();
-			LinkedList<Trees> create = new LinkedList<>();
-			
-			while(size-- > 0) {								// 가을: 증식 가능한 친구들 증식
-				Trees current = pq.poll();
-				create.add(current);
-				if(current.age % 5 != 0) continue;
+			while(!surv.isEmpty()) {								// 가을: 증식 가능한 친구들 증식
+				Trees t = surv.remove();
+				tree.add(t);
+				if(t.age % 5 != 0) continue;
 					
 				for(final int[] DIRECTION: DIRECTIONS) {
-					int nextRow = current.row + DIRECTION[ROW];
-					int nextCol = current.col + DIRECTION[COL];
+					int nextRow = t.row + DIRECTION[ROW];
+					int nextCol = t.col + DIRECTION[COL];
 					
 					if(nextRow < 1 || nextRow > n || nextCol < 1 || nextCol > n) continue;
-					create.add(new Trees(nextRow, nextCol, 1));
+					tree.addFirst(new Trees(nextRow, nextCol, 1));
 				}
 			}
 			
-			while(!create.isEmpty()) {
-				pq.offer(create.remove());
-			}
+			if(tree.isEmpty()) return 0;
 			
-			if(pq.isEmpty()) return 0;
-			
-			for(int row = 1; row < n + 1; row++) {			// 겨울: 로봇이 양분 채움
+			for(int row = 1; row < n + 1; row++) {					// 겨울: 로봇이 양분 채움
 				for(int col = 1; col < n + 1; col++) {
 					a[row][col] += adder[row][col];
 				}
 			}
 		}
 		
-		return pq.size();			// 살아남은 나무 수
+		return tree.size();			// 살아남은 나무 수
 	}
 }
