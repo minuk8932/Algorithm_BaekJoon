@@ -10,18 +10,28 @@ public class Boj17100 {
 		int sugar;
 		int count;
 		int cost;
+		int cover;
 		
-		public Candy(int sugar, int count, int cost) {
+		public Candy(int sugar, int count, int cost, int cover) {
 			this.sugar = sugar;
 			this.count = count;
 			this.cost = cost;
+			this.cover = cover;
 		}
 
 		@Override
 		public int compareTo(Candy c) {
-			if(this.sugar < c.sugar) return -1;
-			else if(this.sugar > c.sugar) return 1;
-			else return 0;
+			if(this.sugar < c.sugar) {
+				return -1;
+			}
+			else if(this.sugar > c.sugar) {
+				return 1;
+			}
+			else {
+				if(this.cost < c.cost) return -1;
+				else if(this.cost > c.cost) return 1;
+				else return 0;
+			}
 		}
 	}
 	
@@ -31,20 +41,27 @@ public class Boj17100 {
 		int N = Integer.parseInt(st.nextToken());
 		int L = Integer.parseInt(st.nextToken());
 		
-		Candy[] c = new Candy[N];
+		Candy[] candy = new Candy[N];
 		for(int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
-			c[i] = new Candy(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+			int a = Integer.parseInt(st.nextToken());
+			int m = Integer.parseInt(st.nextToken());
+			int c = Integer.parseInt(st.nextToken());
+			candy[i] = new Candy(a, m, c, a * m);
 		}
 		
-		Arrays.sort(c);
-		System.out.println(getMinCost(N, L, c));
+		Arrays.sort(candy);
+		System.out.println(getMinCost(N, L, candy));
 	}
 	
 	private static StringBuilder getMinCost(int n, int l, Candy[] arr) {
 		StringBuilder sb = new StringBuilder();
+		int[] k = new int[l + 1];
+		Arrays.fill(k, -1);		
 		
-		
+		for(int i = 1; i < l + 1; i++) {
+			sb.append(k[i]).append(SPACE);
+		}
 		
 		return sb;
 	}
