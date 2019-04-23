@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
  */
 public class Boj17140 {
 	private static int[][] matrix;
+	private static PriorityQueue<Pair> pq = new PriorityQueue<>();
 	
 	private static class Pair implements Comparable<Pair>{
 		int value;
@@ -81,14 +82,12 @@ public class Boj17140 {
 		return result;
 	}
 	
-	private static int remakeMatrix(int r, int c, boolean flag) {		
-		PriorityQueue<Pair> pq;
+	private static int remakeMatrix(int r, int c, boolean flag) {
 		int size = 0;
 		
 		for(int i = 0; i < r; i++) {
-			pq = new PriorityQueue<>();
-			
 			int[] count = new int[101];
+			
 			for(int j = 0; j < c; j++) {
 				count[flag ? matrix[i][j]: matrix[j][i]]++;			// 등장하는 숫자의 갯수
 			}
