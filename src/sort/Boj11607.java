@@ -1,40 +1,32 @@
+package sort;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.InputMismatchException;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 11607번: 모노톤길
+ *
+ *	@see https://www.acmicpc.net/problem/11607/
+ *
+ */
 public class Boj11607 {
-	private static Pair[] roads;
-	private static Pair[] cafe;
+	private static ArrayList<Integer>[] roads = new ArrayList[100_001];
+	private static ArrayList<Pair> cafe;
 	
 	private static final String NEW_LINE = "\n";
 	private static final String SPACE = " ";
 	
-	private static class Pair implements Comparable<Pair>{
+	private static class Pair {
 		int x;
 		int y;
 		
 		public Pair(int x, int y) {
 			this.x = x;
 			this.y = y;
-		}
-
-		@Override
-		public int compareTo(Pair p) {
-			if(this.x < p.x) {
-				return -1;
-			}
-			else if(this.x > p.x) {
-				return 1;
-			}
-			else {
-				int ty = Math.abs(this.y);
-				int py = Math.abs(p.y);
-						
-				if(ty < py) return -1;
-				else if(ty > py) return 1;
-				else return 0;
-			}
 		}
 	}
 	
@@ -46,19 +38,22 @@ public class Boj11607 {
 		
 		while(T-- > 0) {			
 			int n = in.readInt();
-			cafe = new Pair[n];
-			roads = new Pair[n];
+			cafe = new ArrayList<>();
+			
+			for(int i = 0; i < roads.length; i++) {
+				roads[i] = new ArrayList<>();
+			}
 			
 			for(int i = 0; i < n; i++) {
-				roads[i] = new Pair(in.readInt(), in.readInt());
+				roads[in.readInt()].add(in.readInt());
 			}
 			
 			numbering();
 			int m = in.readInt();
 			
 			while(m-- > 0) {
-				int num = in.readInt() - 1;
-				sb.append(cafe[num].x).append(SPACE).append(cafe[num].y).append(NEW_LINE);
+				int num = in.readInt();
+				sb.append(cafe.get(num).x).append(SPACE).append(cafe.get(num).y).append(NEW_LINE);
 			}
 		}
 		
@@ -66,37 +61,29 @@ public class Boj11607 {
 	}
 	
 	private static void numbering() {
-		Arrays.sort(roads);
-		cafe[0] = roads[0];
+		cafe.add(new Pair(-1, 0));					// 정렬에 영향 받지 않을 가장 앞의 값
 		
-		Pair current = new Pair(cafe[0].x, cafe[0].y);
-		Pair save = new Pair(-1, -1);
-		int index = 1;
-		
-		for(int i = 1; i < roads.length; i++) {
-			Pair next = roads[i];
+		for(int i = 0; i < roads.length; i++) {
+			int roadsCount = roads[i].size();
+			if(roadsCount == 0) continue;
 			
-			if(current.y == next.y) {
-				cafe[index++] = next;
+			if(roadsCount == 1) {
+				cafe.add(new Pair(i, roads[i].get(0)));
 			}
 			else {
-				if(current.x == next.x) {
-					cafe[index++] = new Pair(next.x, next.y);
-					
-					if(save.x != -1) {
-						cafe[index++] = new Pair(save.x, save.y);						
-						save = new Pair(-1, -1);
-					}
-				}
-				else {
-					save = next;
-				}
+				Collections.sort(roads[i]);			// (i, ?)의 정점 오름차순 정렬
+				int length = cafe.size();
+				
+				if(cafe.get(length - 1).y == roads[i].get(0)) positioning(i, 0, roadsCount - 1, 1);		// 맨 앞의 y값이 동일하다면 정방향
+				else positioning(i, roadsCount - 1, 0, -1);												// 맨 뒤의 y값이 동일하다면 역방향
 			}
-			
-			current = next;
 		}
-		
-		if(save.x != -1) cafe[index] = new Pair(save.x, save.y);
+	}
+	
+	private static void positioning(int index, int start, int end, int adder) {		// 위치 지정
+		for(int i = start; i * adder <= end * adder; i += adder) {
+			cafe.add(new Pair(index, roads[index].get(i)));
+		}
 	}
 	
 	private static class InputReader {
