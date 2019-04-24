@@ -1,10 +1,9 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 public class Boj11062 {
-	private static ArrayList<Integer> cards = null;
 	private static final String NEW_LINE = "\n";
 
 	public static void main(String[] args) throws Exception {
@@ -15,18 +14,26 @@ public class Boj11062 {
 
 		while (T-- > 0) {
 			int N = Integer.parseInt(br.readLine());
-			cards = new ArrayList<>();
+			int[] cards = new int[N];
 
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			for (int i = 0; i < N; i++) {
-				cards.add(Integer.parseInt(st.nextToken()));
+				cards[i] = Integer.parseInt(st.nextToken());
 			}
 
-			long total = 0, turn = 0;
-
-			sb.append(total).append(NEW_LINE);
+			sb.append(game(N, cards)).append(NEW_LINE);
 		}
 
-		System.out.println(sb.toString());
+		System.out.println(sb);
+	}
+	
+	private static int game(int n, int[] arr) {
+		int[][] dp = new int[n][n];
+		
+		for(int i = 1; i < n; i++) {
+			
+		}
+		
+		return 0;
 	}
 }
