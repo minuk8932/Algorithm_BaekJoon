@@ -1,21 +1,10 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Boj12003 {
-	private static ArrayList<Data> index = new ArrayList<>();
-	
-	private static class Data{
-		int from;
-		int to;
-		
-		public Data(int from, int to) {
-			this.from = from;
-			this.to = to;
-		}
-	}
+	private static int[] indexL;
+	private static int[] indexR;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,52 +17,59 @@ public class Boj12003 {
 			diamond[i] = Integer.parseInt(br.readLine());
 		}
 		
-		binarySearch(N, K, diamond);
-		System.out.println(makeResult(N));
+		System.out.println(makeResult(N, K, diamond));
 	}
 	
-	private static void binarySearch(int n, int k, int[] arr) {
-		Arrays.sort(arr);
+	private static void getRight(int n, int k, int[] arr) {
+		indexR = new int[n];
+		int j = n - 1;
 		
-		for(int i = 0; i < n; i++) {
-			int start = i, end = n - 1;
-			int idx = 0;
-			
-			while(start <= end) {
-				int mid = (start + end) / 2;
-				int diff = Math.abs(arr[i] - arr[mid]);
-				
-				if(diff > k) {
-					end = mid - 1;
-				}
-				else {
-					start = mid + 1;
-					idx = mid;
-				}
+		for(int i = n - 1; i >= 0; i--) {
+			while(j >= 0 && arr[j] - arr[i] > k) {
+				j--;
 			}
 			
-			index.add(new Data(Math.min(i, idx), Math.max(i, idx)));
+			indexR[i] = j;
 		}
 	}
 	
-	private static int makeResult(int n) {
-		int[] left = new int[n];
-		left[0] = 1 - index.get(0).from;
+	private static void getLeft(int n, int k, int[] arr) {
+		indexL = new int[n];
+		int j = 0;
+		
+		for(int i = 0; i < n; i++) {
+			while(j < n && arr[i] - arr[j] > k) {
+				j++;
+			}
+			
+			indexL[i] = j;
+		}
+	}
+	
+	private static int makeResult(int n, int k, int[] arr) {
+		getLeft(n, k, arr);
+		
+		int[] sizeL = new int[n];
+		sizeL[0] = 1 - indexL[0];
 		
 		for(int i = 1; i < n; i++) {
-			left[i] = Math.max(index.get(i).from, index.get(i - 1).from);
+			sizeL[i] = i - indexL[i] + 1;
+			sizeL[i] = Math.max(sizeL[i], sizeL[i - 1]);
 		}
 		
-		int[] right = new int[n];
-		right[n - 1] = index.get(n - 1).to - (n - 1) + 1;
+		getRight(n, k, arr);
+		
+		int[] sizeR = new int[n];
+		sizeR[n - 1] = indexR[n - 1] - (n - 1) + 1;
 		
 		for(int i = n - 2; i >= 0; i--) {
-			right[i] = Math.max(index.get(i).to, index.get(i + 1).to);
+			sizeR[i] = indexR[i] - i + 1;
+			sizeR[i] = Math.max(sizeR[i], sizeR[i + 1]);
 		}
 		
 		int result = 0;
 		for(int i = 0; i < n - 1; i++) {
-			result = Math.max(result, left[i] + right[i + 1]);
+			result = Math.max(result, sizeL[i] + sizeR[i + 1]);
 		}
 		
 		return result;

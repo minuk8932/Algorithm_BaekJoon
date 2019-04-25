@@ -63,12 +63,13 @@ public class Boj2261 {
 				}
 			}
 			
-			int dist = (int) Math.sqrt(min) + 1;
-			Pair lowerPair = new Pair(current.y - dist, -INF);
-			Pair upperPair = new Pair(current.y + dist, INF);
+			int dist = (int) Math.sqrt(min) + 1;			
+			int lower = lowerBound(set, current.y - dist);
+			int upper = upperBound(set, current.y + dist);
 			
-			int lower = lowerBound(p, lowerPair);
-			int upper = upperBound(p, upperPair);
+			for(int idx = lower; idx != upper; idx++) {
+				min = Math.min(min, getDistance(p.get(0), p.get(i)));		// 수정
+			}
 			
 			set.add(p.get(i));
 		}
@@ -80,14 +81,42 @@ public class Boj2261 {
 		return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
 	}
 	
-	private static int lowerBound(ArrayList<Pair> list, Pair range) {
+	private static int lowerBound(TreeSet<Pair> ts, int target) {		// 수정
 		int index = 0;
+		int start = 0;
+		int end = ts.size();
+		
+		while(start <= end) {
+			int mid = (start + end) / 2;
+			
+			if(mid < target) {
+				start = mid + 1;
+				index = mid;
+			}
+			else {
+				end = mid - 1;
+			}
+		}
 		
 		return index;
 	}
 	
-	private static int upperBound(ArrayList<Pair> list, Pair range) {
+	private static int upperBound(TreeSet<Pair> ts, int target) {		// 수정 -> 트리셋이 아니고 다른걸..
 		int index = 0;
+		int start = 0;
+		int end = ts.size();
+		
+		while(start <= end) {
+			int mid = (start + end) / 2;
+			
+			if(mid > target) {
+				end = mid - 1;
+				index = mid;
+			}
+			else {
+				start = mid + 1;
+			}
+		}
 		
 		return index;
 	}
