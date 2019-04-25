@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 public class Boj2261 {
+	private static final int INF = 100_000_000;
 	
 	private static class Pair implements Comparable<Pair>{
 		int x;
@@ -29,9 +30,8 @@ public class Boj2261 {
 		int N = Integer.parseInt(br.readLine());
 		
 		ArrayList<Pair> pair = new ArrayList<>();
-		
-		StringTokenizer st = new StringTokenizer(br.readLine());
 		for(int i = 0; i < N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
 			pair.add(new Pair(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
 		}
 		
@@ -41,18 +41,54 @@ public class Boj2261 {
 	
 	private static int getTheClosestDistance(int n, ArrayList<Pair> p) {
 		int min = getDistance(p.get(0), p.get(1));
+		TreeSet<Pair> set = new TreeSet<>();
 		
-		
-		return 0;
-	}
+		set.add(p.get(0));
+		set.add(p.get(1));
 	
-	private static int binarySearch(Pair start, Pair end, int target) {
+		int start = 0;		
+		for(int i = 2; i < n; i++) {
+			Pair current = p.get(i);
+			
+			while(start < i) {
+				Pair next = p.get(start);
+				int x = current.x - next.x;
+				
+				if(x * x > min) {
+					set.remove(next);
+					start++;
+				}
+				else {
+					break;
+				}
+			}
+			
+			int dist = (int) Math.sqrt(min) + 1;
+			Pair lowerPair = new Pair(current.y - dist, -INF);
+			Pair upperPair = new Pair(current.y + dist, INF);
+			
+			int lower = lowerBound(p, lowerPair);
+			int upper = upperBound(p, upperPair);
+			
+			set.add(p.get(i));
+		}
 		
-		
-		return 0;
+		return min;
 	}
 	
 	private static int getDistance(Pair p1, Pair p2) {
 		return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+	}
+	
+	private static int lowerBound(ArrayList<Pair> list, Pair range) {
+		int index = 0;
+		
+		return index;
+	}
+	
+	private static int upperBound(ArrayList<Pair> list, Pair range) {
+		int index = 0;
+		
+		return index;
 	}
 }
