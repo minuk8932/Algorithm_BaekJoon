@@ -1,3 +1,4 @@
+/.DS_Store
 /Floyd_Washall/
 /articulation/
 /back_tracking/
@@ -35,4 +36,3 @@
 /strongly_connected_component/
 /topology_sort/
 /tree_search/
-/two_pointer/
