@@ -1,4 +1,3 @@
-/.DS_Store
 /Floyd_Washall/
 /articulation/
 /back_tracking/
@@ -20,3 +19,20 @@
 /heap/
 /implementation/
 /math/
+/minimumcost_spanning_tree/
+/network_flow/
+/next_permutation/
+/parsing/
+/queue/
+/search/
+/segment_tree/
+/shortest_path_faster_algorithm/
+/simulation/
+/sliding_window/
+/sort/
+/stack/
+/string_handle/
+/strongly_connected_component/
+/topology_sort/
+/tree_search/
+/two_pointer/
