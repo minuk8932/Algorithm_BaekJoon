@@ -27,7 +27,6 @@ public class Boj16707 {
 		flow = new int[N][N];
 		dist = new int[N][N];
 		prev = new int[N];
-		cost = new int[N];
 		
 		for(int i = 0; i < N; i++) {
 			connected[i] = new ArrayList<>();
@@ -54,20 +53,25 @@ public class Boj16707 {
 		int result = 0;
 		
 		while(true) {
+			cost = new int[n];
 			Arrays.fill(prev, -1);
 			Arrays.fill(cost, INF);
-			
+				
 			cost[0] = 0;
 			spfa(n, 0, 1);
 			spfa(n, 1, n - 1);
 			
-			if(prev[n - 1] == -1) break;
+			for(int i = 0; i < n; i++) {
+				System.out.print(prev[i] + " ");
+			}
 			
+			if(prev[n - 1] == -1) break;
+				
 			int min = INF;
 			for(int i = n - 1; i != 0; i = prev[i]) {
 				min = Math.min(min, capacity[prev[i]][i] - flow[prev[i]][i]);
 			}
-			
+				
 			for(int i = n - 1; i != 0; i = prev[i]) {
 				result += min * dist[prev[i]][i];
 				flow[prev[i]][i] += min;
@@ -93,8 +97,6 @@ public class Boj16707 {
 				if(cost[next] > cost[current] + dist[current][next] && capacity[current][next] - flow[current][next] > 0) {
 					cost[next] = cost[current] + dist[current][next];
 					prev[next] = current;
-					
-					if(next == end) break;
 					
 					if(!inQ[next]) {
 						inQ[next] = true;
