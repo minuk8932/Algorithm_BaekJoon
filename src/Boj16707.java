@@ -49,7 +49,7 @@ public class Boj16707 {
 		System.out.println(networkFlow(N));
 	}
 	
-	private static int networkFlow(int n) {
+	private static int networkFlow(int n) {		
 		int result = 0;
 		
 		while(true) {
@@ -64,6 +64,7 @@ public class Boj16707 {
 			for(int i = 0; i < n; i++) {
 				System.out.print(prev[i] + " ");
 			}
+			System.out.println();
 			
 			if(prev[n - 1] == -1) break;
 				
@@ -73,7 +74,7 @@ public class Boj16707 {
 			}
 				
 			for(int i = n - 1; i != 0; i = prev[i]) {
-				result += min * dist[prev[i]][i];
+				result += dist[prev[i]][i];
 				flow[prev[i]][i] += min;
 				flow[i][prev[i]] -= min;
 			}
