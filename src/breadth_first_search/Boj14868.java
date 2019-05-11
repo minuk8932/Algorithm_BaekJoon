@@ -1,6 +1,7 @@
 package breadth_first_search;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -18,6 +19,8 @@ public class Boj14868 {
 	
 	private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1 ,0}, {0, -1}};
 	private static final int ROW = 0, COL = 1;
+	
+	private static ArrayList<Point> start = new ArrayList<>();
 	
 	private static class Point{
 		int row;
@@ -45,6 +48,7 @@ public class Boj14868 {
 			
 			civil.offer(new Point(row, col));
 			spread[row][col] = 1;
+			start.add(new Point(row, col));				// 문명 발생지
 		}
 		
 		int max = init(N, civil);
@@ -63,11 +67,11 @@ public class Boj14868 {
 							
 				if(nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= n) continue;
 				if(spread[nextRow][nextCol] != 0) continue;
-				spread[nextRow][nextCol] = spread[current.row][current.col] + 1;		// 문명이 퍼져나가는 햇수를 미리 배열에 저장
+				spread[nextRow][nextCol] = spread[current.row][current.col] + 1;
 					
-				if(spread[nextRow][nextCol] > max) max = spread[nextRow][nextCol];		// 최대 해를 저장해서 반환
-					
-				q.offer(new Point(nextRow, nextCol));
+				if(spread[nextRow][nextCol] > max) max = spread[nextRow][nextCol];			// 최대 햇수 저장
+				
+				q.offer(new Point(nextRow, nextCol));			// 문명 미리 확산
 			}
 		}
 		
@@ -80,11 +84,11 @@ public class Boj14868 {
 		while(start <= end) {
 			int mid = (start + end) / 2;
 			
-			boolean united = bfs(n, mid);			// 이분탐색을 통해 기준 mid해에 모든 문명이 합쳐지면 그 해의 최소를 저장
+			boolean united = bfs(n, mid);
 			
 			if(united) {
 				end = mid - 1;
-				year = Math.min(mid, year);
+				year = Math.min(mid, year);			// mid해에 문명 확산으로 모든 문명이 통합된 경우 그때의 최소 해 저장
 			}
 			else {
 				start = mid + 1;
@@ -98,30 +102,28 @@ public class Boj14868 {
 		boolean[][] visit = new boolean[n][n];
 		boolean flag = false;
 
-		for(int row = 0; row < n; row++) {
-			for(int col = 0; col < n; col++) {
-				if(visit[row][col] || spread[row][col] > year || spread[row][col] == 0) continue;
-				visit[row][col] = true;
+        for(Point s: start) {
+			if(visit[s.row][s.col] || spread[s.row][s.col] > year) continue;
+			visit[s.row][s.col] = true;
 				
-				Queue<Point> q = new LinkedList<>();
-				q.offer(new Point(row, col));
+			Queue<Point> q = new LinkedList<>();
+			q.offer(s);
 				
-				if(flag) return false;			// 문명이 두개 이상인 경우
-				flag = true;
+			if(flag) return false;
+			flag = true;
 				
-				while(!q.isEmpty()) {
-					Point current = q.poll();
+			while(!q.isEmpty()) {
+				Point current = q.poll();
 					
-					for(final int[] DIRECTION: DIRECTIONS) {
-						int nextRow = current.row + DIRECTION[ROW];
-						int nextCol = current.col + DIRECTION[COL];
-								
-						if(nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= n) continue;
-						if(visit[nextRow][nextCol] || spread[nextRow][nextCol] > year || spread[nextRow][nextCol] == 0) continue;
-						visit[nextRow][nextCol] = true;
+				for(final int[] DIRECTION: DIRECTIONS) {
+					int nextRow = current.row + DIRECTION[ROW];
+					int nextCol = current.col + DIRECTION[COL];
+							
+					if(nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= n) continue;
+					if(visit[nextRow][nextCol] || spread[nextRow][nextCol] > year) continue;
+					visit[nextRow][nextCol] = true;
 						
-						q.offer(new Point(nextRow, nextCol));
-					}
+					q.offer(new Point(nextRow, nextCol));
 				}
 			}
 		}
