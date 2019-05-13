@@ -15,7 +15,7 @@ public class Boj17074 {
 			arr[i] = Integer.parseInt(st.nextToken());
 			
 			if(i >= 1) {
-				if(arr[i - 1] > arr[i]) index = i;
+				if(arr[i - 1] > arr[i]) index = i - 1;
 			}
 		}
 		
@@ -23,25 +23,21 @@ public class Boj17074 {
 	}
 	
 	private static int getCount(int n, int[] arr, int except) {
+		boolean[] prev = new boolean[n];
+		boolean[] post = new boolean[n];
+		
 		for(int i = 1; i < except; i++) {
 			if(arr[i - 1] > arr[i]) return 0;
+			prev[i] = true;
 		}
 
 		for(int i = except + 1; i < n - 1; i++) {
 			if(arr[i] > arr[i + 1]) return 0;
+			post[i + 1] = true;
 		}
 		
-		if(except == n - 1) {
-			if(arr[except] >= arr[except - 2]) return 2;
-			else return 1;
-		}
-		else if(except == 1){
-			if(arr[except - 1] <= arr[except + 1]) return 2;
-			else return 1;
-		}
-		else {
-			if(arr[except - 2] <= arr[except]) return 2;
-			else return 1;
-		}
+		
+		
+		return 0;
 	}
 }
