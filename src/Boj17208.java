@@ -41,18 +41,27 @@ public class Boj17208 {
 			
 			if(b == 0 || f == 0) continue;
 			dp[0][arr[i].burger][arr[i].fry] = 1;
-			if(dp[0][arr[i].burger][arr[i].fry] > max) max = dp[0][arr[i].burger][arr[i].fry];
 		}
 		
-		for(int x = 1; x < N; x++) {
-			for(int y = 0; y < M + 1; y++) {
-				for(int z = 0; z < K + 1; z++) {		
+		
+		for(int y = 0; y < M + 1; y++) {
+			for(int z = 0; z < K + 1; z++) {
+				for(int x = 1; x < N; x++) {
+//					if(dp[x - 1][y][z] == 0) continue;
+					
 					int b = arr[x].burger + y <= M ? 1: 0;
 					int f = arr[x].fry + z <= K ? 1: 0;
 					
 					if(b == 0 || f == 0) continue;
-					dp[x][arr[x].burger + y][arr[x].fry + z] += dp[x - 1][y][z] + 1;
-					if(dp[x][arr[x].burger + y][arr[x].fry + z] > max) max = dp[x][arr[x].burger + y][arr[x].fry + z];
+					dp[x][arr[x].burger + y][arr[x].fry + z] = dp[x - 1][y][z] + 1;
+				}
+			}
+		}
+		
+		for(int x = 0; x < N; x++) {
+			for(int y = 0; y < M + 1; y++) {
+				for(int z = 0; z < K + 1; z++) {
+					if(dp[x][y][z] > max) max = dp[x][y][z];
 				}
 			}
 		}
