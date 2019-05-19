@@ -39,10 +39,10 @@ public class Boj16401 {
 		
 		while(start <= end) {
 			int mid = (start + end) / 2;
+			if(mid == 0) break;
 			
 			int count = 0;
 			for(int i = 0; i < n; i++) {		// mid 길이로 조카들에게 분배 가능한지 확인
-				if(mid == 0) break;
 				count += (arr[i] / mid);
 			}
 			
