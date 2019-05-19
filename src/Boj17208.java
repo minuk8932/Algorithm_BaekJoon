@@ -4,6 +4,7 @@ import java.util.StringTokenizer;
 
 public class Boj17208 {
 	private static int N, M, K;
+	private static int[][][] dp;
 	
 	private static class Order{
 		int burger;
@@ -23,52 +24,43 @@ public class Boj17208 {
 		K = Integer.parseInt(st.nextToken());
 		
 		Order[] or = new Order[N];
+		dp = new int[N][M + 1][K + 1];
+		
 		for(int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			or[i] = new Order(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
 		}
 		
-		System.out.println(getMaxOrder(or));
-	}
-	
-	private static int getMaxOrder(Order[] arr) {
-		int[][][] dp = new int[N][M + 1][K + 1];
+		getMaxOrder(or, 0, 0, 0);
+		
 		int max = 0;
-		
 		for(int i = 0; i < N; i++) {
-			int b = arr[i].burger <= M ? 1: 0;
-			int f = arr[i].fry <= K ? 1: 0;
-			
-			if(b == 0 || f == 0) continue;
-			dp[0][arr[i].burger][arr[i].fry] = 1;
-		}
-		
-		for(int x = 0; x < N; x++) {
-			for(int y = 0; y < M + 1; y++) {
-				for(int z = 0; z < K + 1; z++) {
-					
-					int curB = arr[x].burger + y;
-					int curF = arr[x].fry + z;
-					int b = curB <= M ? 1: 0;
-					int f = curF <= K ? 1: 0;
-					
-					if(b == 0 || f == 0) dp[x][y][z] = dp[x - 1][y][z];
-					else dp[x][curB][curF] = dp[x - 1][y][z] + 1;
-				}
-			}
-		}
-		
-		for(int x = 0; x < N + 1; x++) {
-			for(int y = 0; y < M + 1; y++) {
-				for(int z = 0; z < K + 1; z++) {
-					System.out.print(dp[x][y][z] + " ");
-					if(dp[x][y][z] > max) max = dp[x][y][z];
+			for(int j = 0; j < M + 1; j++) {
+				for(int k = 0; k < K + 1; k++) {
+					System.out.print(dp[i][j][k] + " ");
+					if(dp[i][j][k] > max) max = dp[i][j][k];
 				}
 				System.out.println();
 			}
 			System.out.println();
 		}
 		
-		return max;
+		System.out.println(max);
+	}
+	
+	private static int getMaxOrder(Order[] arr, int idx, int b, int f) {
+		if(b > M || f > K) return 0;
+		if(dp[idx][b][f] != 0) return 0;
+		dp[idx][b][f] = 1;
+		
+		for(int x = idx; x < N; x++) {
+			for(int y = b; y < M + 1; y++) {
+				for(int z = f; z < K + 1; z++) {
+					dp[x][y][z] = getMaxOrder(arr, x, y + arr[x].burger, z + arr[x].fry) + dp[idx][b][f];
+				}
+			}
+		}
+		
+		return dp[idx][b][f];
 	}
 }
