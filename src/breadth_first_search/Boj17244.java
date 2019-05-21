@@ -1,3 +1,4 @@
+package breadth_first_search;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -5,6 +6,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 17244번: 아 맞다 우산
+ *
+ *	@see https://www.acmicpc.net/problem/17244/
+ *
+ */
 public class Boj17244 {
 	private static ArrayList<Point> thing = new ArrayList<>();
 	private static ArrayList<String> query = new ArrayList<>();
@@ -55,13 +64,18 @@ public class Boj17244 {
 		int leng = thing.size();
 		for(int i = 0; i < leng; i++) {
 			visit = new boolean[leng];
-			backTracking(leng, i, 0, i + "");
+			backTracking(leng, i, 0, i + "");			// 물건을 줍는 경로 생성 (모든 경우)
 		}
 		
 		int distance = Integer.MAX_VALUE;
-		for(String Q: query) {
-			int value = getMinDistance(map, s, e, Q);
-			if(value < distance) distance = value;
+		if(leng == 0) {									// 갖고 나갈 물건이 없는 경우
+			distance = bfs(map, s, e);
+		}
+		else {
+			for(String Q: query) {
+				int value = getMinDistance(map, s, e, Q);
+				if(value < distance) distance = value;		// 이동거리의 최소
+			}
 		}
 		
 		System.out.println(distance);
@@ -90,7 +104,7 @@ public class Boj17244 {
 		
 		int cost = 0;
 		
-		while(st.hasMoreTokens()) {
+		while(st.hasMoreTokens()) {								// 나온 경로를 통해 총 이동 거리 합
 			e = thing.get(Integer.parseInt(st.nextToken()));
 			cost += bfs(arr, s, e);
 
