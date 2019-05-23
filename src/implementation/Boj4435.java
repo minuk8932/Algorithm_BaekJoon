@@ -3,6 +3,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author minchoba
+ *	백준 4435번: 중간계 전쟁
+ *
+ *	@see https://www.acimcpc.net/problem/4435/
+ *
+ */
 public class Boj4435 {
 	private static final int[] GANDALF = {1, 2, 3, 3, 4, 10};
 	private static final int[] SAURON = {1, 2, 2, 2, 3, 5, 10};
