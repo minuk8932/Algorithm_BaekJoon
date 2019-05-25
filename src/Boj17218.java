@@ -17,8 +17,12 @@ public class Boj17218 {
 		}
 		
 		for(int i = 1; i < word1.length; i++) {
+			dp[i][0] = word1[i] == word2[0] ? dp[i - 1][0] + 1: dp[i - 1][0];
+		}
+		
+		for(int i = 1; i < word1.length; i++) {
 			for(int j = 0; j < word2.length; j++) {
-				dp[i][j] = word1[i] == word2[i] ?  dp[i - 1][j - 1] + 1: Math.max(dp[i - 1][j], dp[i][j - 1]);
+				dp[i][j] = word1[i] == word2[i] ?  dp[i - 1][j - 1] + 1: Math.max(dp[i - 1][j], dp[i][j]);
 			}
 		}
 		
