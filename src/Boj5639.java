@@ -20,36 +20,58 @@ public class Boj5639 {
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		LinkedList<Integer> input = new LinkedList<>();
+		int[] input = new int[10_000];
+		int idx = 0;
 		
-		String in = "";
-		while((in = br.readLine()) != null) {
-			input.add(Integer.parseInt(in));
+		while(true) {
+			try {
+				input[idx++] = Integer.parseInt(br.readLine());
+			}
+			catch(Exception e) {
+				break;
+			}
 		}
 		
 		makeTree(input);
 		
-		System.out.println(getostOrder());
+		System.out.println(getPostOrder());
 	}
 	
-	private static void makeTree(LinkedList<Integer> list) {
+	private static void makeTree(int[] arr) {
 		for(int i = 0; i < tree.length; i++) {
 			tree[i] = new Node(-1, -1, -1);
 		}
 		
-		int root = list.remove();
+		int root = arr[0];
 		int parent = -1;
 		
-		while(!list.isEmpty()) {
-			int node = list.remove();
+		for(int i = 1; i < arr.length; i++) {
+			if(arr[i] == 0) break;
 			
-			if(node < root) tree[root] = new Node(parent, node, tree[root].right);
-			else tree[root] = new Node(parent, tree[root].left, node);
+			int node = arr[i];
 			
+			if(node < root) {
+				tree[root].left = node;
+				parent = root;
+				root = node;
+				
+				tree[root].parent = parent;
+			}
+			else {
+				if(tree[root].parent > node && node > root) {
+					tree[root].right = node;
+				}
+			}
+		}
+		
+		for(int i = 0; i < tree.length; i++) {
+			if(tree[i].left == -1 && tree[i].right == -1 && tree[i].parent == -1) continue;
+			System.out.println(tree[i].parent);
+			System.out.println(tree[i].left + " " + i + " " + tree[i].right);
 		}
 	}
 	
-	private static StringBuilder getostOrder() {
+	private static StringBuilder getPostOrder() {
 		StringBuilder sb = new StringBuilder();
 		
 		
