@@ -10,13 +10,11 @@ public class Boj17100 {
 		int sugar;
 		int count;
 		int cost;
-		int cover;
 		
-		public Candy(int sugar, int count, int cost, int cover) {
+		public Candy(int sugar, int count, int cost) {
 			this.sugar = sugar;
 			this.count = count;
 			this.cost = cost;
-			this.cover = cover;
 		}
 
 		@Override
@@ -47,7 +45,7 @@ public class Boj17100 {
 			int a = Integer.parseInt(st.nextToken());
 			int m = Integer.parseInt(st.nextToken());
 			int c = Integer.parseInt(st.nextToken());
-			candy[i] = new Candy(a, m, c, a * m);
+			candy[i] = new Candy(a, m, c);
 		}
 		
 		Arrays.sort(candy);
