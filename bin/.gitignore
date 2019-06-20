@@ -25,6 +25,7 @@
 /network_flow/
 /next_permutation/
 /parsing/
+/prefix_sum/
 /queue/
 /search/
 /segment_tree/
@@ -34,4 +35,7 @@
 /sort/
 /stack/
 /string_handle/
-/prefix_sum/
+/strongly_connected_component/
+/topology_sort/
+/tree_search/
+/two_pointer/
