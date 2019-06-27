@@ -1,7 +1,5 @@
 package stack;
 
-import javax.xml.ws.WebServiceRef;
-
 public class StackTest {
 	public static void main(String[] args) {
 		Stack stk = new Stack();
