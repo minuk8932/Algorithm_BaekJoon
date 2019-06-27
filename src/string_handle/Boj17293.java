@@ -1,7 +1,16 @@
+package string_handle;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class ContestC {
+/**
+ * 
+ * 	@author exponential-e
+ * 	백준 17293번: 맥주 99병
+ * 
+ * 	@see https://www.acmicpc.net/problem/17293/
+ *
+ */
+public class Boj17293 {
 	private static final String[] MANY = {" bottles of beer on the wall, ",
 			" bottles of beer.\nTake one down and pass it around, ",
 			" bottles of beer on the wall.\n\n"};
@@ -23,13 +32,13 @@ public class ContestC {
 			if(loop == 1) {
 				sb.append(loop).append(ONE[0]).append(loop).append(ONE[1]);
 			}
-			else {
+			else {					// 2병일때, 1병 예외처리
 				if(loop == 2) sb.append(loop).append(TWO[0]).append(loop).append(TWO[1]).append(loop - 1).append(TWO[2]);
 				else sb.append(loop).append(MANY[0]).append(loop).append(MANY[1]).append(loop - 1).append(MANY[2]);
 			}
 		}
 		
-		if(N == 1) sb.append(LAST[0]).append(N).append(LAST[2]);
+		if(N == 1) sb.append(LAST[0]).append(N).append(LAST[2]);		// 1병일때 1병 예외처리
 		else sb.append(LAST[0]).append(N).append(LAST[1]);
 		
 		System.out.println(sb.toString());
