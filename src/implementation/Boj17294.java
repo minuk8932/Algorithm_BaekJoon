@@ -1,7 +1,16 @@
+package implementation;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class ContestB {
+/**
+ * 
+ * 	@author exponential-e
+ * 	백준 17294번: 귀여운 수
+ * 
+ * 	@see https://www.acmicpc.net/problem/17294/
+ *
+ */
+public class Boj17294 {
 	private static final String CUTE = "◝(⑅•ᴗ•⑅)◜..°♡ 뀌요미!!";
 	private static final String NOT_CUTE = "흥칫뿡!! <(￣ ﹌ ￣)>";
 	
