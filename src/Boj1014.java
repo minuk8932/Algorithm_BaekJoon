@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 public class Boj1014 {
 	private static final String NEW_LINE = "\n";
 	
-	private static final int[][] DIRECTIONS = {{0, 1}, {0, -1}, {-1, 1}, {-1, -1}, {1, 1}, {-1, -1}};
+	private static final int[][] DIRECTIONS = {{0, 1}, {0, -1}, {-1, 1}, {-1, -1}};
 	private static final int ROW = 0, COL = 1;
 	
 	private static final char EMPTY = '.';
@@ -83,11 +83,9 @@ public class Boj1014 {
 	private static int networkFlow(int n, int m, char[][] arr, int source, int sink, int size) {
 		int result = 0;
 		int[] prev = new int[size];
-		int[] spread = new int[size];
 		
 		while(true) {
 			Arrays.fill(prev, -1);
-			Arrays.fill(spread, 0);
 			
 			Queue<Integer> q = new LinkedList<>();
 			q.offer(source);
@@ -98,7 +96,6 @@ public class Boj1014 {
 				for(int next: connected[current]) {
 					if(prev[next] == -1 && capacity[current][next] - flow[current][next] > 0) {
 						prev[next] = current;
-						spread[next]++;
 						
 						q.offer(next);
 					}
@@ -115,6 +112,6 @@ public class Boj1014 {
 			result++;
 		}
 		
-		return result;
+		return n * m - result;
 	}
 }
