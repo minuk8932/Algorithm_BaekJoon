@@ -28,7 +28,8 @@ public class Boj1014 {
 			int N = Integer.parseInt(st.nextToken());
 			int M = Integer.parseInt(st.nextToken());
 			
-			int length = N * M * 2 + 2, src = N * M * 2, snk = N * M * 2 + 1;
+			int length = N * M * 2 + 2;
+			int src = length - 2, snk = length - 1;
 			
 			connected = new ArrayList[length];
 			flow = new int[length][length];
@@ -50,37 +51,39 @@ public class Boj1014 {
 			
 			for(int row = 0; row < N; row++) {
 				for(int col = 0; col < M; col++) {
-					if(map[row][col] == EMPTY) {
+					if(map[row][col] == EMPTY) {								
 						for(final int[] DIRECTION: DIRECTIONS) {
 							int adjRow = row + DIRECTION[ROW];
 							int adjCol = col + DIRECTION[COL];
 							
 							if(adjRow < 0 || adjCol < 0 || adjRow >= N || adjCol >= M) continue;
 							if(map[adjRow][adjCol] != EMPTY) continue;
+							int node1 = row * M + col;
+							int node2 = adjRow * M + adjCol + N * M;
 
-							connected[row * M + col].add((adjRow * M + adjCol) + N * M);
-							connected[(adjRow * M + adjCol) + N * M].add(row * M + col);
-							capacity[row * M + col][adjRow * M + adjCol] = 1;
+							connected[src].add(node1);					// 열 한개 더
+							connected[node1].add(src);
+							capacity[src][node1] = 4;
+							
+							connected[node1].add(node2);
+							connected[node2].add(node1);
+							capacity[node1][node2] = 1;
+							
+							connected[snk].add(node2);
+							connected[node2].add(snk);
+							capacity[node2][snk] = 1;
 						}
-						
-						connected[src].add(row * M + col);
-						connected[row * M + col].add(src);
-						capacity[src][row * M + col] = 4;
-						
-						connected[snk].add(row * M + col);
-						connected[row * M + col].add(snk);
-						capacity[row * M + col][snk] = 1;
 					}
 				}
 			}
 			
-			sb.append(networkFlow(N, M, map, src, snk, length)).append(NEW_LINE);
+			sb.append(networkFlow(N, M, src, snk, length)).append(NEW_LINE);
 		}
 		
 		System.out.println(sb);
 	}
 	
-	private static int networkFlow(int n, int m, char[][] arr, int source, int sink, int size) {
+	private static int networkFlow(int n, int m, int source, int sink, int size) {
 		int result = 0;
 		int[] prev = new int[size];
 		
@@ -94,7 +97,9 @@ public class Boj1014 {
 				int current = q.poll();
 				
 				for(int next: connected[current]) {
-					if(prev[next] == -1 && capacity[current][next] - flow[current][next] > 0) {
+					if(prev[next] != -1) continue;
+					
+					if(capacity[current][next] - flow[current][next] > 0) {
 						prev[next] = current;
 						
 						q.offer(next);
@@ -105,13 +110,13 @@ public class Boj1014 {
 			if(prev[sink] == -1) break;
 			
 			for(int i = sink; i != source; i = prev[i]) {
-				flow[prev[i]][i]++;
-				flow[i][prev[i]]--;
+				flow[prev[i]][i] += 1;
+				flow[i][prev[i]] -= 1;
 			}
 			
-			result++;
+			result += 1;
 		}
 		
-		return n * m - result;
+		return result;
 	}
 }
