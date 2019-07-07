@@ -42,7 +42,7 @@ public class Boj4233 {
 			
 			p >>= 1;
 		}
-		
+
 		return result == a ? true : false;
 	}
 	
