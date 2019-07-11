@@ -16,6 +16,7 @@ public class Boj14629 {
 	private static final long LIMIT = 9_876_543_210L;
 	
 	private static ArrayList<Long> values = new ArrayList<>();
+	private static long min = Long.MAX_VALUE;
 	private static boolean[] visit;
 	
 	public static void main(String[] args) throws Exception{
@@ -30,17 +31,10 @@ public class Boj14629 {
 		
 		for(int start = 1; start < 10; start++) {	// 가능한 숫자 조합들
 			visit = new boolean[10];
-			backTracking(start, start);
+			backTracking(n, start, start);
 		}
 		
-		long min = Long.MAX_VALUE;
 		long res = Long.MAX_VALUE;
-		
-		for(long v: values) {
-			long diff = Math.abs(n - v);
-			if(diff < min) min = diff;
-		}
-
 		for(long v: values) {
 			long diff = Math.abs(n - v);
 			if(diff == min) res = Math.min(v, res);	// 결과
@@ -49,16 +43,17 @@ public class Boj14629 {
 		return res;
 	}
 	
-	private static void backTracking(long val, int current) {
+	private static void backTracking(long target, long val, int current) {
 		if(visit[current]) return;
 		visit[current] = true;
 		
 		values.add(val);
+		if(Math.abs(target - val) < min) min = Math.abs(target - val);
 		
 		for(int next = 0; next < 10; next++) {
 			if(visit[next]) continue;
 			
-			backTracking(val * 10 + next, next);
+			backTracking(target, val * 10 + next, next);
 			visit[next] = false;
 		}
 	}
