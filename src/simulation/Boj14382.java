@@ -1,6 +1,15 @@
+package simulation;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+/**
+ * 
+ * 	@author exponential-e
+ *	백준 14382번: 숫자 세는 양(Large)
+ *
+ *	@see https://www.acmicpc.net/problem/14382/
+ *
+ */
 public class Boj14382 {
 	private static final String CASE = "Case #";
 	private static final String COLON = ": ";
@@ -33,7 +42,7 @@ public class Boj14382 {
 			long target = n * count;
 			last = target;
 			
-			while(target > 0) {
+			while(target > 0) {							// 각 자리마다 등장하는 숫자 체크
 				num[(int) target % 10] = true;
 				target /= 10;
 			}
@@ -44,7 +53,7 @@ public class Boj14382 {
 		return last;
 	}
 	
-	private static boolean rotated(boolean[] arr) {
+	private static boolean rotated(boolean[] arr) {		// 0 ~ 9 모든 숫자가 등장 하였는가?
 		for(int i = 0; i < arr.length; i++) {
 			if(!arr[i]) return false;
 		}
