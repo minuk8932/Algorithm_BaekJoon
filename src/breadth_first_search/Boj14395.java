@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
  *
  */
 public class Boj14395 {
-	private static final char[] OPR = {'*', '+', '-', '/'};
+	private static final char[] OPR = {'*', '+', '/'};
 	private static final int INF = 1_000_000_001;
 	
 	private static class Pair{
@@ -67,18 +67,10 @@ public class Boj14395 {
 	            }
 	        }
 			
-			long sub = current.x - current.x;
-			if(sub > 0){
-	            if(!set.contains(sub)){
-	                q.offer(new Pair(sub, current.cost + OPR[2]));
-	                set.add(sub);
-	            }
-	        }
-			
 			long div = current.x / current.x;
 			if(div > 0){
 	            if(!set.contains(div)){
-	                q.offer(new Pair(div, current.cost + OPR[3]));
+	                q.offer(new Pair(div, current.cost + OPR[2]));
 	                set.add(div);
 	            }
 	        }
