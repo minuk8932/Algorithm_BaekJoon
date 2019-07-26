@@ -20,11 +20,11 @@ public class Boj1016 {
 		
 		int N = (int) Math.sqrt(max); 
 		
-		getPrime(N, min);
-		System.out.println(getNotPow(N, max, min));
+		getPrime(N);
+		System.out.println(getNotPow(N, min, max));
 	}
 	
-	private static void getPrime(int n, long m) {
+	private static void getPrime(int n) {
 		prime = new boolean[n + 1];
 		
 		Arrays.fill(prime, true);
@@ -37,35 +37,24 @@ public class Boj1016 {
 				prime[j] = false;
 			}
 			
-			list.add((long) i * i);
+			list.add((long) i);
 		}
-		
-//		for(int i = 0; i < n + 1; i++) {
-//			if(!prime[i]) continue;
-//			long value = i * i;
-//			
-//			if(value >= m) {
-//				factor = i;
-//				break;
-//			}
-//		}
 	}
 	
 	private static long getNotPow(int n, long left, long right) {
 		for(long p: list) {
 			long min = Long.MAX_VALUE;
+			long pow = p * p;
 			
-			if(left % p == 0) min = ((left / p) + 1) * p;
+			if(left % pow == 0) min = ((left / p) + 1) * p;
 			else min = left;
 			
 			long max = (right / p) * p;
-			
 			for(long i = min; i < max + 1; i += p) {
-				if(hs.contains(i - left)) continue;
 				hs.add(i - left);
 			}
 		}
-		
+
 		long size = right - left + 1 - hs.size();
 		return size;
 	}
