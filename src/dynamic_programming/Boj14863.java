@@ -1,10 +1,19 @@
+package dynamic_programming;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author exponential-e
+ *	백준 14863번: 서울에서 경산까지
+ *
+ *	@see https://www.acmicpc.net/problem/14863/
+ *
+ */
 public class Boj14863 {
 	private static long[][] dp;
+	private static Method[] tour;
 	
 	private static class Volunteer{
 		int time;
@@ -32,7 +41,7 @@ public class Boj14863 {
 		int N = Integer.parseInt(st.nextToken());
 		int K = Integer.parseInt(st.nextToken());
 		
-		Method[] tour = new Method[N + 1];
+		tour = new Method[N + 1];
 		for(int i = 1; i < N + 1; i++) {
 			st = new StringTokenizer(br.readLine());
 			tour[i] = new Method(new Volunteer(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())),
@@ -40,32 +49,16 @@ public class Boj14863 {
 		}
 		
 		dp = new long[N + 1][K + 1];
-		System.out.println(getCost(N, K, tour));
+		System.out.println(recursion(N, K));
 	}
-	
-	private static long getCost(int n, int k, Method[] tour) {
-		for(int i = 1; i < n + 1; i++) {
-			Arrays.fill(dp[i], -1);
-		}
+
+	private static long recursion(int n, int k) {
+		if(k < 0) return Long.MIN_VALUE;			// 불가능 할 때, 0을 넣으면 안돈다...
+		if(n == 0) return 0;
 		
-		for(int city = 1; city < n + 1; city++) {
-			for(int time = 0; time < k + 1; time++) {	
-				if(time - tour[city].walk.time >= 0) {
-					dp[city][time] = Math.max(dp[city][time], dp[city - 1][time - tour[city].walk.time] + tour[city].walk.cost);
-		        }
-				
-				if(time - tour[city].bike.time >= 0) {
-					dp[city][time] = Math.max(dp[city][time], dp[city - 1][time - tour[city].bike.time] + tour[city].bike.cost);
-				}
-	           
-			}
-		}
+		if(dp[n][k] != 0) return dp[n][k];
 		
-		long result = -1;
-		for(int i = 1; i < k + 1; i++) {
-			result = Math.max(result, dp[n][i]);
-		}
-		
-		return result;
+		return dp[n][k] = Math.max(recursion(n - 1, k - tour[n].walk.time) + tour[n].walk.cost,		// 걷기와 자전거 중 많은 모금액
+				recursion(n - 1, k - tour[n].bike.time) + tour[n].bike.cost);
 	}
 }
