@@ -1,11 +1,18 @@
+package math;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * 
+ * 	@author exponential-e
+ *	백준 14715번: 전생했더니 슬라임 연구자였던 건에 대하여 (Easy) 
+ *
+ *	@see https://www.acmicpc.net/problem/14715/
+ *
+ */
 public class Boj14715 {
 	private static boolean[] prime = new boolean[1_000_001];
-	private static ArrayList<Integer> primeList = new ArrayList<>();
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,21 +33,27 @@ public class Boj14715 {
 				prime[j] = false;
 			}
 		}
-		
-		for(int i = 0; i < prime.length; i++) {
-			if(prime[i]) primeList.add(i);
-		}
 	}
 	
 	private static int getDivide(int k) {
+		if(prime[k]) return 0;						// 소수인 경우
 		int count = 0;
-		prime[0] = prime[1] = true;
 		
-		while(k > 0 && !prime[k]) {
-			k = (int) Math.sqrt(k);
-			count++;
+		for(int i = 2; i < prime.length; i++) {			
+			while(k % i == 0) {						// 소수인 약수의 갯수
+				k /= i;
+				count++;
+			}
+			
+			if(k == 1) break;
 		}
 		
-		return count;
+		int result = 0, pow = 1;
+		while(count > pow) {						// 트리 가지뻗기
+			pow *= 2;
+			result++;
+		}
+		
+		return result;
 	}
 }
