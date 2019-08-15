@@ -28,16 +28,16 @@ public class Boj2110 {
 	}
 	
 	private static int binarySearch(int[] arr, int hits) {		
-		int start = arr[0], end = arr[arr.length - 1] - arr[0];
+		int start = 0, end = arr[arr.length - 1] - arr[0];	// 최소, 최대 간격 설정
 		int res = 0;
-		
+
 		while(start <= end) {
 			int mid = (start + end) / 2;
 			int count = getCount(arr[0], mid, arr);		// mid(간격)에 따른 공유기 설치 갯수 반환
 			
 			if(hits <= count) {
-				start = mid + 1;		// 갯수가 더 많은 경우
-				res = mid;				// 같은 경우
+				start = mid + 1;						// 갯수가 더 많은 경우
+				res = Math.max(mid, res);				// 같은 경우
 			}
 			else {
 				end = mid - 1;
