@@ -13,11 +13,12 @@ import java.util.StringTokenizer;
 public class FileInOutWriter {
 	private static final String COMMA = ",";
 	private static final String HYPER = "-";
+	private static final String COLON = ":";
 	
 	public static void main(String[] args) throws Exception{        
         BufferedWriter bufWriter = null;
         try{
-            bufWriter = Files.newBufferedWriter(Paths.get("/Users/exponential-e/Desktop/MOCK_DATA_edit.csv"),Charset.forName("UTF-8"));
+            bufWriter = Files.newBufferedWriter(Paths.get("/Users/exponential-e/Desktop/MOCK_Game_DATA_edit.csv"),Charset.forName("UTF-8"));
             List<List<String>> allData = read();
             
             for(List<String> newLine : allData){
@@ -56,7 +57,7 @@ public class FileInOutWriter {
         BufferedReader br = null;
         
         try{
-            br = Files.newBufferedReader(Paths.get("/Users/exponential-e/Desktop/MOCK_DATA.csv"));
+            br = Files.newBufferedReader(Paths.get("/Users/exponential-e/Desktop/MOCK_Game_DATA.csv"));
             Charset.forName("UTF-8");
             String line = "";
             
@@ -71,10 +72,22 @@ public class FileInOutWriter {
                     continue;
                 }
                 
+                String home_team = array[4];
+                String away_team = array[5];
+                
+                if(home_team.equals(away_team)) {
+                	int home = Integer.parseInt(home_team);
+                	int away = Integer.parseInt(away_team);
+                	
+                	while(home != away) {
+                		away = (int) (Math.random() * 20) + 1;
+                	}
+                }
+                
                 String item = array[3];
                 StringTokenizer st = new StringTokenizer(item);
                 String dates = st.nextToken();
-                String hours = st.nextToken();
+                st.nextToken();
                 
                 st = new StringTokenizer(dates, HYPER);
                 String year = st.nextToken();
@@ -84,7 +97,13 @@ public class FileInOutWriter {
                 int mon = (int) (Math.random() * 12) + 1;
                 int day = (int) (Math.random() * 30) + 1;
                 
-                array[3] = year + HYPER + (mon < 10 ? "0" + mon: mon) + HYPER + (day < 10 ? "0" + day: day) + " " + hours;
+                int h = (int) (Math.random() * 18) + 6;
+                int m = (int) (Math.random() * 59);
+                int s = (int) (Math.random() * 59);
+                
+                array[3] = "2019" + HYPER + (mon < 10 ? "0" + mon: mon) + HYPER + (day < 10 ? "0" + day: day) + " " + 
+                (h < 10 ? "0" + h : h) + COLON + (m < 10 ? "0" + m : m) + COLON + (s < 10 ? "0" + s : s);
+                
                 tmpList = Arrays.asList(array);
                 
                 ret.add(tmpList);
