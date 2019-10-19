@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -9,6 +10,9 @@ public class Boj17471 {
 	private static int[] person;
 	private static boolean[] visit;
 	private static ArrayList<Long> comb = new ArrayList<>();
+	private static ArrayList<Integer>[] link;
+	
+	private static HashMap<Integer, Integer> list = new HashMap<>();
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -20,7 +24,7 @@ public class Boj17471 {
 			person[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		ArrayList<Integer>[] link = new ArrayList[N];
+		link = new ArrayList[N];
 		for(int i = 0; i < N; i++) {
 			link[i] = new ArrayList<>();
 		}
@@ -32,21 +36,23 @@ public class Boj17471 {
 			while(count-- > 0) {
 				int node = Integer.parseInt(st.nextToken()) - 1;
 				
-				link[i].add(node);
 				link[node].add(i);
+				list.put(node, i);
 			}
 		}
 		
-		System.out.println(section(N, person, link));
+		System.out.println(section(N, person));
 	}
 	
-	private static int section(int n, int[] p, ArrayList<Integer>[] list) {
+	private static int section(int n, int[] p) {
 		int count = Integer.MAX_VALUE;
 		
 		for(int s = 1; s <= n; s++) {
 			visit = new boolean[n];
 			backTracking(n, s, s, 0);
 		}
+		
+		if(comb.size() == 0 && n == 2) return Math.abs(person[0] - person[1]);
 		
 		for(long num: comb) {
 			int idx = n - 1;
@@ -72,7 +78,7 @@ public class Boj17471 {
 					seg[1].add(arr[j]);
 				}
 				
-				int[] population = {bfs(n, seg[0], list), bfs(n, seg[1], list)};
+				int[] population = {bfs(n, seg[0]), bfs(n, seg[1])};
 				
 				if(population[0] == -1 || population[1] == -1) continue;
 				count = Math.min(count, Math.abs(population[0] - population[1]));
@@ -82,7 +88,7 @@ public class Boj17471 {
 		return count == Integer.MAX_VALUE ? -1: count;
 	}
 	
-	private static int bfs(int n, ArrayList<Integer> seg, ArrayList<Integer>[] list) {
+	private static int bfs(int n, ArrayList<Integer> seg) {
 		int sum = 0;
 		boolean[] istied = new boolean[n];
 			
@@ -101,7 +107,7 @@ public class Boj17471 {
 		while(!q.isEmpty()) {
 			int current = q.poll();
 				
-			for(int next: list[current]) {
+			for(int next: link[current]) {
 				if(!istied[next]) continue;
 				istied[next] = false;
 					
@@ -117,7 +123,25 @@ public class Boj17471 {
 	
 	private static void backTracking(int n, int idx, long val, int count) {
 		if(count == n - 1) {
-			comb.add(val);
+			boolean flag = true;
+			long loop = val;
+			
+			int current = (int) (loop % 10 == 0 ? 9: (loop % 10) - 1);
+			loop /= 10;
+			
+			while(loop > 0) {
+				int next = (int) (loop % 10 == 0 ? 9: (loop % 10) - 1);
+				
+				if(list.get(current) == null) {
+					flag = false;
+					break;
+				}
+				
+				current = next;
+				loop /= 10;
+			}
+			
+			if(flag) comb.add(val);
 			return;
 		}
 		visit[idx - 1] = true;
