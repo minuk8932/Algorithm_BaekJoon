@@ -7,38 +7,37 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CSVFileModifider {
-	static String[][] indat = new String[3124][6];
-
 	public static void main(String[] args) {
         try{
-        	File file = new File("/Users/exponential-e/Desktop/SWM_Proj/crawling/game_detail.csv");
+        	File file = new File("/Users/exponential-e/Desktop/SWM_Proj/crawling/game.csv");
         	BufferedWriter bw = Files.newBufferedWriter(Paths.get("/Users/exponential-e/Desktop/SWM_Proj/crawling/temp.csv"),Charset.forName("UTF-8"));
         	BufferedReader br = new BufferedReader(new FileReader(file));
             
         	String input = "";
-        	int row = 0, col = 0;
         	
         	while ((input = br.readLine()) != null) {
-                String[] token = input.split(",", -1);
+                String[] token = input.split(",");
+                String[] dummy = new String[6];
                 
-                for(col=0; col < 6; col++) {
-                	if(col == 3) token[col] = "\"" + token[col] + "\"";
-                	
-                	indat[row][col] = token[col];
+                for(int i =0; i < 6; i++) {
+                	if(i == 3 && !token[i].equals("time")) token[i] = "\"" + token[i] + "\"";
+                	dummy[i] = token[i];
                 }
+                
+                String result = "";
                
-                for(col=0; col < 6; col++) {
-                	bw.write(indat[row][col] + (col == 5 ? "": ","));
-                	System.out.print(indat[row][col] + (col == 5 ? "": ","));
+                for(int i=0; i < 6; i++) {
+                	result += dummy[i] + (i == 5 ? "": ",");
                 }
-                bw.write("\n");
-                System.out.println("");
-               
-                row++;
+                System.out.println(result);
+                bw.write(result + "\n");
             }
             br.close();
+            bw.close();
         }
         catch (FileNotFoundException e){
             System.out.println("파일 없음");
