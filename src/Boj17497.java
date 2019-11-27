@@ -13,11 +13,12 @@ public class Boj17497 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		long N = Long.parseLong(br.readLine());
 		
-		System.out.println(bfs(N));
+		System.out.println(search(N));
 	}
 	
-	private static String bfs(long n) {
+	private static String search(long n) {
 		StringBuilder sb = new StringBuilder();
+		
 		
 		
 		return sb.append(-1).toString();

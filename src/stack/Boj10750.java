@@ -1,34 +1,52 @@
+package stack;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 
+/**
+ * 
+ * 	@author exponential-e
+ *	백준 10750번: Censoring
+ *
+ *	@see https://www.acmicpc.net/problem/10750/
+ *
+ */
 public class Boj10750 {
 	public static void main(String[] args) throws Exception {
 		InputReader in = new InputReader(System.in);
-		System.out.println(censoring(in.readString().toCharArray(), in.readString()));
+		System.out.println(censoring(in.readString().toCharArray(), in.readString().toCharArray()));
 	}
 	
-	private static String censoring(char[] S, String T) {
+	private static String censoring(char[] S, char[] T) {
 		ArrayDeque<Character> stack = new ArrayDeque<>();
-		String revT = getRev(T.toCharArray());
+		ArrayList<Character> tmp = new ArrayList<>();
 		
 		for(int i = 0; i < S.length; i++) {
+			tmp = new ArrayList<>();
+			
 			stack.push(S[i]);
-			if(S[i] != revT.charAt(0)) continue;
 			
-			String str = "";
-			int loop = revT.length();
-			
-			while(loop-- > 0) {
-				if(stack.isEmpty()) break;
-				str += stack.pop();
-			}
-			
-			if(revT.equals(str)) continue;
-			
-			for(int j = str.length() - 1; j >= 0; j--) {
-				stack.push(str.charAt(j));
+			if(i >= T.length - 1 && S[i] == T[T.length - 1]) {
+				int cnt = 0, idx = 0;
+
+				for(int j = T.length - 1; j >= 0; j--) {
+					if(stack.isEmpty())	break;
+					tmp.add(idx, stack.pop());				// make substring
+					
+					if(tmp.get(idx) == T[j]) cnt++;
+					else break;
+					
+					idx++;
+				}
+				
+				if(cnt == T.length) continue;				// is matched
+				idx = tmp.size() - 1;
+				
+				for(int j = idx; j >= 0; j--) {
+					stack.push(tmp.get(j));
+				}
 			}
 		}
 		
@@ -39,16 +57,6 @@ public class Boj10750 {
 		}
 		
 		return sb.reverse().toString();
-	}
-	
-	private static String getRev(char[] arr) {
-		StringBuilder sb = new StringBuilder();
-		
-		for(int i = arr.length - 1; i >= 0; i--) {
-			sb.append(arr[i]);
-		}
-		
-		return sb.toString();
 	}
     
 	private static class InputReader {
