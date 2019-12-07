@@ -46,13 +46,13 @@ public class Boj17489 {
 	}
 
 	private static String search(int n, int m, int len, char[] key, char[][] arr) {
-		if(arr[0][0] != key[0]) return ERROR;
-		
 		int row = -1, col = -1;
 		int max = 0;
 
-		int[][] visit = new int[n][m];
-		visit[0][0] = 1;
+//		int[][][] visit = new int[n][m][26];
+		int[][][] visit = new int[n][m][len];
+//		visit[0][0][arr[0][0] - 'A'] = 1;
+		visit[0][0][0] = 1;
 
 		Queue<Point> q = new LinkedList<>();
 		q.offer(new Point(0, 0, 0));
@@ -67,12 +67,16 @@ public class Boj17489 {
 
 				if (nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= m) continue;
 				if (arr[nextRow][nextCol] != key[nextIdx]) continue;
-				if (visit[nextRow][nextCol] != 0) return ERROR;
-				visit[nextRow][nextCol] = visit[current.row][current.col] + 1;
+//				if (visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] != 0 && arr[nextRow][nextCol] != key[len - 1]) return ERROR;
+				if (visit[nextRow][nextCol][nextIdx] != 0 && arr[nextRow][nextCol] != key[len - 1]) return ERROR;
+//				visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] = visit[current.row][current.col][arr[current.row][current.col] - 'A'] + 1;
+				visit[nextRow][nextCol][nextIdx] = visit[current.row][current.col][current.idx] + 1;
 
 				if (arr[nextRow][nextCol] == key[len - 1]) {
-					if (visit[nextRow][nextCol] > max) {
-						max = visit[nextRow][nextCol];
+//					if (visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] > max) {
+//						max = visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'];
+					if (visit[nextRow][nextCol][nextIdx] > max) {
+						max = visit[nextRow][nextCol][nextIdx];
 						row = nextRow + 1;
 						col = nextCol + 1;
 					}
