@@ -25,7 +25,11 @@ public class Boj17402 {
 	private static int bipartiteMatch(int n, int m, boolean[][] arr){
 		int count = 0;
 		
-		
+		for(int i = 0; i < n; i++) {
+			for(int j = 0; j < m; j++) {
+				
+			}
+		}
 		
 		return count;
 	}

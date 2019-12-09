@@ -46,13 +46,26 @@ public class Boj17489 {
 	}
 
 	private static String search(int n, int m, int len, char[] key, char[][] arr) {
+		StringBuilder sb = new StringBuilder();
+		
+		if(len == 1) {
+			int count = 0;
+			
+			for(int i = 0; i < n; i++) {
+				for(int j = 0; j < m; j++) {
+					if(arr[i][j] == key[0]) count++;
+				}
+			}
+			
+			if(count == 1 && arr[0][0] == key[0]) return sb.append(1).append(NEW_LINE).append(1).append(SPACE).append(1).toString();
+			else return ERROR;
+		}
+			
 		int row = -1, col = -1;
 		int max = 0;
 
-//		int[][][] visit = new int[n][m][26];
-		int[][][] visit = new int[n][m][len];
-//		visit[0][0][arr[0][0] - 'A'] = 1;
-		visit[0][0][0] = 1;
+		int[][][] visit = new int[n][m][26];
+		visit[0][0][arr[0][0] - 'A'] = 1;
 
 		Queue<Point> q = new LinkedList<>();
 		q.offer(new Point(0, 0, 0));
@@ -67,16 +80,12 @@ public class Boj17489 {
 
 				if (nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= m) continue;
 				if (arr[nextRow][nextCol] != key[nextIdx]) continue;
-//				if (visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] != 0 && arr[nextRow][nextCol] != key[len - 1]) return ERROR;
-				if (visit[nextRow][nextCol][nextIdx] != 0 && arr[nextRow][nextCol] != key[len - 1]) return ERROR;
-//				visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] = visit[current.row][current.col][arr[current.row][current.col] - 'A'] + 1;
-				visit[nextRow][nextCol][nextIdx] = visit[current.row][current.col][current.idx] + 1;
+				if (visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] != 0 && max > visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A']) return ERROR;
+				visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] = visit[current.row][current.col][arr[current.row][current.col] - 'A'] + 1;
 
 				if (arr[nextRow][nextCol] == key[len - 1]) {
-//					if (visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] > max) {
-//						max = visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'];
-					if (visit[nextRow][nextCol][nextIdx] > max) {
-						max = visit[nextRow][nextCol][nextIdx];
+					if (visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] > max) {
+						max = visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'];
 						row = nextRow + 1;
 						col = nextCol + 1;
 					}
@@ -87,8 +96,6 @@ public class Boj17489 {
 		}
 
 		if (row == -1 || col == -1) return ERROR;
-
-		StringBuilder sb = new StringBuilder();
 		return sb.append(max / len).append(NEW_LINE).append(row).append(SPACE).append(col).toString();
 	}
 }
