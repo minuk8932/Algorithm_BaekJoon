@@ -45,9 +45,11 @@ public class Boj16508 {
 		for (int i = 1; i < len; i++) {
 			int[] count = new int[26];
 			int cost = 0;
+			int idx = -1;
 
-			for (int d = 1, idx = 0; d <= i; d <<= 1, idx++) {
-				if ((i & d) != d) continue;
+			for (int c = 1; c <= i; c *= 2) {
+				idx++;
+				if ((i & c) != c) continue;
 
 				cost += arr[idx].C;
 				for (int j = 0; j < 26; j++) {
