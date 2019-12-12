@@ -1,7 +1,16 @@
+package search;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author exponential-e
+ *	백준 16508번: 전공책
+ *
+ *	@see https://www.acmicpc.net/problem/16508/
+ *
+ */
 public class Boj16508 {
 	private static class Book {
 		public int C;
@@ -49,7 +58,7 @@ public class Boj16508 {
 
 			for (int c = 1; c <= i; c *= 2) {
 				idx++;
-				if ((i & c) != c) continue;
+				if ((i & c) != c) continue;					// check by bit mask
 
 				cost += arr[idx].C;
 				for (int j = 0; j < 26; j++) {
