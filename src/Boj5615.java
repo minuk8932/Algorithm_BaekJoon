@@ -1,65 +1,95 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.InputMismatchException;
 
 public class Boj5615 {
-	private static long[] prime = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 51, 53, 59, 61};
-	private static final int INF = 10_000;
+	private static final long INF = 1L << 31;
 	
 	public static void main(String[] args) throws Exception{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
+		InputReader in = new InputReader(System.in);
+		int N = in.readInt();
 		int count = 0;
 		
 		while(N-- > 0) {
-			long sqr = Long.parseLong(br.readLine()) * 2 + 1;
+			int sqr = in.readInt();
 			
-			boolean flag = isPrime(sqr);
-			count += flag ? 1: 0;
+			int x = 1;
+			boolean flag = false;
+
+			while ((sqr > x) && (2 * x * (x + 1) < INF)) {
+		        if (((sqr - x) % (x * 2 + 1)) == 0) {
+		        	flag = true;
+		            break;
+				}
+		        x += 1;
+			}
+			
+			if(!flag) count += 1;
 		}
 		
 		System.out.println(count);
 	}
 	
-	private static boolean isPrime(long s) {
-		if (s <= 1) return false;
-		
-	    if (s <= INF) {
-	        for (long i = 2; i * i <= s; i++) {
-	            if (s % i == 0) return false;
-	        }
-	        
-	        return true;
-	    }
-	    
-	    for (long p : prime) {
-	        if (!mrJudge(s, p)) return false;
-	    }
+	private static class InputReader {
+		private InputStream stream;
+		private byte[] buf = new byte[1024];
+		private int curChar;
+		private int numChars;
+		private SpaceCharFilter filter;
 
-	    return true;
-	}
-	
-	private static boolean mrJudge(long n, long a) {
-		long d = n - 1;
-		
-	    while (d % 2 == 0) {
-	        if (mod(a, d, n) == n - 1) return true;
-	        d /= 2;
-	    }
-	    
-	    long tmp = mod(a, d, n);
-	    return tmp == n - 1 || tmp == 1;
-	}
-	
-	private static long mod(long a, long d, long n) {
-		a %= n;
-	    long r = 1L;
-	    
-	    while (d > 0) {
-	        if (d % 2 == 1) r = (r * a) % n;
-	        a = (a * a) % n;
-	        d /= 2;
-	    }
-	    
-	    return r;
+		public InputReader(InputStream stream) {
+			this.stream = stream;
+		}
+
+		public int read() {
+			if (numChars == -1) {
+				throw new InputMismatchException();
+			}
+			if (curChar >= numChars) {
+				curChar = 0;
+				try {
+					numChars = stream.read(buf);
+				} catch (IOException e) {
+					throw new InputMismatchException();
+				}
+				if (numChars <= 0) {
+					return -1;
+				}
+			}
+			return buf[curChar++];
+		}
+
+		public int readInt() {
+			int c = read();
+			while (isSpaceChar(c)) {
+				c = read();
+			}
+			int sgn = 1;
+			if (c == '-') {
+				sgn = -1;
+				c = read();
+			}
+			int res = 0;
+			do {
+				if (c < '0' || c > '9') {
+					throw new InputMismatchException();
+				}
+				res *= 10;
+				res += c - '0';
+				c = read();
+			} while (!isSpaceChar(c));
+			return res * sgn;
+		}
+
+		public boolean isSpaceChar(int c) {
+			if (filter != null) {
+				return filter.isSpaceChar(c);
+			}
+			return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+		}
+
+		public interface SpaceCharFilter {
+			public boolean isSpaceChar(int ch);
+		}
 	}
 }

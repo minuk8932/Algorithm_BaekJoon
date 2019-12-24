@@ -1,12 +1,23 @@
+package breadth_first_search;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * 	@author exponential-e
+ *	백준 17489번: 보물 찾기
+ *
+ *	@see https://www.acmicpc.net/problem/17489/
+ *
+ */
 public class Boj17489 {
 	private static final int[][] DIRECTIONS = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
 	private static final int ROW = 0, COL = 1;
+	private static final int CIPHER = 1_000;
 
 	private static final String NEW_LINE = "\n";
 	private static final String SPACE = " ";
@@ -16,11 +27,13 @@ public class Boj17489 {
 		int row;
 		int col;
 		int idx;
+		HashSet<Integer> passed;
 
-		public Point(int row, int col, int idx) {
+		public Point(int row, int col, int idx, HashSet<Integer> passed) {
 			this.row = row;
 			this.col = col;
 			this.idx = idx;
+			this.passed = passed;
 		}
 	}
 
@@ -46,29 +59,19 @@ public class Boj17489 {
 	}
 
 	private static String search(int n, int m, int len, char[] key, char[][] arr) {
+		if(len == 1 && arr[0][0] != key[0]) return ERROR;						// no treasure
 		StringBuilder sb = new StringBuilder();
-		
-		if(len == 1) {
-			int count = 0;
-			
-			for(int i = 0; i < n; i++) {
-				for(int j = 0; j < m; j++) {
-					if(arr[i][j] == key[0]) count++;
-				}
-			}
-			
-			if(count == 1 && arr[0][0] == key[0]) return sb.append(1).append(NEW_LINE).append(1).append(SPACE).append(1).toString();
-			else return ERROR;
-		}
-			
+				
 		int row = -1, col = -1;
 		int max = 0;
 
-		int[][][] visit = new int[n][m][26];
-		visit[0][0][arr[0][0] - 'A'] = 1;
+		int[][] visit = new int[n][m];
+		visit[0][0] = 1;
+		row = 0;
+		col = 0;
 
 		Queue<Point> q = new LinkedList<>();
-		q.offer(new Point(0, 0, 0));
+		q.offer(new Point(0, 0, 0, new HashSet(1 * CIPHER + 1)));				// saved path
 
 		while (!q.isEmpty()) {
 			Point current = q.poll();
@@ -77,25 +80,35 @@ public class Boj17489 {
 				int nextRow = current.row + DIRECTION[ROW];
 				int nextCol = current.col + DIRECTION[COL];
 				int nextIdx = (current.idx + 1) % len;
+				int nextPass = (nextRow + 1) * CIPHER + (nextCol + 1);
 
 				if (nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= m) continue;
 				if (arr[nextRow][nextCol] != key[nextIdx]) continue;
-				if (visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] != 0 && max > visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A']) return ERROR;
-				visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] = visit[current.row][current.col][arr[current.row][current.col] - 'A'] + 1;
-
+				
+				if(current.passed.contains((nextPass))) return ERROR;
+				
+				visit[nextRow][nextCol] = visit[current.row][current.col] + 1;	// distance
+				
 				if (arr[nextRow][nextCol] == key[len - 1]) {
-					if (visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'] > max) {
-						max = visit[nextRow][nextCol][arr[nextRow][nextCol] - 'A'];
-						row = nextRow + 1;
-						col = nextCol + 1;
+					if (visit[nextRow][nextCol] > max) {
+						max = visit[nextRow][nextCol];							// max distance when find treasure
+						row = nextRow;
+						col = nextCol;
 					}
 				}
+				
+				Point next = new Point(0, 0, 0, new HashSet());					// save next
+				next.row = nextRow;
+				next.col = nextCol;
+				next.idx = nextIdx;
+				next.passed.addAll(current.passed);
+				next.passed.add(nextPass);
 
-				q.offer(new Point(nextRow, nextCol, nextIdx));
+				q.offer(next);
 			}
 		}
 
-		if (row == -1 || col == -1) return ERROR;
-		return sb.append(max / len).append(NEW_LINE).append(row).append(SPACE).append(col).toString();
+		if (row == -1 || col == -1 || visit[row][col] / len == 0) return ERROR;
+		return sb.append(visit[row][col] / len).append(NEW_LINE).append(row + 1).append(SPACE).append(col + 1).toString();
 	}
 }
