@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Boj12003 {
@@ -17,6 +18,7 @@ public class Boj12003 {
 			diamond[i] = Integer.parseInt(br.readLine());
 		}
 		
+		Arrays.sort(diamond);
 		System.out.println(makeResult(N, K, diamond));
 	}
 	
