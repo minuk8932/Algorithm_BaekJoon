@@ -51,13 +51,12 @@ public class Boj18235 {
 		}
 	}
 	
-	private static int bfs(int n, int b) {
-		int[] isMeet = new int[n];
-		
+	private static int bfs(int n, int b) {		
 		Queue<Pair> q = new LinkedList<>();
+		q.offer(new Pair(visit[b], b));
 		
-		isMeet[b] = 1;
-		q.offer(new Pair(isMeet[b], b));
+		if(visit[b] == 0) return -1;
+		int min = visit[b];
 		
 		while(!q.isEmpty()) {
 			Pair current = q.poll();
@@ -67,15 +66,13 @@ public class Boj18235 {
 				int next = current.pos + D;
 				
 				if(next < 0 || next >= n) continue;
-				if(isMeet[next] != 0) continue;
-				isMeet[next] = isMeet[current.pos] + 1;
+				if(visit[next] == 0 || visit[next] > min || next < 0 || next >= n) continue;
+				min = Math.min(visit[next], min);
 				
-				if(isMeet[next] <= visit[next]) return visit[next] - 1;
-				
-				q.offer(new Pair(isMeet[next], next));
+				q.offer(new Pair(visit[next], next));
 			}
 		}
 		
-		return -1;
+		return min;
 	}
 }
