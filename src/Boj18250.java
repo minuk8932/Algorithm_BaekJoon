@@ -1,9 +1,13 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class Boj18250 {
+	private static HashMap<Integer, Integer> visit = new HashMap<>();
+	private static int result;
+	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -24,17 +28,16 @@ public class Boj18250 {
 			path[b].add(a);
 		}
 		
-		System.out.println(getPath(N, path));
+		getPath(N, path);
 	}
 	
-	private static int getPath(int n, ArrayList<Integer>[] list) {
-		int count = 0;
-		
-		for(int i = 0; i < n; i++) {
-			if(list[i].size() == 1) count++;
+	private static void getPath(int n, ArrayList<Integer>[] list) {		
+		for(int from = 0; from < n; from++) {
+			if(list[from].size() == 1) {
+				
+			}
 		}
 		
-		int res = (count + 1) / 2;
-		return res == 0 ? 1: res;
+		System.out.println(result);
 	}
 }
