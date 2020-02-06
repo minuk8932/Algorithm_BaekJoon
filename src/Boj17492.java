@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Boj17492 {
@@ -15,7 +13,7 @@ public class Boj17492 {
 	private static final String IM = "Impossible";
 	private static final String PO = "Possible";
 	
-	private static int[][][] map;
+	private static int[][][] visit;
 	private static ArrayList<Point> start = new ArrayList<>();
 	
 	private static class Point{
@@ -38,47 +36,15 @@ public class Boj17492 {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			for(int j = 0; j < N; j++) {
 				go[i][j] = Integer.parseInt(st.nextToken());
-				
-				if(go[i][j] == 2) start.add(new Point(i, j));
-				
-				for(int x = 0; x < map.length; x++) {
-					map[x][i][j] = go[i][j];
-				}
 			}
 		}
-		
-		map = new int[start.size()][N][N];
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < N; j++) {
-				for(int x = 0; x < map.length; x++) {
-					map[x][i][j] = go[i][j];
-				}
-			}
-		}
-		
-		String res = IM;
-		for(Point s: start) {
-			if(isPossible(N, go, s)) {
-				res = PO;
-				break;
-			}
-		}
-		
-		System.out.println(res);
+
+		System.out.println(bfs(N, go));
 	}
 	
-	private static boolean isPossible(int n, int[][] arr, Point p){
-		Queue<Point> q = new LinkedList<>();
-		q.offer(p);
+	private static String bfs(int n, int[][] arr) {
 		
-		while(!q.isEmpty()) {
-			Point current = q.poll();
-			
-			for(int d = 0; d < DIRECTIONS.length; d++) {
-				
-			}
-		}
 		
-		return false;
+		return "";
 	}
 }

@@ -21,4 +21,6 @@
 /prefix_sum/
 /queue/
 /search/
-/string_handle/
+/segment_tree/
+/shortest_path_faster_algorithm/
+/simulation/

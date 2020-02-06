@@ -53,7 +53,7 @@ public class Boj2261 {
     		list.add(new Coordinate(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
     	}
 
-    	list.sort(Comparator.comparingInt(p -> p.x));				// sorting by x, Ananymous comparator
+    	list.sort(Comparator.comparingInt(p -> p.x));				// sorting by x, Anonymous comparator
     	TreeSet<Coordinate> candidate = new TreeSet<>();
     	
 //    	TreeSet<Point> candidate = new TreeSet<>((p1, p2) -> {		// comparing more than 2
