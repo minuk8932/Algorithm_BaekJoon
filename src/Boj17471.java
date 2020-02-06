@@ -1,156 +1,162 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Boj17471 {
 	private static int[] person;
-	private static boolean[] visit;
-	private static ArrayList<Long> comb = new ArrayList<>();
-	private static ArrayList<Integer>[] link;
-	
-	private static HashMap<Integer, Integer> list = new HashMap<>();
-	
-	public static void main(String[] args) throws Exception{
+	private static boolean visit[];
+	private static ArrayList<Integer>[] list;
+	private static ArrayList<Integer> groups = new ArrayList<>();
+	private static int min = Integer.MAX_VALUE;
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
-		
-		person = new int[N];
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		for(int i = 0; i < N; i++) {
+		
+		int N = Integer.parseInt(st.nextToken());
+		
+		list = new ArrayList[N];
+		person = new int[N];
+		visit = new boolean[N];
+		
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
 			person[i] = Integer.parseInt(st.nextToken());
+			list[i] = new ArrayList<Integer>();
 		}
 		
-		link = new ArrayList[N];
-		for(int i = 0; i < N; i++) {
-			link[i] = new ArrayList<>();
-		}
-		
-		for(int i = 0; i < N; i++) {
+		int[] arr = new int[N];
+
+		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			int count = Integer.parseInt(st.nextToken());
+			arr[i] = i;
 			
 			while(count-- > 0) {
-				int node = Integer.parseInt(st.nextToken()) - 1;
-				
-				link[node].add(i);
-				list.put(node, i);
+				list[i].add(Integer.parseInt(st.nextToken()) - 1);
 			}
 		}
-		
-		System.out.println(section(N, person));
+
+		for (int i = 0; i < N; i++) {
+			if (!visit[i]) groups.add(bfs(i, arr));
+		}
+
+		switch (groups.size()) {
+			case 1:
+				division(N);
+				break;
+			case 2:
+				min = Math.abs(groups.get(0) - groups.get(1));
+				break;
+			default:
+				min = -1;
+		}
+
+		System.out.println(min);
 	}
-	
-	private static int section(int n, int[] p) {
-		int count = Integer.MAX_VALUE;
+
+	private static void division(int n) {
+		int half = list.length / 2;
+
+		for (int i = 0; i < half; i++) {
+			combination(new int[n], n, i, 0, 0, i + 1);
+		}
+	}
+
+	public static void combination(int[] comb, int n, int r, int index, int target, int len) {
+		if(target == n - 1) return;
 		
-		for(int s = 1; s <= n; s++) {
+		if (r == 0) {
+			int[] first = new int[len];
+			
+			for(int i = 0; i < len; i++) {
+				first[i] = comb[i];
+			}
+			
+			int[] second = makeSet(n, first);
+
 			visit = new boolean[n];
-			backTracking(n, s, s, 0);
-		}
-		
-		if(comb.size() == 0 && n == 2) return Math.abs(person[0] - person[1]);
-		
-		for(long num: comb) {
-			int idx = n - 1;
-			int[] arr = new int[n];
-
-			while(num > 0) {
-				arr[idx--] = (int) (num % 10 == 0 ? num % 100: num % 10);
-				num = (num % 10 == 0 ? num / 100: num / 10);
-			}
+			int adder = bfs(first[0], first);
+			if(!isConnected(first)) return;
 			
-			for(int i = 0; i < (n + 1) / 2; i++) {
-				int s = i;
-				
-				ArrayList<Integer>[] seg = new ArrayList[2];
-				seg[0] = new ArrayList<>();
-				seg[1] = new ArrayList<>();
-				
-				for(int j = 0; j <= s; j++) {
-					seg[0].add(arr[j]);
-				}
-				
-				for(int j = s + 1; j < n; j++) {
-					seg[1].add(arr[j]);
-				}
-				
-				int[] population = {bfs(n, seg[0]), bfs(n, seg[1])};
-				
-				if(population[0] == -1 || population[1] == -1) continue;
-				count = Math.min(count, Math.abs(population[0] - population[1]));
+			visit = new boolean[n];
+			adder -= bfs(second[0], second);
+			if(!isConnected(second)) return;
+			
+			int diff = Math.abs(adder);
+			if (diff < min) min = diff;
+		} 
+		else {
+			comb[index] = target;
+			combination(comb, n, r - 1, index + 1, target + 1, len);
+			combination(comb, n, r, index, target + 1, len);
+		}
+	}
+
+	public static boolean isConnected(int[] group) {
+		for (int i = 0; i < group.length; i++) {
+			if (!visit[group[i]]) {
+				return false;
 			}
 		}
 		
-		return count == Integer.MAX_VALUE ? -1: count;
+		return true;
 	}
 	
-	private static int bfs(int n, ArrayList<Integer> seg) {
+	public static int bfs(int s, int[] group) {
+		boolean flag = false;
 		int sum = 0;
-		boolean[] istied = new boolean[n];
-			
-		for(int site: seg) {
-			istied[site - 1] = true;
-		}
-			
-		int count = seg.size() - 1;
-			
+
 		Queue<Integer> q = new LinkedList<>();
-		q.offer(seg.get(0) - 1);
-			
-		sum += person[seg.get(0) - 1];
-		istied[seg.get(0) - 1] = false;
-	
-		while(!q.isEmpty()) {
+		q.add(s);
+
+		while (!q.isEmpty()) {
 			int current = q.poll();
+			sum += person[current];
+			visit[current] = true;
+
+			for (int next: list[current]) {
+				flag = false;
 				
-			for(int next: link[current]) {
-				if(!istied[next]) continue;
-				istied[next] = false;
-					
-				sum += person[next];
-					
-				count--;
-				q.offer(next);
+				for (int g: group) {
+					if (next == g) {
+						flag = true;
+						break;
+					}
+				}
+				
+				if (flag && !visit[next]) {
+					q.add(next);
+					visit[next] = true;
+				}
 			}
 		}
-
-		return count == 0 ? sum: -1;
+		
+		return sum;
 	}
-	
-	private static void backTracking(int n, int idx, long val, int count) {
-		if(count == n - 1) {
-			boolean flag = true;
-			long loop = val;
+
+	public static int[] makeSet(int n, int[] first) {
+		int[] second = new int[n - (first.length - 1)];
+		int index = 0;
+		boolean flag;
+
+		for (int i = 0; i < n; i++) {
+			flag = false;
 			
-			int current = (int) (loop % 10 == 0 ? 9: (loop % 10) - 1);
-			loop /= 10;
-			
-			while(loop > 0) {
-				int next = (int) (loop % 10 == 0 ? 9: (loop % 10) - 1);
-				
-				if(list.get(current) == null) {
-					flag = false;
+			for (int j = 0; j < first.length; j++) {
+				if (first[j] == i) {
+					flag = true;
 					break;
 				}
-				
-				current = next;
-				loop /= 10;
 			}
 			
-			if(flag) comb.add(val);
-			return;
+			if (!flag) second[index++] = i;
 		}
-		visit[idx - 1] = true;
 		
-		for(int i = 1; i < n + 1; i++) {
-			if(visit[i - 1]) continue;
-			
-			backTracking(n, i, val * (i == 10 ? 100: 10) + i, count + 1);
-			visit[i - 1] = false;
-		}
+		return second;
 	}
+
 }
