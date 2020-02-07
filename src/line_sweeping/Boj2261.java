@@ -18,6 +18,8 @@ import java.util.TreeSet;
  *
  */
 public class Boj2261 {
+	private static TreeSet<Coordinate> candidate;
+	
 	private static class Coordinate implements Comparable<Coordinate>{
 		int x;
 		int y;
@@ -45,18 +47,22 @@ public class Boj2261 {
 
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
-		ArrayList<Coordinate> list = new ArrayList<>();
+		int N = Integer.parseInt(br.readLine());
+		ArrayList<Coordinate> coors = new ArrayList<>();
             
-    	for (int i = 0; i < n; i++) {
+    	for (int i = 0; i < N; i++) {
     		StringTokenizer st = new StringTokenizer(br.readLine());
-    		list.add(new Coordinate(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
+    		coors.add(new Coordinate(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
     	}
-
-    	list.sort(Comparator.comparingInt(p -> p.x));				// sorting by x, Anonymous comparator
-    	TreeSet<Coordinate> candidate = new TreeSet<>();
     	
-//    	TreeSet<Point> candidate = new TreeSet<>((p1, p2) -> {		// comparing more than 2
+    	System.out.println(lineSweeping(N, coors));
+    }
+	
+	private static int lineSweeping(int n, ArrayList<Coordinate> list) {
+		list.sort(Comparator.comparingInt(p -> p.x));				// sorting by x, Anonymous comparator
+    	candidate = new TreeSet<>();
+    	
+//    	TreeSet<Point> candidate = new TreeSet<>((p1, p2) -> {		// comparing with more than 2
 //    		if (p1.y == p2.y) return Integer.compare(p1.x, p2.x);
 //    		
 //    		return Integer.compare(p1.y,p2.y);
@@ -65,38 +71,43 @@ public class Boj2261 {
     	candidate.add(list.get(0));
     	candidate.add(list.get(1));
 
-    	int ans = getDistance(list.get(1), list.get(0));			// start point
+    	int result = getDistance(list.get(1), list.get(0));			// start point (candidate)
     	int start = 0;
     	
     	for (int i = 2; i < n; i++) {
-    		Coordinate current = list.get(i);
+    		Coordinate current = list.get(i);						// get another coordinate
     		
     		while (start < i) {
     			Coordinate pivot = list.get(start);
     			int x = pivot.x - current.x;
     			
-    			if(x * x <= ans) break;
-    			candidate.remove(pivot);
+    			if(x * x <= result) break;								// if x differ is bigger than distance of two coordinates, remove TreeSet's component
+    			candidate.remove(pivot);								// => is not candiate
     			start++;
     		}
-                
-    		int d = (int) Math.sqrt((double) ans) + 1;
-    		Set<Coordinate> lower = candidate.subSet(new Coordinate(current.x, current.y - d), new Coordinate(current.x, current.y + d));
-    		Iterator<Coordinate> it_lower = lower.iterator();
-                
-    		while (it_lower.hasNext()) {
-    			Coordinate p = it_lower.next();
-    			d = getDistance(current, p);
-    			
-    			if (d < ans) ans = d;							// The closest pair
-    		}
     		
+    		result = findTheClosest(result, current);
     		candidate.add(list.get(i));
     	}
     	
-    	System.out.println(ans);
-    }
+    	return result;
+	}
 	
+	private static int findTheClosest(int res, Coordinate cur) {
+		int d = (int) Math.sqrt((double) res) + 1;
+		
+		Set<Coordinate> lower = candidate.subSet(new Coordinate(cur.x, cur.y - d), new Coordinate(cur.x, cur.y + d));		// Sub Range sort
+		Iterator<Coordinate> itLower = lower.iterator();
+		
+		while (itLower.hasNext()) {
+			Coordinate p = itLower.next();
+			d = getDistance(cur, p);						// make part distance
+			
+			if (d < res) res = d;							// The closest pair's distance
+		}
+		
+		return res;
+	}
 
 	public static int getDistance(Coordinate p1, Coordinate p2) {
 		return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
