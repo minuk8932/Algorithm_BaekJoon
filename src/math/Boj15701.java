@@ -23,11 +23,11 @@ public class Boj15701 {
         int loop = (int) (Math.sqrt(n));
         int count = 2;
 
-        if(loop * loop == n) count++;
-
-        for(int i = 2; i < loop; i++){
+        for(int i = 2; i <= loop; i++){
             if(n % i == 0) count += 2;
         }
+
+        if(loop * loop == n) count--;
 
         return count;
     }
