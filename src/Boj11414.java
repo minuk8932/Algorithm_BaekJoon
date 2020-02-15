@@ -4,28 +4,27 @@ import java.util.StringTokenizer;
 
 public class Boj11414 {
     public static void main(String[] args) throws Exception{
-        long start = System.currentTimeMillis();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int A = Integer.parseInt(st.nextToken());
         int B = Integer.parseInt(st.nextToken());
 
-        System.out.println(find(Math.abs(A - B), A, B));
-        System.out.println(System.currentTimeMillis() - start);
+        System.out.println(find(Math.abs(A - B), B));
     }
 
-    private static int find(int diff, int a, int b){
+    private static int find(int diff, int b){
         if(diff == 0) return 1;
+
+        int loop = (int) Math.sqrt(diff) + 1;
         int result = 1;
-        int min = Math.min(a, b);
 
-        while(true){
-            int sum = min + result;
+        for(int i = 1; i < loop; i++){
+            if(diff % i == 0){
+                int[] tmp = {i, diff / i};
 
-            if(sum % diff == 0) break;
-            if(diff % sum == 0) break;
-
-            result++;
+                int max = Math.max(Math.abs(tmp[0] - b), Math.abs(tmp[1] - b));
+                if(result < max) result = max;
+            }
         }
 
         return result;
