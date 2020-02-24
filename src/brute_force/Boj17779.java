@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
 public class Boj17779 {
     private static int[][] map;
     private static int N;
-    private static int[][] used;
+    private static boolean[][] used;
 
     private static int[] district;
 
@@ -68,7 +68,7 @@ public class Boj17779 {
                     for(int d2 = 1; d2 < N; d2++) {
                         if(col - d1 < 0 || col + d2 >= N || row + d1 + d2 >= N) continue;
                         district = new int[5];
-                        used = new int[N][N];
+                        used = new boolean[N][N];
 
                         district[4] = makeDistrictFive(new Pair(row, col), new Pair(d1, d2));
                         district[0] = makeDistrict(new Pair(0, 0), new Pair(row + d1 - 1, col), 1);
@@ -91,7 +91,7 @@ public class Boj17779 {
         q.offer(starter[idx - 1]);
 
         int sum = map[starter[idx - 1].row][starter[idx - 1].col];
-        used[starter[idx - 1].row][starter[idx - 1].col] = idx;
+        used[starter[idx - 1].row][starter[idx - 1].col] = true;
 
         while(!q.isEmpty()){
             Pair current = q.poll();
@@ -101,8 +101,8 @@ public class Boj17779 {
                 int nextCol = current.col + DIRECTION[COL];
 
                 if(nextRow < start.row || nextCol < start.col || nextRow > end.row || nextCol > end.col) continue;
-                if(used[nextRow][nextCol] != 0) continue;
-                used[nextRow][nextCol] = idx;
+                if(used[nextRow][nextCol]) continue;
+                used[nextRow][nextCol] = true;
 
                 sum += map[nextRow][nextCol];
                 q.offer(new Pair(nextRow, nextCol));
@@ -122,11 +122,11 @@ public class Boj17779 {
                 int adj = nextRow + 1;
 
                 if(adj <= p.row + r + d.col && adj <= p.row + d.row + c){
-                    used[adj][nextCol] = 5;
+                    used[adj][nextCol] = true;
                     sum += map[adj][nextCol];
                 }
 
-                used[nextRow][nextCol] = 5;
+                used[nextRow][nextCol] = true;
                 sum += map[nextRow][nextCol];
             }
         }
