@@ -104,10 +104,6 @@ public class Boj12746 {
         int max = 0;
         int[] node = new int[2];
 
-        for(int c = 0; c < N; c++){
-            System.out.println(target[c]);
-        }
-
         for(int i = 0; i < N; i++){
             if(max < count[i]) max = count[i];
         }
