@@ -1,18 +1,43 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Boj12746 {
     private static ArrayList<Integer>[] tree;
     private static int[][] parent;
     private static int[] deep;
-    private static int[] count;
     private static boolean[] visit;
-    private static int[] target;
+    private static long[] target;
 
     private static int N;
     private static final String SPACE = " ";
+    private static final long CIPHER = 1_000_000;
+
+    private static class Pair implements Comparable<Pair>{
+        int node;
+        int depth;
+        long cost;
+
+        public Pair(int node, int depth){
+            this.node = node;
+            this.depth = depth;
+        }
+
+        public Pair(int node, long cost){
+            this.node = node;
+            this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(Pair p) {
+            if (this.depth > p.depth || this.cost > p.cost) return -1;
+            else if(this.depth < p.depth || this.cost < p.cost) return 1;
+            else return 0;
+        }
+    }
 
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,8 +49,7 @@ public class Boj12746 {
         parent = new int[N][21];
         deep = new int[N];
         visit = new boolean[N];
-        count = new int[N];
-        target = new int[N];
+        target = new long[N];
 
         for(int i = 0; i < N; i++){
             tree[i] = new ArrayList<>();
@@ -49,7 +73,9 @@ public class Boj12746 {
             int node1 = Integer.parseInt(st.nextToken()) - 1;
             int node2 = Integer.parseInt(st.nextToken()) - 1;
 
-            target[lca(node1, node2)] = Math.min(node1, node2);
+            target[node1] += 1;
+            target[node2] += 1;
+            target[lca(node1, node2)] -= 2;
         }
 
         System.out.println(getMax());
@@ -101,22 +127,40 @@ public class Boj12746 {
     }
 
     private static String getMax(){
-        int max = 0;
-        int[] node = new int[2];
+        long max = 0;
 
-        for(int i = 0; i < N; i++){
-            if(max < count[i]) max = count[i];
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+        boolean[] visit = new boolean[N];
+
+        for(int i = 0; i < N; i++){             // 단말노드 찾아서 넣으면 끝
+            visit[i] = true;
+            pq.offer(new Pair(i, deep[i]));
         }
 
-        int idx = 0;
-        for(int i = 0; i < N; i++){
-            if(idx == 2) break;
-            if(max == count[i]){
-                node[idx++] = (i + 1);
+        while(!pq.isEmpty()){
+            Pair current = pq.poll();
+
+            for(int next: tree[current.node]){
+                if(visit[next]) continue;
+                visit[next] = true;
+                target[next] += target[current.node];
+
+                if(target[next] > max) max = target[next];
+                pq.offer(new Pair(next, deep[next]));
             }
         }
 
+        PriorityQueue<Pair> pCost = new PriorityQueue<>();
+        for(int i = 0; i < N; i++){
+            System.out.print(target[i] + " ");
+            pCost.offer(new Pair(i, target[i]));
+        }
+        System.out.println();
+
+        int[] idx = {pCost.poll().node, pCost.poll().node};
+
         StringBuilder sb = new StringBuilder();
-        return sb.append(node[0]).append(SPACE).append(node[1]).append(SPACE).append(max).toString();
+        return sb.append(Math.min(idx[0], idx[1]) + 1).append(SPACE)
+                .append(Math.max(idx[0], idx[1]) + 1).append(SPACE).append(max).toString();
     }
 }
