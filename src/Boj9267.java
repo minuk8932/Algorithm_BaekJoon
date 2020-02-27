@@ -16,26 +16,35 @@ public class Boj9267 {
 		
 		System.out.println(getResult(a, b, S));
 	}
-	
-	private static String getResult(long a, long b, long sum) {
-		if(a == sum || b == sum) return Y;
-		if(a + b == sum) return Y;
-		
-		if(a == 0 && b == 0 && sum != 0) return N;
-		if(a > sum || b > sum) return N;
-		
-		if(a == 0) {
-			if(sum % b == 0) return Y;
-			else return N;
-		}
-		
-		if(b == 0) {
-			if(sum % a == 0) return Y;
-			else return N;
-		}
-		
-		
 
-		return Y;
+	private static long exEuclid(long b, long p) {
+		long c = p;
+		long d = b;
+		long x = 0;
+		long y = 1;
+
+		while (d != 1) {
+			long q = c / d;
+			long e = c - d * q;
+			long w = x - y * q;
+
+			c = d;
+			d = e;
+			x = y;
+			y = w;
+		}
+
+		if (y < 0)  y += p;
+		return y;
+	}
+
+
+	private static String getResult(long a, long b, long sum) {
+		if(a % sum == 0 || b % sum == 0 || (a + b) % sum == 0) return Y;
+
+		long gcd = exEuclid(a, b);
+		if(sum % gcd != 0) return N;
+
+		return N;
 	}
 }
