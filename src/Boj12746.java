@@ -1,42 +1,29 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 12746번: Traffic (small)
+ *
+ * @see  https://www.acmicpc.net/problem/12746/
+ *
+ */
 public class Boj12746 {
     private static ArrayList<Integer>[] tree;
     private static int[][] parent;
     private static int[] deep;
+    private static int[] cost;
+
     private static boolean[] visit;
-    private static long[] target;
-
     private static int N;
+
+    private static final long CIPHER = 1_000_000L;
     private static final String SPACE = " ";
-    private static final long CIPHER = 1_000_000;
-
-    private static class Pair implements Comparable<Pair>{
-        int node;
-        int depth;
-        long cost;
-
-        public Pair(int node, int depth){
-            this.node = node;
-            this.depth = depth;
-        }
-
-        public Pair(int node, long cost){
-            this.node = node;
-            this.cost = cost;
-        }
-
-        @Override
-        public int compareTo(Pair p) {
-            if (this.depth > p.depth || this.cost > p.cost) return -1;
-            else if(this.depth < p.depth || this.cost < p.cost) return 1;
-            else return 0;
-        }
-    }
+    private static int result = -1;
+    private static long index;
 
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -45,14 +32,14 @@ public class Boj12746 {
         int Q = Integer.parseInt(st.nextToken());
 
         tree = new ArrayList[N];
-        parent = new int[N][21];
-        deep = new int[N];
-        visit = new boolean[N];
-        target = new long[N];
-
         for(int i = 0; i < N; i++){
             tree[i] = new ArrayList<>();
         }
+
+        parent = new int[N][21];
+        deep = new int[N];
+        visit = new boolean[N];
+        cost = new int[N];
 
         int loop = N - 1;
         while(loop-- > 0){
@@ -72,17 +59,17 @@ public class Boj12746 {
             int node1 = Integer.parseInt(st.nextToken()) - 1;
             int node2 = Integer.parseInt(st.nextToken()) - 1;
 
-            target[node1] += 1;
-            target[node2] += 1;
-            target[lca(node1, node2)] -= 2;
+            cost[node1]++;
+            cost[node2]++;
+            cost[LCA(node1, node2)] -= 2;               // make prefix sum
         }
 
-        System.out.println(getMax());
+        System.out.println(getResult());
     }
 
     private static void dfs(int current, int depth){
-        visit[current] = true;
         deep[current] = depth;
+        visit[current] = true;
 
         for(int next: tree[current]){
             if(visit[next]) continue;
@@ -92,15 +79,15 @@ public class Boj12746 {
         }
     }
 
-    private static void connecting() {
+    private static void connecting(){
         for(int p = 1; p < 21; p++){
-            for(int c = 0; c < N; c++){
-                parent[c][p] = parent[parent[c][p - 1]][p - 1];
+            for(int cur = 0; cur < N; cur++){
+                parent[cur][p] = parent[parent[cur][p - 1]][p - 1];
             }
         }
     }
 
-    private static int lca(int x, int y){
+    private static int LCA(int x, int y){                       // LCA
         if(deep[x] > deep[y]){
             int tmp = x;
             x = y;
@@ -109,14 +96,12 @@ public class Boj12746 {
 
         for(int i = 20; i >= 0; i--){
             int jump = 1 << i;
-            if(deep[y] - deep[x] >= jump){
-                y = parent[y][i];
-            }
+            if(deep[y] - deep[x] >= jump) y = parent[y][i];     // set same level
         }
 
         if(x == y) return x;
 
-        for(int i = 20; i >= 0; i--){
+        for(int i = 20; i >= 0; i--){                           // find ancestor
             if(parent[x][i] == parent[y][i]) continue;
             x = parent[x][i];
             y = parent[y][i];
@@ -125,41 +110,26 @@ public class Boj12746 {
         return parent[x][0];
     }
 
-    private static String getMax(){
-        long max = 0;
-
-        PriorityQueue<Pair> pq = new PriorityQueue<>();
-        boolean[] visit = new boolean[N];
-
-        for(int i = 0; i < N; i++){             // 단말노드 찾아서 넣으면 끝
-            visit[i] = true;
-            pq.offer(new Pair(i, deep[i]));
-        }
-
-        while(!pq.isEmpty()){
-            Pair current = pq.poll();
-
-            for(int next: tree[current.node]){
-                if(visit[next]) continue;
-                visit[next] = true;
-                target[next] += target[current.node];
-
-                if(target[next] > max) max = target[next];
-                pq.offer(new Pair(next, deep[next]));
-            }
-        }
-
-        PriorityQueue<Pair> pCost = new PriorityQueue<>();
-        for(int i = 0; i < N; i++){
-            System.out.print(target[i] + " ");
-            pCost.offer(new Pair(i, target[i]));
-        }
-        System.out.println();
-
-        int[] idx = {pCost.poll().node, pCost.poll().node};
-
+    private static String getResult(){
         StringBuilder sb = new StringBuilder();
-        return sb.append(Math.min(idx[0], idx[1]) + 1).append(SPACE)
-                .append(Math.max(idx[0], idx[1]) + 1).append(SPACE).append(max).toString();
+        filling(0);
+
+        return sb.append(index / CIPHER + 1).append(SPACE).append(index % CIPHER + 1).append(SPACE).append(result).toString();
+    }
+
+    private static void filling(int current){
+        for (int next : tree[current]) {
+            if (next == parent[current][0]) continue;                   // pass same node
+            filling(next);                                              // search next;
+
+            long idx = current * CIPHER + next;
+            if (current > next) idx = next * CIPHER + current;          // make index
+
+            if (cost[next] > result || cost[next] == result && idx < index) {       // find max
+                result = cost[next];
+                index = idx;
+            }
+            cost[current] += cost[next];                 // add cost bottom up
+        }
     }
 }
