@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
  *
  */
 public class Boj11404 {
-	private static final int MAX = 100_001;
+	private static final int MAX = 1_000_000_001;
 	private static final String SPACE = " ";
 	private static final String NEW_LINE = "\n";
 	private static final int NO_WAY = 0;
