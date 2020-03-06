@@ -94,7 +94,7 @@ public class Boj1626 {
 			}
 		}
 		
-		return 0;
+		return minCost;
 	}
 	
 	private static class InputReader {
