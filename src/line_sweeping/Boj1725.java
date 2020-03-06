@@ -1,3 +1,5 @@
+package line_sweeping;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
@@ -28,18 +30,18 @@ public class Boj1725 {
         int result = 0;
 
         for(int i = 0; i < n; i++){
-            while(!stack.isEmpty() && rec[i] < rec[stack.peek()]){
-                int h = rec[stack.pop()];
+            while(!stack.isEmpty() && rec[i] < rec[stack.peek()]){      // in stack > rec[i]
+                int h = rec[stack.pop()];                               // get bigger one
                 int w = i;
 
-                if(!stack.isEmpty()) w = (i - stack.peek() - 1);
+                if(!stack.isEmpty()) w = (i - stack.peek() - 1);        // width
                 if(result < w * h) result = w * h;
             }
 
             stack.push(i);
         }
 
-        while(!stack.isEmpty()){
+        while(!stack.isEmpty()){                        // is remained?
             int h = rec[stack.pop()];
             int w = n;
 
