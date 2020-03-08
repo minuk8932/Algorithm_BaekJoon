@@ -28,16 +28,16 @@ public class Boj3079 {
 		System.out.println(binarySearch(N, M, 0, INF, time));
 	}
 	
-	private static long binarySearch(int n, int m, long start, long end, long[] arr) {
-		long result = 0;
+	private static long binarySearch(int n, long m, long start, long end, long[] arr) {
+		long result = INF;
 		
 		while(start <= end) {
 			long mid = (start + end) / 2;
-			long count = passer(n, arr, mid);
+			long count = passer(m, arr, mid);
 			
-			if(count >= m) {		// 해당 인원 수 만큼 심사 받는 경우
+			if(count >= m) {		// all friends covered
 				end = mid - 1;
-				result = mid;
+				if(mid < result) result = mid;
 			}
 			else {
 				start = mid + 1;
@@ -47,11 +47,12 @@ public class Boj3079 {
 		return result;
 	}
 	
-	private static long passer(int n, long[] arr, long target) {
+	private static long passer(long m, long[] arr, long target) {
 		long cnt = 0;
 		
-		for(int i = 0; i < n; i++) {		// 목적 시간당 심사를 받는 인원 수
+		for(int i = 0; i < arr.length; i++) {		// the number of people per time
 			cnt += (target / arr[i]);
+			if(cnt >= m) cnt = m;					// overflow safe
 		}
 		
 		return cnt;
