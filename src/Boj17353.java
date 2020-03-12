@@ -3,23 +3,24 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Boj17353 {
-	private static final int INF = 1 << 20;
-	private static int start = INF / 2;
-	private static long tree[] = new long[INF];
-	private static long lazy[] = new long[INF];
+	private static int start = 1;
+	private static long[] tree;
+	private static long[] lazy;
+
+	private static int N;
 
 	private static final String NEW_LINE = "\n";
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
+		N = Integer.parseInt(br.readLine());
+
+		init();
 
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		for (int i = start; i < N + start; i++) {
 			tree[i] = Long.parseLong(st.nextToken());
 		}
-
-		init();
 
 		StringBuilder sb = new StringBuilder();
 		int Q = Integer.parseInt(br.readLine());
@@ -29,34 +30,36 @@ public class Boj17353 {
 			int method = Integer.parseInt(st.nextToken());
 
 			if (method == 1) {
-				int A = Integer.parseInt(st.nextToken());
-				int B = Integer.parseInt(st.nextToken());
+				int L = Integer.parseInt(st.nextToken());
+				int R = Integer.parseInt(st.nextToken());
 
-				add(A, B, 1,1, 0, start);
+				add(L, R, 1, 0, start - 1);
+				for(int i = 0; i < tree.length; i++) System.out.print(tree[i] + " ");
+				System.out.println();
 			}
 			else {
-				int X = Integer.parseInt(st.nextToken()) - 1;
-				sb.append(sum(X, 1, 0, start)).append(NEW_LINE);
+				int X = Integer.parseInt(st.nextToken());
+				sb.append(sum(X - 1, X, 1, 0, start - 1)).append(NEW_LINE);
 			}
 		}
 
-		for(int i = start; i < start + N; i++){
-			System.out.print(tree[i] + " ");
-		}
+		for(int i = 0; i < tree.length; i++) System.out.print(tree[i] + " ");
 		System.out.println();
 
 		System.out.print(sb.toString());
 	}
 
-	private static int[] makeSon(int node){
-		return new int[]{node * 2, node * 2 + 1};
+	private static void init(){
+		while(start <= N) start <<= 1;
+
+		tree = new long[start * 2];
+		lazy = new long[start * 2];
+//		start /= 2;
 	}
 
-	private static void init(){
-		for(int i = start - 1; i > 0; i--){
-			int[] son = makeSon(i);
-			tree[i] = tree[son[0]] + tree[son[1]];
-		}
+	private static int[] makeSon(int node){
+		int son = node * 2;
+		return new int[]{son, ++son};
 	}
 
 	private static void propagation(int node, int s, int e){
@@ -64,37 +67,44 @@ public class Boj17353 {
 
 		if(node < start){
 			int[] son = makeSon(node);
+
 			lazy[son[0]] += lazy[node];
 			lazy[son[1]] += lazy[node];
 		}
 
-		tree[node] += lazy[node] * (e - s);
+		tree[node] += lazy[node] * (e - s + 1);
 		lazy[node] = 0;
 	}
 
-	private static void add(int s, int e, int k, int node, int S, int E){
-		propagation(node, S, E);
+	private static void add(int s, int e, int node, int ns, int ne){
+		propagation(node, ns, ne);
 
-		if(e <= S || E <= s) return;
-		if(s <= S && E <= e){
-			lazy[node] += k;
-			propagation(node, S, E);
+		if(e < ns || ne < s) return;
+		if(s <= ns && ne <= e) {
+			lazy[node] += ns - s + 1;
+			propagation(node, ns, ne);
+
 			return;
 		}
 
-		System.out.println(S + " " + E + " " + k);
-
-		int mid = (S + E) / 2;
 		int[] son = makeSon(node);
+		int mid = (ns + ne) / 2;
 
-		add(s, e, k + 1, son[0], S, mid);
-		add(s, e, k + 1, son[1], mid, E);
+		add(s, e, son[0], ns, mid);
+		add(s, e, son[1], mid + 1, ne);
 
 		tree[node] = tree[son[0]] + tree[son[1]];
 	}
 
-	private static long sum(int x, int node, int S, int E){
-		propagation(node, S, E);
-		return tree[x + start];
+	private static long sum(int s, int e, int node, int ns, int ne){
+		propagation(node, ns, ne);
+
+		if(e < ns || ne < s) return 0;
+		if(s <= ns && ne <= e) return tree[node];
+
+		int[] son = makeSon(node);
+		int mid = (ns + ne) / 2;
+
+		return sum(s, e, son[0], ns, mid) + sum(s, e, son[1], mid + 1, ne);
 	}
 }
