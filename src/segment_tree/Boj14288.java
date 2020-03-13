@@ -1,12 +1,22 @@
+package segment_tree;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 14288번: 내리 갈굼 4
+ *
+ * @see https://www.acmicpc.net/problem/14288/
+ *
+ */
 public class Boj14288 {
     private static ArrayList<Integer>[] link;
-    private static int[] tree;
-    private static int[] lazy;
+    private static int[][] tree;
+    private static int[][] lazy;
 
     private static int[] start, end;
     private static int N, S = 1;
@@ -23,14 +33,14 @@ public class Boj14288 {
         init();
 
         st = new StringTokenizer(br.readLine());
-        for(int i = 1; i <= N; i++){
+        for(int i = 0; i < N; i++){
             int val = Integer.parseInt(st.nextToken());
             if(val == -1) continue;
 
-            link[val].add(i);
+            link[--val].add(i);
         }
 
-        dfs(1);
+        dfs(0);
 
         StringBuilder sb = new StringBuilder();
         boolean flag = false;
@@ -44,21 +54,18 @@ public class Boj14288 {
                 continue;
             }
 
-            int i = Integer.parseInt(st.nextToken());
+            int i = Integer.parseInt(st.nextToken()) - 1;
 
             if(cmd == 1){
                 int w = Integer.parseInt(st.nextToken());
-                add(start[i], flag ? start[i] : end[i], w, 1, 0, N - 1);
+                if(flag) add(start[i], start[i], w, 1, 0, N - 1, 0);        // back
+                else add(start[i], end[i], w, 1, 0, N - 1, 1);              // for
             }
             else {
-                sb.append(sum(start[i], flag ? end[i]: start[i], 1, 0, N - 1)).append(NEW_LINE);
+                sb.append(sum(start[i], end[i], 1, 0, N - 1, 0)             // for + back cases
+                + sum(start[i], start[i], 1, 0, N - 1, 1)).append(NEW_LINE);
             }
         }
-
-//        for(int i = 0; i < tree.length; i++){
-//            System.out.print(tree[i] + " ");
-//        }
-//        System.out.println();
 
         System.out.println(sb.toString());
     }
@@ -66,13 +73,13 @@ public class Boj14288 {
     private static void init(){
         while(S <= N) S <<= 1;
 
-        tree = new int[S * 2];
-        lazy = new int[S * 2];
-        start = new int[N + 1];
-        end = new int[N + 1];
+        tree = new int[S * 2][2];           // divide to For, Back
+        lazy = new int[S * 2][2];
+        start = new int[N];
+        end = new int[N];
 
-        link = new ArrayList[N + 1];
-        for(int i = 0; i <= N; i++){
+        link = new ArrayList[N];
+        for(int i = 0; i < N; i++){
             link[i] = new ArrayList<>();
         }
     }
@@ -92,27 +99,26 @@ public class Boj14288 {
         return new int[]{son, ++son};
     }
 
-    private static void propagation(int node, int start, int end){
-        if(lazy[node] == 0) return;
+    private static void propagation(int node, int start, int end, int idx){
+        if(lazy[node][idx] == 0) return;
 
         if(start != end){
             int[] son = makeSon(node);
-
-            lazy[son[0]] += lazy[node];
-            lazy[son[1]] += lazy[node];
+            lazy[son[0]][idx] += lazy[node][idx];
+            lazy[son[1]][idx] += lazy[node][idx];
         }
 
-        tree[node] += lazy[node] * (end - start + 1);
-        lazy[node] = 0;
+        tree[node][idx] += lazy[node][idx] * (end - start + 1);
+        lazy[node][idx] = 0;
     }
 
-    private static void add(int left, int right, int val, int node, int start, int end){
-        propagation(node, start, end);
+    private static void add(int left, int right, int val, int node, int start, int end, int idx){
+        propagation(node, start, end, idx);
 
         if(right < start || end < left) return;
         if(left <= start && end <= right) {
-            lazy[node] += val;
-            propagation(node, start, end);
+            lazy[node][idx] += val;
+            propagation(node, start, end, idx);
 
             return;
         }
@@ -120,21 +126,21 @@ public class Boj14288 {
         int[] son = makeSon(node);
         int mid = (start + end) / 2;
 
-        add(left, right, val, son[0], start, mid);
-        add(left, right, val, son[1], mid + 1, end);
+        add(left, right, val, son[0], start, mid, idx);
+        add(left, right, val, son[1], mid + 1, end, idx);
 
-        tree[node] = tree[son[0]] + tree[son[1]];
+        tree[node][idx] = tree[son[0]][idx] + tree[son[1]][idx];
     }
 
-    private static int sum(int left, int right, int node, int start, int end){
-        propagation(node, start, end);
+    private static int sum(int left, int right, int node, int start, int end, int idx){
+        propagation(node, start, end, idx);
 
         if(right < start || end < left) return 0;
-        if(left <= start && end <= right) return tree[node];
+        if(left <= start && end <= right) return tree[node][idx];
 
         int[] son = makeSon(node);
         int mid = (start + end) / 2;
 
-        return sum(left, right, son[0], start, mid) + sum(left, right, son[1], mid + 1, end);
+        return sum(left, right, son[0], start, mid, idx) + sum(left, right, son[1], mid + 1, end, idx);
     }
 }
