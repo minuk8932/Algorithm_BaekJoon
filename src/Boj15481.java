@@ -105,7 +105,6 @@ public class Boj15481 {
 			}
 			else {
 				Path target = check.get(i);
-				
 				result[i] = cost + target.cost - 0;
 			}
 		}
