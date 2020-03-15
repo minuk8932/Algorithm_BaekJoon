@@ -3,102 +3,107 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Boj14504 {
-	private static int start;
-	private static long tree[],lazy[];
+	private static int[] tree;
+	private static int[] lazy;
 
-	public static void main(String[] args) throws Exception {
+	private static int N, K, S = 1;
+	private static final String NEW_LINE = "\n";
+
+	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
-
-		for (start = 1; start < N; start *= 2) ;
-		tree = new long[start * 2];
-		lazy = new long[start * 2];
-
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++) {
-			long num = Long.parseLong(st.nextToken());
-			init(i, num);
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+
+		init();
+
+		st = new StringTokenizer(br.readLine());
+		for(int i = S; i < S + N; i++){
+			tree[i] = Integer.parseInt(st.nextToken());
+		}
+
+		for(int i = S - 1; i > 0; i--){
+			int[] son = makeSon(i);
+			tree[i] = tree[son[0]] | tree[son[1]];
 		}
 
 		StringBuilder sb = new StringBuilder();
 		int M = Integer.parseInt(br.readLine());
-		while(M-- > 0) {
+
+		while(M-- > 0){
 			st = new StringTokenizer(br.readLine());
 			int cmd = Integer.parseInt(st.nextToken());
+			int i = Integer.parseInt(st.nextToken()) - 1;
+			int j = Integer.parseInt(st.nextToken()) - 1;
+			int k = Integer.parseInt(st.nextToken());
 
-			if (cmd == 2) {
-				int A = Integer.parseInt(st.nextToken()) - 1;
-				long num = Long.parseLong(st.nextToken());
-
-				setRange(A, 1, 0, start - 1, num);
+			if(cmd == 2){
+				update(i, i, k, 1, 0, N - 1);
 			}
-			else {
-				int A = Integer.parseInt(st.nextToken()) - 1;
-				int B = Integer.parseInt(st.nextToken()) - 1;
-
-				sb.append(getSum(A, B, 1, 0, start - 1)).append("\n");
+			else{
+				sb.append(compare(i, j, 1, 0, N - 1)).append(NEW_LINE);
 			}
 		}
 
-		System.out.print(sb.toString());
+		System.out.println(sb.toString());
 	}
-	private static void setRange(int L, int idx, long left, long right, long num){
-		if(lazy[idx] != 0){
-			tree[idx] += (right - left + 1) * lazy[idx];
 
-			if(right!=left){
-				lazy[idx * 2] += lazy[idx];
-				lazy[idx * 2 + 1] += lazy[idx];
-			}
+	private static void init(){
+		while(S <= N) S <<= 1;
 
-			lazy[idx] = 0;
+		tree = new int[S * 2];
+		lazy = new int[S * 2];
+	}
+
+	private static int[] makeSon(int node){
+		int son = node * 2;
+		return new int[]{son, ++son};
+	}
+
+	private static void propagation(int node, int start, int end, boolean flag){
+		if(lazy[node] == 0) return;
+
+		if(start != end){
+			int[] son = makeSon(node);
+			lazy[son[0]] = Math.max(lazy[node], lazy[son[0]]);
+			lazy[son[1]] = Math.max(lazy[node], lazy[son[1]]);
 		}
 
-		if (L > right) return;
-		if(L <= left){
-			tree[idx] += (right - left + 1) * num;
+		if(flag) {
+			tree[node] = lazy[node];
+			lazy[node] = 0;
+		}
+	}
 
-			if(left != right){
-				lazy[idx * 2] += num;
-				lazy[idx * 2 + 1] += num;
-			}
+	private static void update(int left, int right, int val, int node, int start, int end){
+		propagation(node, start ,end, false);
+
+		if(right < start || end < left) return;
+		if(left <= start && end < right){
+			lazy[node] = val;
+			propagation(node, start, end, false);
 
 			return;
 		}
 
-		long mid = (left + right) / 2;
+		int[] son = makeSon(node);
+		int mid = (start + end) / 2;
 
-		setRange(L, idx * 2, left, mid, num);
-		setRange(L, idx * 2 + 1, mid + 1, right, num);
-		tree[idx] = tree[idx * 2] + tree[idx * 2 + 1];
+		update(left, right, val, son[0], start, mid);
+		update(left, right, val, son[1], mid + 1, end);
+
+		tree[node] = val;
 	}
 
-	private static void init(int idx, long val) {
-		int index = start + idx;
-		tree[index] = val;
+	private static int compare(int left, int right, int node, int start, int end){
+		propagation(node, start, end, true);
 
-		while (index > 1) {
-			index /= 2;
-			tree[index] = tree[index * 2] + tree[index * 2 + 1];
-		}
-	}
+		if(right < start || end < left) return 0;
+		if(left <= start && end < right) return tree[node];
 
-	private static long getSum(int L, int R, int idx, long left, long right) {
-		if(lazy[idx] != 0){
-			tree[idx] += (right - left + 1) * lazy[idx];
+		int[] son = makeSon(node);
+		int mid = (start + end) / 2;
 
-			if(right != left){
-				lazy[idx * 2] += lazy[idx];
-				lazy[idx * 2 + 1] += lazy[idx];
-			}
-
-			lazy[idx] = 0;
-		}
-
-		if (L > right || R < left) return 0;
-		if (L <= left && right <= R) return tree[idx];
-
-		long mid = (left + right) / 2;
-		return getSum(L, R, idx * 2, left, mid) + getSum(L, R, idx * 2 + 1, mid + 1, right);
+		return compare(left, right, son[0], start, mid) | compare(left, right, son[1], mid + 1, end);
 	}
 }

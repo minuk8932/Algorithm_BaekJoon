@@ -51,8 +51,7 @@ public class Boj6444 {
 				sb.append(NEW_LINE);
 			}
 		}
-		
-		br.close();
+
 		System.out.println(sb.toString());
 	}
 	
@@ -70,16 +69,10 @@ public class Boj6444 {
 			if(idx != -1) build.append(c[i]);
 		}
 		
-//		if(idx == 1) return 999 * (c[0] - 'A') + Integer.parseInt(build.toString()) - 1;
-//		else if(idx == 2) return 999 * 26 * (c[0] - 'A' + 1) + Integer.parseInt(build.toString()) - 1;
-//		else return 999 * 26 * 26 * (c[0] - 'A' + 1) + Integer.parseInt(build.toString()) - 1;
-		
 		int fix = LAST * (Integer.parseInt(build.toString()) - 1);
 		
 		if(idx == 1) return fix + c[0] - 'A';
 		else if(idx == 2) return fix + (c[1] - 'A' + 1) * 26 + (c[0] - 'A');
 		else return fix + (c[2] - 'A' + 1) * 26 * 26 + (c[1] - 'A' + 1) * 26  + (c[0] - 'A');
-		
-//		return LAST * (Integer.parseInt(build.toString()) - 1) + c[0] - 'A';
 	}
 }
