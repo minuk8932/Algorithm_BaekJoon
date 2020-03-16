@@ -5,6 +5,9 @@ import java.util.StringTokenizer;
 
 public class Boj17131 {
 	private static final int MOD = 1_000_000_007;
+
+	private static int N, S = 1;
+	private static int[] tree;
 	
 	private static class Point implements Comparable<Point>{
 		int x;
@@ -25,8 +28,10 @@ public class Boj17131 {
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
-		
+		N = Integer.parseInt(br.readLine());
+
+		init();
+
 		Point[] p = new Point[N];
 		for(int i = 0; i < N; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
@@ -36,5 +41,10 @@ public class Boj17131 {
 		Arrays.sort(p);
 		
 		
+	}
+
+	private static void init(){
+		while(S <= N) S <<= 1;
+		tree = new int[S * 2];
 	}
 }
