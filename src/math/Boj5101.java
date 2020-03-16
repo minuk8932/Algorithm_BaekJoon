@@ -28,8 +28,8 @@ public class Boj5101 {
 
             if(A == 0 && B == 0 && C ==0) break;
 
-            int mod = (C- A) % B;
-            if(mod != 0) {                          // is Sequence?
+            int mod = (C - A) % B;
+            if(mod != 0 || (A > C && B >= 0) || (A < C && B <= 0)) {                          // is Sequence?
                 sb.append(ERROR).append(NEW_LINE);
                 continue;
             }
