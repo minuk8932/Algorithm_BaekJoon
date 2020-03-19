@@ -42,7 +42,7 @@ public class Boj9251 {
 			}
 		}
 		
-		int max = 1, cnt = 0;
+		int max = 0, cnt = 0;
 		
 		// 최장 공통부분의 길이 측정
 		for(int i = 1; i < leng2 + 1; i++){
@@ -53,6 +53,6 @@ public class Boj9251 {
 				}
 			}
 		}
-		System.out.println(cnt + 1);
+		System.out.println(cnt);
 	}
 }
