@@ -28,7 +28,7 @@ public class Boj17943 {
         }
 
         for(int i = 1; i < N - 1; i++){
-            xored[i] = xored[i - 1] ^ xored[i];
+            xored[i] = xored[i - 1] ^ xored[i];                 // make a1 ^ a2, a1 ^ a3 ..... a1 ^ an
         }
 
         StringBuilder sb = new StringBuilder();
@@ -44,7 +44,7 @@ public class Boj17943 {
 
                 if(x != y) {
                     if(x == 0) res = xored[y - 1];
-                    else res = xored[x - 1] ^ xored[y - 1];
+                    else res = xored[x - 1] ^ xored[y - 1];     // am ^ ak == (a1 ^ am) ^ (a1 ^ ak)
                 }
 
                 sb.append(res).append(NEW_LINE);
@@ -54,7 +54,7 @@ public class Boj17943 {
 
                 if(x != y) {
                     if (x == 0) res ^= xored[y - 1];
-                    else res ^= xored[x - 1] ^ xored[y - 1];
+                    else res ^= xored[x - 1] ^ xored[y - 1];    // a ^ x ^ a == x
                 }
 
                 sb.append(res).append(NEW_LINE);
