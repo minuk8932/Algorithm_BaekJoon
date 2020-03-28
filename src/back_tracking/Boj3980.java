@@ -1,11 +1,21 @@
+package back_tracking;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 3980번: 선발 명단
+ *
+ * @see https://www.acmicpc.net/problem/3980/
+ *
+ */
 public class Boj3980 {
     private static final String NEW_LINE = "\n";
     private static final int OVER = 2047;
-    private static int visit, result;
+    private static int result;
 
     private static boolean[] pvisit;
     private static int[][] eleven;
@@ -31,40 +41,32 @@ public class Boj3980 {
 
             for (int i = 0; i < 11; i++) {
                 if (eleven[0][i] == 0) continue;
-                backTracking(i, 0, eleven[0][i]);
+                backTracking(0, i, 0, eleven[0][i]);
             }
 
             sb.append(result).append(NEW_LINE);
         }
 
-        System.out.println(result);
+        System.out.println(sb.toString());
     }
 
-    private static void backTracking(int position, int person, int val) {
-        if (visit == OVER) {
-            result = Math.max(result, val);
+    private static void backTracking(int visit, int current, int person, int val) {
+        pvisit[person] = true;
+        visit |= (1 << current);
+
+        if (person == 10) {
+            if(visit == OVER) result = Math.max(result, val);
             return;
         }
 
-        pvisit[person] = true;
+        for (int pos = 0; pos < 11; pos++) {
+            if (eleven[person + 1][pos] == 0) continue;                                             // value 0
 
-        int current = 1 << position;
-        visit |= current;
+            int next = 1 << pos;
+            if ((visit & next) != 0) continue;
 
-        for (int per = 0; per < 11; per++) {
-            if (pvisit[per]) continue;
-
-            for (int pos = 0; pos < 11; pos++) {
-                if (eleven[per][pos] == 0) continue;
-
-                int next = 1 << pos;
-                if ((visit & next) != 0) continue;
-
-                backTracking(pos, per, val + eleven[per][pos]);
-                visit ^= next;
-            }
-
-            pvisit[per] = false;
+            backTracking(visit, pos, person + 1, val + eleven[person + 1][pos]);        // find proper position
+            pvisit[person + 1] = false;
         }
     }
 }
