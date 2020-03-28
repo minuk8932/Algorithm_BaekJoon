@@ -104,9 +104,10 @@ public class Boj2819 {
         while(left <= right){
             int mid = (left + right) / 2;
             int target = flag < 2 ? arr[mid].y: arr[mid].x;
+            int src = flag < 2 ? start.y: start.x;
 
-            if(flag == 0){                              // y++
-                if(target <= start.y){
+            if(flag == 0 || flag == 2){                              // ++
+                if(target <= src){
                     left = mid + 1;
                     idx = mid;
                 }
@@ -114,26 +115,8 @@ public class Boj2819 {
                     right = mid - 1;
                 }
             }
-            else if(flag == 1){                         // y--
-                if(target >= start.y){
-                    right = mid - 1;
-                    idx = mid;
-                }
-                else{
-                    left = mid + 1;
-                }
-            }
-            else if(flag == 2){                         // x++
-                if(target <= start.x){
-                    left = mid + 1;
-                    idx = mid;
-                }
-                else{
-                    right = mid - 1;
-                }
-            }
-            else {                                      // x--
-                if(target >= start.x){
+            else {                                                  // --
+                if(target >= src){
                     right = mid - 1;
                     idx = mid;
                 }
