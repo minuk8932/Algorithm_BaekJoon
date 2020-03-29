@@ -17,10 +17,6 @@ public class Boj17825 {
             move.add(Integer.parseInt(st.nextToken()));
         }
 
-//        for (int i = 0; i < 10; i++) {
-//            visit = new boolean[10];
-//            backTracking(10, i, move.get(i), 0);
-//        }
         permutation.add(1234123412L);
 
         System.out.println(getMax());
@@ -30,43 +26,43 @@ public class Boj17825 {
         int max = 0;
 
         for(long p: permutation){
-            int[] arr = new int[10];
-            int[] sum = new int[4];
-            boolean[] flag = new boolean[61];
-            boolean[] used = new boolean[4];
-            int[] current = {0, 0, 0, 0};
-            int total = 0;
+            boolean[] promise = new boolean[4];
+            promise[3] = true;
 
-            int index = (int) (p % 10);
-            arr[index]++;
+            long tmp = p;
+            int val = 0;
+            while(tmp > 0){
+                val += tmp % 10;
 
-            // bfs
+                if (val == 5) promise[0] = true;
+                if (val == 10) promise[1] = true;
+                if (val == 15) promise[2] = true;
 
-            p /= 10;
-            total = sum[3];
+                tmp /= 10;
+            }
 
-            for (int i = 0; i < sum.length; i++){
-                if(max < sum[i]) max = sum[i];
+            for(int i = 0; i < 4; i++){
+                if(!promise[i]) continue;
+
+                long loop = p;
+                int sum = 0;
+
+                int idx = 0;
+
+                while(loop > 0){
+                    idx += (int) (loop % 10);
+                    sum += board[idx][i];
+
+                    System.out.println(sum + " " + idx);
+
+                    loop /= 10;
+                }
+
+                max = Math.max(sum, max);
             }
         }
 
         return max;
-    }
-
-    private static void backTracking(int n, int current, long val, int count){
-        if(count == n - 1) {
-            permutation.add(val);
-            return;
-        }
-
-        visit[current] = true;
-
-        for(int next = 0; next < 10; next++){
-            if(visit[next]) continue;
-
-            backTracking(n, next, val * 10 + move.get(next), count + 1);
-            visit[next] = false;
-        }
     }
 
     private static void init(){
