@@ -1,6 +1,16 @@
+package back_tracking;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 13140번: Hello World!
+ *
+ * @see https://www.acmicpc.net/problem/13140/
+ *
+ */
 public class Boj13140 {
     private static int[] numbers = new int[7];
     private static boolean[] visit;
@@ -30,7 +40,7 @@ public class Boj13140 {
             sb.append(NO);
         }
         else {
-            sb.append(DOUBLE).append(result[0]).append(NEW_LINE)
+            sb.append(DOUBLE).append(result[0]).append(NEW_LINE)        // make sentence
                     .append(PLUS).append(result[1]).append(NEW_LINE)
                     .append(HYPEN).append(NEW_LINE)
                     .append(N >= 100_000 ? SPACE: DOUBLE).append(N);
@@ -46,13 +56,8 @@ public class Boj13140 {
         numbers[count] = current;
 
         if(count == 6){
-            int a = make(LOOP, new int[]{0, 4, 2, 2, 3});
-            int b = make(LOOP, new int[]{1, 3, 5, 2, 6});
-
-//            for (int n: numbers) {
-//                System.out.print(n);
-//            }
-//            System.out.println();
+            int a = make(LOOP, new int[]{0, 4, 2, 2, 3});           // hello
+            int b = make(LOOP, new int[]{1, 3, 5, 2, 6});           // world
 
             if(N == a + b){
                 flag = true;
