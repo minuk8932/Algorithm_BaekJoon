@@ -1,9 +1,10 @@
 package breadth_first_search;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.InputMismatchException;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.StringTokenizer;
 
 /**
  * 
@@ -17,55 +18,11 @@ public class Boj3197 {
 	private static final int[][] DIRECTIONS = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
 	private static final int ROW = 0;
 	private static final int COL = 1;
+	private static final char SWAN = 'L';
+	private static final char OCEAN = '.';
 
-	public static void main(String[] args) throws Exception {
-		InputReader in = new InputReader(System.in);
-		int R = in.readInt();
-		int C = in.readInt();
-		
-		Point[] start = new Point[2];
-		int idx = 0;
-		
-		int[][] melt = new int[R][C];
-		char[][] map = new char[R][C];
-		
-		for (int i = 0; i < R; i++) {
-			String line = in.readString();
-			for(int j = 0; j < C; j++) {
-				map[i][j] = line.charAt(j);
-				
-				if(map[i][j] == 'L') {
-					start[idx] = new Point(i, j);
-					idx++;
-				}
-			}
-		}
-		
-		melt = init(R, C, melt, map);		// 얼음이 녹는 시간 측정
-		
-		int left = 0, right = 0, min = Integer.MAX_VALUE;
-		
-		for(int i = 0; i < R; i++) {
-			for(int j = 0; j < C; j++) {
-				if(melt[i][j] > right) right = melt[i][j];
-			}
-		}
-
-		while(left <= right) {				// 이분 탐색으로 만나는 날짜를 찾아줌
-			int mid = (left + right) / 2;
-			boolean attaced = canMeet(R, C, melt, mid, start);
-			
-			if(!attaced) {			// 안만난 경우 일수를 증가
-				left = mid + 1;
-			}
-			else {						// 만난 경우 최소 일수를 찾음
-				if(min > mid) min = mid;
-				right = mid - 1;
-			}
-		}
-		
-		System.out.println(min);		// 결과 출력
-	}
+	private static int R, C;
+	private static int[][] melt;
 
 	private static class Point {
 		int row;
@@ -76,51 +33,103 @@ public class Boj3197 {
 			this.col = col;
 		}
 	}
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		R = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
+		
+		Point[] start = new Point[2];
+		int idx = 0;
+		
+		melt = new int[R][C];
+		char[][] map = new char[R][C];
+		
+		for (int i = 0; i < R; i++) {
+			String line = br.readLine();
+			for(int j = 0; j < C; j++) {
+				map[i][j] = line.charAt(j);
+				
+				if(map[i][j] == SWAN) {
+					start[idx] = new Point(i, j);
+					idx++;
+				}
+			}
+		}
+		
+		init(map);												// ice melting time
+		System.out.println(binarySearch(start));
+	}
+
+	private static boolean outOfRange (int row, int col) {
+		return row < 0 || row >= R || col < 0 || col >= C;
+	}
 	
-	private static int[][] init(int N, int M, int[][] arr, char[][] graph){
+	private static void init(char[][] graph){
 		int counts = 1;
-		boolean[][] isVisited = new boolean[N][M];
+		boolean[][] isVisited = new boolean[R][C];
 		
 		Queue<Point> q = new LinkedList<>();
 		
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				if(graph[i][j] == 'L' || graph[i][j] == '.') {		// 녹기 시작할 기준부터 큐에 저장
-					q.offer(new Point(i, j));
-					isVisited[i][j] = true;
-				}
+		for(int i = 0; i < R; i++) {
+			for(int j = 0; j < C; j++) {
+				if(graph[i][j] != SWAN && graph[i][j] != OCEAN) continue;
+				q.offer(new Point(i, j));
+				isVisited[i][j] = true;
 			}
 		}
 		
 		while(!q.isEmpty()) {
 			int size = q.size();
 			
-			for(int i = 0; i < size; i++) {			// 테두리부터(1일차) 녹여가야하므로 큐내에 들어있는 것들만 우선적으로 돌림
+			for(int i = 0; i < size; i++) {												// melting time preset
 				Point current = q.poll();
 				
 				for(final int[] DIRECTION: DIRECTIONS) {
 					int nextRow = current.row + DIRECTION[ROW];
 					int nextCol = current.col + DIRECTION[COL];
 					
-					if(nextRow >= 0 && nextCol >= 0 && nextRow < N && nextCol < M) {
-						if(!isVisited[nextRow][nextCol] && graph[nextRow][nextCol] != 'L') {
-							arr[nextRow][nextCol] = counts;
-							isVisited[nextRow][nextCol] = true;
-							
-							q.offer(new Point(nextRow, nextCol));
-						}
-					}
+					if(outOfRange(nextRow, nextCol)) continue;
+					if(isVisited[nextRow][nextCol] || graph[nextRow][nextCol] == SWAN) continue;
+					isVisited[nextRow][nextCol] = true;
+
+					melt[nextRow][nextCol] = counts;
+					q.offer(new Point(nextRow, nextCol));
 				}
 			}
 			
 			counts++;
 		}
-		
-		return arr;
+	}
+
+	private static int binarySearch(Point[] start){
+		int left = 0, right = 0, min = Integer.MAX_VALUE;
+
+		for(int i = 0; i < R; i++) {
+			for(int j = 0; j < C; j++) {
+				if(melt[i][j] > right) right = melt[i][j];
+			}
+		}
+
+		while(left <= right) {
+			int mid = (left + right) / 2;
+			boolean attaced = canMeet(mid, start);
+
+			if(!attaced) {												// can not meet
+				left = mid + 1;
+			}
+			else {														// if can meet, take min time
+				if(min > mid) min = mid;
+				right = mid - 1;
+			}
+		}
+
+		return min;
 	}
 	
-	private static boolean canMeet(int N, int M, int[][] arr, int limits, Point[] start) {
-		boolean[][] isVisited = new boolean[N][M];
+	private static boolean canMeet(int limits, Point[] start) {
+		boolean[][] isVisited = new boolean[R][C];
 
 		Queue<Point> q = new LinkedList<>();
 		q.offer(new Point(start[0].row, start[0].col));
@@ -134,94 +143,15 @@ public class Boj3197 {
 				int nextRow = current.row + DIRECTION[ROW];
 				int nextCol = current.col + DIRECTION[COL];
 				
-				if(nextRow >= 0 && nextRow < N && nextCol >= 0 && nextCol < M) {
-					if(!isVisited[nextRow][nextCol] && arr[nextRow][nextCol] <= limits) {
-						isVisited[nextRow][nextCol] = true;
+				if(outOfRange(nextRow, nextCol)) continue;
+				if(isVisited[nextRow][nextCol] || melt[nextRow][nextCol] > limits) continue;
+				isVisited[nextRow][nextCol] = true;
 						
-						if(nextRow == start[1].row && nextCol == start[1].col) return true;
-						
-						q.offer(new Point(nextRow, nextCol));
-					}
-				}
+				if(nextRow == start[1].row && nextCol == start[1].col) return true;
+				q.offer(new Point(nextRow, nextCol));
 			}
 		}
 		
 		return false;
-	}
-	
-	private static class InputReader {
-		private InputStream stream;
-		private byte[] buf = new byte[1024];
-		private int curChar;
-		private int numChars;
-		private SpaceCharFilter filter;
-
-		public InputReader(InputStream stream) {
-			this.stream = stream;
-		}
-
-		public int read() {
-			if (numChars == -1) {
-				throw new InputMismatchException();
-			}
-			if (curChar >= numChars) {
-				curChar = 0;
-				try {
-					numChars = stream.read(buf);
-				} catch (IOException e) {
-					throw new InputMismatchException();
-				}
-				if (numChars <= 0) {
-					return -1;
-				}
-			}
-			return buf[curChar++];
-		}
-
-		public int readInt() {
-			int c = read();
-			while (isSpaceChar(c)) {
-				c = read();
-			}
-			int sgn = 1;
-			if (c == '-') {
-				sgn = -1;
-				c = read();
-			}
-			int res = 0;
-			do {
-				if (c < '0' || c > '9') {
-					throw new InputMismatchException();
-				}
-				res *= 10;
-				res += c - '0';
-				c = read();
-			} while (!isSpaceChar(c));
-			return res * sgn;
-		}
-
-		public String readString() {
-			int c = read();
-			while (isSpaceChar(c)) {
-				c = read();
-			}
-			StringBuilder res = new StringBuilder();
-			do {
-				res.appendCodePoint(c);
-				c = read();
-			} while (!isSpaceChar(c));
-			return res.toString();
-		}
-
-		public boolean isSpaceChar(int c) {
-			if (filter != null) {
-				return filter.isSpaceChar(c);
-			}
-			return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
-		}
-
-		public interface SpaceCharFilter {
-			public boolean isSpaceChar(int ch);
-		}
 	}
 }
