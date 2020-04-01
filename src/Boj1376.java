@@ -10,6 +10,7 @@ public class Boj1376 {
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
 
