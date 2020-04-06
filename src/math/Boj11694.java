@@ -27,15 +27,14 @@ public class Boj11694 {
 	}
 	
 	private static boolean winner(int n, int[] arr) {
-		boolean oneChecker = false;
+		boolean flag = false;
 		int result = 0;
 		
 		for(int i = 0; i < n; i++) {
-			if(arr[i] == 1) oneChecker = true;	// 1이 등장?
 			result ^= arr[i];					// 항등원 기준 돌 무더기의 값을 모두 xor
+			if(arr[i] > 1) flag = true;
 		}
-		
-		if(oneChecker) result--;
-		return result != 0 ? true : false;
+
+		return flag ? result != 0 ? true: false : result != 0? false: true;
 	}
 }
