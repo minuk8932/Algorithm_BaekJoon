@@ -7,6 +7,8 @@ import java.util.Arrays;
  * 
  * 	@author minchoba
  *	백준 5052번: 전화번호 목록
+ *
+ * @see https://www.acmicpc.net/problem/5052/
  */
 public class Boj5052 {
 	private static final String NEW_LINE = "\n";
@@ -25,21 +27,32 @@ public class Boj5052 {
                 str[i] = br.readLine();
             }
             
-            Arrays.sort(str);		// 전화번호 정렬
-            
-            boolean isValid = true;	// 타당성 체크
+            Arrays.sort(str);
+
+            boolean isValid = true;
             
             for (int i = 1; i < n; i++) {
-                if (str[i].length() >= str[i - 1].length()
-                        && str[i].contains(str[i - 1])) {		// 현재 번호가 이전 번호보다 길이가 길고, 이전 번호가 현재 번호에 포함된 경우
-                    isValid = false;				// 타당치 못함
-                    break;
+            	boolean flag = false;
+            	int len = str[i - 1].length();
+
+                if (str[i].length() >= len) {
+                	for(int x = 0; x < len; x++){
+                		if(str[i].charAt(x) != str[i - 1].charAt(x)){		// dont use contains,
+                			flag = true;
+                			break;
+						}
+					}
+
+                    if(!flag){
+                    	isValid = false;
+						break;
+					}
                 }
             }
 			
-			sb.append(isValid ? "YES" : "NO").append(NEW_LINE);		// isValid 값에 따라 버퍼에 값 입력
+			sb.append(isValid ? "YES" : "NO").append(NEW_LINE);
 		}
 		
-		System.out.println(sb.toString());		// 결과 값 한번에 출력
+		System.out.println(sb.toString());
 	}
 }
