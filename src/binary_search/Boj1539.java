@@ -4,20 +4,35 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Boj1539 {
     private static List<Integer> list = new ArrayList<>();
-    private static long[] height;
+    private static Map<Integer, Integer> depth = new TreeMap<>();
 
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        long sum = 0;
+        int d = 0;
+        int prev = 0;
 
-        height = new long[N];
         for(int i = 0; i < N; i++){
-            int node = Integer.parseInt(br.readLine());
-            sum += getHeight(node);
+            int val = Integer.parseInt(br.readLine());
+
+            if (i == 0) {
+                depth.put(val, d);
+                prev = val;
+                d++;
+                continue;
+            }
+
+            int index = binarySearch(0, prev, val);
+        }
+
+        long sum = 0;
+        for(int key: depth.keySet()){
+            sum = sum + depth.get(key) + 1;
         }
 
         System.out.println(sum);
@@ -32,20 +47,5 @@ public class Boj1539 {
         }
 
         return end;
-    }
-
-    private static long getHeight(int node){
-        int size = list.size();
-        int index = binarySearch(0, size, node);
-
-        long left = 0, right = 0;
-
-        if(index > 0) left = height[list.get(index - 1)];
-        if(index < size) right = height[list.get(index)];
-
-        height[node] = Math.max(left, right) + 1;
-        list.add(index, node);
-
-        return height[node];
     }
 }

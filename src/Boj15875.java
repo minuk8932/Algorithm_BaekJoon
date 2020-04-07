@@ -1,34 +1,24 @@
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.InputMismatchException;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Boj15875 {
 	private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 	private static final int ROW = 0;
 	private static final int COL = 1;
-	
+
+	private static Point[] values;
+
 	private static int[] parent;
-	private static ArrayList<Point> start = new ArrayList<>();
-	private static ArrayList<Point> mins = new ArrayList<>();
+	private static int H, W;
+	private static int size;
 	
-	private static class Point implements Comparable<Point>{
-		int row;
-		int col;
+	private static class Point implements Comparable<Point> {
+		int idx;
 		int val;
 		
-		public Point(int row, int col) {
-			this.row = row;
-			this.col = col;
-		}
-		
-		public Point(int row, int col, int val) {
-			this.row = row;
-			this.col = col;
+		public Point(int idx, int val) {
+			this.idx = idx;
 			this.val = val;
 		}
 
@@ -38,75 +28,61 @@ public class Boj15875 {
 		}
 	}
 	
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args) {
 		InputReader in = new InputReader(System.in);
-		int H = in.readInt();
-		int W = in.readInt();
-		
-		int[][] map = new int[H][W];
-		parent = new int[H * W];
+		W = in.readInt();
+		H = in.readInt();
+
+		size = H * W;
+
+		values = new Point[size];
+		parent = new int[size];
 		Arrays.fill(parent, -1);
-		
-		int min = Integer.MAX_VALUE;
-		
+
 		for(int i = 0; i < H; i++) {
 			for(int j = 0; j < W; j++) {
-				map[i][j] = in.readInt();
-				start.add(new Point(i, j, map[i][j]));
-				
-				if(min > map[i][j]) min = map[i][j];
+				int idx = i * W + j;
+				values[idx] = new Point(idx, in.readInt());
 			}
 		}
-		
-		Collections.sort(start);
-		System.out.println(bfs(H, W, map));
+
+		Arrays.sort(values);
+		System.out.println(spread());
 	}
 	
-	private static int bfs(int h, int w, int[][] arr) {
-		boolean[][] visit = new boolean[h][w];
-		Queue<Point> q = new LinkedList<>();
-		
+	private static int spread() {
 		int max = 0;
-		
-		for(Point s: start) {
-			if(visit[s.row][s.col]) continue;
-			visit[s.row][s.col] = true;
-			
-			q.offer(new Point(s.row, s.col));
-			int par = s.row * w + s.col;
-			
-			while(!q.isEmpty()) {
-				Point current = q.poll();
-				
-				for(final int[] DIRECTION: DIRECTIONS) {
-					int nextRow = current.row + DIRECTION[ROW];
-					int nextCol = current.col + DIRECTION[COL];
-					
-					if(nextRow < 0 || nextRow >= h || nextCol < 0 || nextCol >= w) {
-						parent[current.row * w + current.col] = -1;
-						continue;
-					}
-					
-					if(arr[nextRow][nextCol] > s.val) continue;
-					
-					if(visit[nextRow][nextCol]) continue;
-					visit[nextRow][nextCol] = true;
-					
-					merged(par, nextRow * w + nextCol);
-					max = Math.max(max, -parent[find(par)]);
-					
-					for(int i = 0; i < parent.length; i++) {
-						if(i % w == 0) System.out.println();
-						System.out.print(parent[i] + " ");
-					}
-					System.out.println();
-					
-					q.offer(new Point(nextRow, nextCol));
+
+		for(int i = 0; i < size; ) {
+			int current = i;
+
+			while(values[current].val == values[i].val){
+				for(final int[] DIRECTION: DIRECTIONS){
+					int nextRow = values[i].idx / W + DIRECTION[ROW];
+					int nextCol = values[i].idx % W + DIRECTION[COL];
+
+					if(outOfRange(nextRow, nextCol)) continue;
+
+					int x = find(values[i].idx);
+					int y = find(nextRow * W + nextCol);
+
+					if(x == y) continue;
+					merge(x, y);
 				}
+
+				if(++i == size) break;
+			}
+
+			for(int j = current; j < i; j++){
+				max = Math.max(max, -parent[find(j)]);
 			}
 		}
-		
+
 		return max;
+	}
+
+	private static boolean outOfRange(int row, int col) {
+		return row < 0 || row >= H || col < 0 || col >= W;
 	}
 	
 	private static int find(int x) {
@@ -114,12 +90,7 @@ public class Boj15875 {
 		else return parent[x] = find(parent[x]);
 	}
 	
-	private static boolean merged(int x, int y) {
-		x = find(x);
-		y = find(y);
-		
-		if(x == y) return true;
-		
+	private static void merge(int x, int y) {
 		if(parent[x] < parent[y]) {
 			parent[x] += parent[y];
 			parent[y] = x;
@@ -128,9 +99,33 @@ public class Boj15875 {
 			parent[y] += parent[x];
 			parent[x] = y;
 		}
-		
-		return false;
 	}
+
+//	private static void prefix (int N, int end, boolean flag) {
+//		int z = find(0);
+//
+//		for (int i = 0; i < N; i++){
+//			Point[] input = new Point[2];
+//
+//			if(flag){
+//				input[0] = new Point(i, 0);
+//				input[1] = new Point(i, end);
+//			}
+//			else{
+//				input[0] = new Point(0, i);
+//				input[1] = new Point(end, i);
+//			}
+//
+//			q.offer(input[0]);
+//			q.offer(input[1]);
+//
+//			int x = find(input[0].row * W + input[0].col);
+//			int y = find(input[1].row * W + input[1].col);
+//
+//			if(x != z) merge(x, z);
+//			if(y != z) merge(y, z);
+//		}
+//	}
 	
 	private static class InputReader {
 		private InputStream stream;
