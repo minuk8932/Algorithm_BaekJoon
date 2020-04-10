@@ -5,9 +5,9 @@ import java.util.StringTokenizer;
 
 public class Boj16491 {
 	private static final String NEW_LINE = "\n";
-	private static final String SPACE = " ";
+	private static long INF;
 	
-	private static ArrayList<String> seq = new ArrayList<>();
+	private static ArrayList<Long> seq = new ArrayList<>();
 	private static boolean[] isVisited;
 	
 	private static class Point {
@@ -25,16 +25,17 @@ public class Boj16491 {
 		StringTokenizer st = null;
 		
 		int N = Integer.parseInt(br.readLine());
+		INF = (long) Math.pow(10, N - 1);
 		
-		Point[] robot = new Point[N + 1];
-		Point[] shelter = new Point[N + 1];
+		Point[] robot = new Point[N];
+		Point[] shelter = new Point[N];
 		
-		for(int i = 1; i < N + 1; i++) {
+		for(int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			robot[i] = new Point(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
 		}
 		
-		for(int i = 1; i < N + 1; i++) {
+		for(int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			shelter[i] = new Point(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
 		}
@@ -45,31 +46,37 @@ public class Boj16491 {
 	private static StringBuilder process(int n, Point[] robo, Point[] shel) {
 		StringBuilder sb = new StringBuilder();
 		
-		for(int i = 1; i < n + 1; i++) {
-			isVisited = new boolean[n + 1];
-			backTracking(n, i, 0, i + "");
+		for(int i = 0; i < n; i++) {
+			isVisited = new boolean[n];
+			backTracking(n, i, 0, i);
 		}
 		
-		for(String str: seq) {
-			StringTokenizer st = new StringTokenizer(str);
-			int[] tmp = new int[n + 1];
+		for(long s: seq) {
+			int[] tmp = new int[n];
+			int loop = n;
+
+			if(s < INF){
+				loop--;
+				tmp[n - 1] = 0;
+			}
 			
-			for(int i = 1; i < n + 1; i++) {
-				tmp[i] = Integer.parseInt(st.nextToken());
+			for(int i = 0; i < loop; i++) {
+				tmp[i] = (int) (s % 10);
+				s /= 10;
 			}
 			
 			boolean flag = false;
 			
-			for(int i = 1; i < n + 1; i++) {
+			for(int i = 0; i < n; i++) {
 				if(flag) break;
-				for(int j = i + 1; j < n + 1; j++) {
+				for(int j = i + 1; j < n; j++) {
 					flag = isIntersect(robo[i], shel[tmp[i]], robo[j], shel[tmp[j]]);
 				}
 			}
 				
 			if(!flag) {
-				for(int idx = 1; idx < tmp.length; idx++) {
-					sb.append(tmp[idx]).append(NEW_LINE);
+				for(int idx = 0; idx < tmp.length; idx++) {
+					sb.append(tmp[idx] + 1).append(NEW_LINE);
 				}
 					
 				break;
@@ -79,19 +86,19 @@ public class Boj16491 {
 		return sb;
 	}
 	
-	private static void backTracking(int n, int current, int depth, String str) {
+	private static void backTracking(int n, int current, int depth, long value) {
 		if(depth == n - 1) {
-			seq.add(str);
+			seq.add(value);
 			return;
 		}
 		
 		if(isVisited[current]) return;
 		isVisited[current] = true;
 		
-		for(int next = 1; next < n + 1; next++) {
+		for(int next = 0; next < n; next++) {
 			if(isVisited[next]) continue;
 			
-			backTracking(n, next, depth + 1, str + SPACE + next);
+			backTracking(n, next, depth + 1, value * 10 + next);
 			isVisited[next] = false;
 		}
 	}
