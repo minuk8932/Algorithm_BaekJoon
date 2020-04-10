@@ -43,12 +43,12 @@ public class Boj18231 {
         }
 
         K = Integer.parseInt(br.readLine());
-        destroied = new boolean[N];
+        destroyed = new boolean[N];
         st = new StringTokenizer(br.readLine());
 
         for(int i = 0; i < K; i++) {
             int index = Integer.parseInt(st.nextToken()) - 1;
-            destroied[index] = true;
+            destroyed[index] = true;
             list.add(index);
         }
 
