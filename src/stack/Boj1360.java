@@ -39,7 +39,7 @@ public class Boj1360 {
             String v = st.nextToken();
             int t = Integer.parseInt(st.nextToken());
 
-            stack.push(new Query(c, v, t));                                 // make reverse query
+            stack.push(new Query(c, v, t));                 // make offline reversed query
         }
 
         System.out.println(getResult(stack));
@@ -59,24 +59,21 @@ public class Boj1360 {
         while (!stack.isEmpty()) {
             Query q = stack.pop();
             int diff = undo - (prev - q.timer);
+            prev = q.timer;
 
-            if (q.cmd.equals(UNDO)) {
+            if(diff >= 0) {                                 // ignored
+                undo = diff;
+                continue;
+            }
+
+            if (q.cmd.equals(UNDO)) {                       // executed
                 int value = Integer.parseInt(q.value);
-
-                if (diff < 0) undo = value;                 // executed
-                else undo = diff;                           // ignored
+                undo = value;
             }
             else {
-                if (diff < 0) {
-                    result.push(q.value);
-                    undo = -1;
-                }
-                else{
-                    undo = diff;
-                }
+                result.push(q.value);
+                undo = -1;
             }
-
-            prev = q.timer;
         }
 
         StringBuilder sb = new StringBuilder();
