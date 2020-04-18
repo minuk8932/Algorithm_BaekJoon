@@ -11,7 +11,7 @@ import java.util.Arrays;
  *	@see https://www.acmicpc.net/problem/1085/
  *
  */
-public class Boj1085 {
+public class Boj1058 {
 	private static final char YES = 'Y';
 	private static final int INF = 10_001;
 	
