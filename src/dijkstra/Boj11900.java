@@ -1,9 +1,19 @@
+package dijkstra;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 11900번: 차이 그래프
+ *
+ * @see https://www.acmicpc.net/problem/11900/
+ *
+ */
 public class Boj11900 {
     private static final String NEW_LINE = "\n";
     private static final int INF = 2_000_000_000;
@@ -11,8 +21,7 @@ public class Boj11900 {
     private static int N;
     private static int[] A;
     private static int[] dist;
-
-    private static boolean[] flag = new boolean[3];
+    private static int[] parent;
 
     private static class Node implements Comparable<Node> {
         int node;
@@ -32,44 +41,34 @@ public class Boj11900 {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
+
         A = new int[N];
+        parent = new int[N];
+        parent[0] = -1;
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for (int i = 1; i < A.length; i++) {
+        for (int i = 1; i < N; i++) {
             A[i] = Integer.parseInt(st.nextToken());
-            if (A[i] == 0) A[i] = INF;
+            parent[i] = -1;
         }
 
         makeGraph();
 
         StringBuilder sb = new StringBuilder();
         int Q = Integer.parseInt(br.readLine());
-        int half = N / 2;
 
         while (Q-- > 0) {
             st = new StringTokenizer(br.readLine());
             int s = Integer.parseInt(st.nextToken());
             int e = Integer.parseInt(st.nextToken());
 
-            int diff = s - e;
-            if(diff < 0) diff += N;
+            int idx = e - s;
+            if(idx < 0) idx += N;
 
-            if(half == diff && N % 2 == 0){
-                sb.append(Math.abs(dist[e] - dist[s])).append(NEW_LINE);
-            }
-            else {
-                if (diff < half && A[diff] != INF) {                 // 역방향
+            s = find(s);
+            e = find(e);
 
-                }
-                else if (diff > half && A[diff] != INF) {            // 정방향
-
-                }
-                else {
-                    sb.append(-1).append(NEW_LINE);
-                }
-            }
-
-            sb.append(1).append(NEW_LINE);
+            sb.append(e != s ? -1: dist[idx]).append(NEW_LINE);             // shortest path
         }
 
         System.out.println(sb.toString());
@@ -79,29 +78,9 @@ public class Boj11900 {
         dist = new int[N];
         Arrays.fill(dist, INF);
 
-        dist[0] = 0;
-        int prev = 0;
-        int size = N;
-
-        while(size > 0) {
-            int idx = 0;
-
-            for(int i = 1; i < N; i++) {
-                if(A[i] == INF) continue;
-
-                dist[size - i] = Math.min(A[i] + dist[prev], dist[size - i]);
-                prev = size - i;
-                idx = i;
-                break;
-            }
-
-            size -= idx;
-        }
-
-        dijkstra(0);
-
         for(int i = 0; i < N; i++) {
-            System.out.print(dist[i] + " ");
+            if(dist[i] != INF) continue;
+            dijkstra(i);
         }
     }
 
@@ -113,19 +92,43 @@ public class Boj11900 {
 
         while(!pq.isEmpty()) {
             Node current = pq.poll();
+            if(current.cost > dist[current.node]) continue;
 
             for(int next = 0; next < N; next++) {
                 if(current.node == next) continue;
                 int diff = current.node - next;
 
                 if(diff < 0) diff += N;
-                if(A[diff] == INF) continue;
+                if(A[diff] == 0) continue;
 
                 if(dist[next] <= dist[current.node] + A[diff]) continue;
                 dist[next] = dist[current.node] + A[diff];
 
+                merge(start, next);                                         // make path set
+
                 pq.offer(new Node(next, dist[next]));
             }
+        }
+    }
+
+    private static int find(int x) {
+        if(parent[x] < 0) return x;
+        return parent[x] = find(parent[x]);
+    }
+
+    private static void merge (int x, int y) {
+        x = find(x);
+        y = find(y);
+
+        if(x == y) return;
+
+        if(parent[x] < parent[y]) {
+            parent[x] += parent[y];
+            parent[y] = x;
+        }
+        else {
+            parent[y] += parent[x];
+            parent[x] = y;
         }
     }
 }
