@@ -1,4 +1,4 @@
-package Floyd_Washall;
+package Floyd_Warshall;
 
 /*
  * 		Floyd - Washall Algorithm

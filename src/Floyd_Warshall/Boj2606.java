@@ -1,9 +1,7 @@
-package Floyd_Washall;
+package Floyd_Warshall;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /* 
