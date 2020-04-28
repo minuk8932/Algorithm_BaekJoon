@@ -1,7 +1,17 @@
+package Floyd_Warshall;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 1602번: 도망자 원숭이
+ *
+ * @see https://www.acmicpc.net/problem/1602/
+ *
+ */
 public class Boj1602 {
     private static int[][] dist;
     private static int[][] graph;
@@ -10,21 +20,6 @@ public class Boj1602 {
     private static final String NEW_LINE = "\n";
     private static final int INF = 1_000_000_000;
     private static final int CIPHER = 1_000;
-
-    private static class Node implements Comparable<Node>{
-        int node;
-        int cost;
-
-        public Node(int node, int cost) {
-            this.node = node;
-            this.cost = cost;
-        }
-
-        @Override
-        public int compareTo(Node n) {
-            return this.cost < n.cost ? -1: 1;
-        }
-    }
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -62,7 +57,7 @@ public class Boj1602 {
         }
 
         for(int v = 0; v < N; v++) {
-            floydWashall(N, v);
+            floydWarshall(N, v, harass);
         }
 
         StringBuilder sb = new StringBuilder();
@@ -78,15 +73,15 @@ public class Boj1602 {
         System.out.println(sb.toString());
     }
 
-    private static void floydWashall(int n, int via) {
-        via = bothered[via];
+    private static void floydWarshall(int n, int via, int[] h) {
+        via = bothered[via] % CIPHER;               // find minimum harass
 
         for(int s = 0; s < n; s++){
             for(int e = 0; e < n; e++){
                 graph[s][e] = Math.min(graph[s][e], graph[s][via] + graph[via][e]);
 
-                int max = Math.max(bothered[s], bothered[e]);
-                dist[s][e] =  Math.min(dist[s][e], graph[s][e] + Math.max(max, bothered[via]));
+                int max = Math.max(h[s], h[e]);
+                dist[s][e] =  Math.min(dist[s][e], graph[s][e] + Math.max(max, h[via]));        // get min distance
             }
         }
     }
