@@ -21,7 +21,6 @@ public class Boj11657 {
 	private static final int INF = 100_000_001;
 
 	public static void main(String[] args) throws Exception {
-		// 버퍼를 통한 값 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), SPACE);
 
@@ -31,7 +30,7 @@ public class Boj11657 {
 		ArrayList<PathCost>[] bus = new ArrayList[N + 1];
 		for(int i = 0; i < N + 1; i++) bus[i] = new ArrayList<>();
 		
-		int[] dist = new int[N + 1];
+		long[] dist = new long[N + 1];
 		Arrays.fill(dist, INF);
 
 		for (int i = 1; i < M + 1; i++) {
@@ -57,46 +56,29 @@ public class Boj11657 {
 			sb.append(NO_WAY).append(NEW_LINE);
 		}
 		
-		System.out.println(sb.toString());
+		System.out.print(sb.toString());
 	}
-	
-	/**
-	 * 최단경로 확인: 벨만포드 알고리즘 이용
-	 * 
-	 * @param pc
-	 * @param dist: 최소비용
-	 * @param N
-	 * @return
-	 */
-	static boolean hasShortestWay(ArrayList<PathCost>[] pc, int[] dist, int N) {	
-		for (int i = 1; i < N + 1; i++) {
-			for (int j = 1; j < N + 1; j++) {
 
-				int start = j;
-				for(PathCost p: pc[j]) {
+	static boolean hasShortestWay(ArrayList<PathCost>[] pc, long[] dist, int N) {
+		for (int i = 1; i < N + 1; i++) {
+			for (int start = 1; start < N + 1; start++) {
+				for(PathCost p: pc[start]) {
 					int end = p.e;
 					int cost = p.v;
 					
 					if(dist[end] > dist[start] + cost) {
-						if(dist[start] == INF && dist[end] == INF && cost < 0) continue;	// 잘못된 최솟값 갱신시
+						if(dist[start] == INF && dist[end] == INF && cost < 0) continue;	// update not approved
 						dist[end] = dist[start] + cost;
-						
-						if(i == N) {		// 사이클
-							return false;
-						}
+
+						if(i == N) return false;											// negative cycle
 					}
 				}
 			}
 		}
-		
+
 		return true;
 	}
-	
-	/**
-	 * 도착 지점, 비용 이너 클래스
-	 * @author minchoba
-	 *
-	 */
+
 	private static class PathCost {
 		int e;
 		int v;
