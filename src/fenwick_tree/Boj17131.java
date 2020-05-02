@@ -1,8 +1,18 @@
+package fenwick_tree;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 17131번: 여우가 정보섬에 올라온 이유
+ *
+ * @see https://www.acmicpc.net/problem/17131/
+ *
+ */
 public class Boj17131 {
     public static final int MOD = 1_000_000_007;
     public static final int INF = 200_001;
@@ -43,7 +53,7 @@ public class Boj17131 {
             int y = Integer.parseInt(st.nextToken()) + INF;
 
             coordinate[i] = new Star(x, y);
-            update(coordinate[i].x, -1);
+            update(coordinate[i].x, 1);             // make coordinate positive & update
         }
 
         Arrays.sort(coordinate);
@@ -52,17 +62,17 @@ public class Boj17131 {
         int target = -SIZE;
 
         for(int i = 0; i < N; i++) {
-            if (target != coordinate[i].y) {
+            if (target != coordinate[i].y) {                // pass already used
                 target = coordinate[i].y;
 
-                for (int j = i; j < N; j++){
+                for (int j = i; j < N; j++){                // considering same y value
                     if(target != coordinate[j].y) break;
-                    update(coordinate[j].x, 1);
+                    update(coordinate[j].x, -1);
                 }
             }
 
             long prev = sum(coordinate[i].x - 1);
-            long post = sum(SIZE - 1) - sum(coordinate[i].x);
+            long post = sum(SIZE - 1) - sum(coordinate[i].x);  // current y < another
             result += (prev % MOD) * (post % MOD);
             result %= MOD;
         }
