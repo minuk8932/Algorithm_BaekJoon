@@ -46,13 +46,13 @@ public class Boj1012 {
 			}
 			
 			int areaCnt = 0;								// 필요한 배추 흰 지렁이 갯수
-			
+
 			for(int row = 0; row < N; row++){
 				for(int col = 0; col < M; col++){
 					if(map[row][col]){					// 배추가 심어져있는지?
 						map[row][col] = false;
 						areaCnt++;						// 심어져있는 경우 배추 흰지렁이 갯수 + 1, 방문한것으로 표시
-						
+
 						Queue<Point> queue = new LinkedList<>();
 						queue.offer(new Point(row, col));
 						
@@ -71,7 +71,7 @@ public class Boj1012 {
 								}
 							}
 						}
-						
+
 					}
 				}
 			}
