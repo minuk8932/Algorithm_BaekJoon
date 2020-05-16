@@ -18,6 +18,8 @@ public class Boj14604 {
     private static ArrayList<Coordinate> fan = new ArrayList<>();
     private static ArrayList<Coordinate> notFan = new ArrayList<>();
 
+    private static int result;
+
     private static class Coordinate {
         int x;
         int y;
@@ -37,16 +39,17 @@ public class Boj14604 {
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
 
-            if(st.nextToken().equals(FAN)) fan.add(new Coordinate(x, y));
+            if(FAN.equals(st.nextToken())) fan.add(new Coordinate(x, y));
             else notFan.add(new Coordinate(x, y));
         }
 
-        System.out.println(Math.max(makeLovelyz(fan, fan), Math.max(makeLovelyz(fan, notFan), makeLovelyz(notFan, notFan))));
+        makeLovelyz(notFan, notFan);                                       // considering all cases
+        makeLovelyz(fan, notFan);
+
+        System.out.println(result);
     }
 
-    private static int makeLovelyz(ArrayList<Coordinate> f, ArrayList<Coordinate> nf) {
-        int result = 0;
-
+    private static void makeLovelyz(ArrayList<Coordinate> f, ArrayList<Coordinate> nf) {
         int size = f.size();
         int nSize = nf.size();
         int[] sizes = {fan.size(), notFan.size()};
@@ -54,7 +57,7 @@ public class Boj14604 {
         boolean[][] used = new boolean[size][nSize];
 
         for(int i = 0; i < size; i++) {
-            for(int j = 0; j < nSize; j++) {                // make set with fan fan, fan notFan, notFan notFan
+            for(int j = 0; j < nSize; j++) {                            // make set with fan fan, fan notFan, notFan notFan
                 if(used[i][j]) continue;
                 used[i][j] = true;
 
@@ -65,35 +68,36 @@ public class Boj14604 {
 
                 int b = another.x - current.x;                          // get a, b, c
                 int a = current.y - another.y;
-                int c = -a * current.x - b * current.y;
+                int c = a * current.x + b * current.y;
 
                 int[] fans = new int[2];
                 for(int k = 0; k < sizes[0]; k++) {                     // location relation checker
                     Coordinate target = fan.get(k);
 
-                    if(a * target.x + b * target.y + c >= 0) fans[0]++;
-                    if(a * target.x + b * target.y + c <= 0) fans[1]++;
+                    if(online(target, a, b, c) >= 0) fans[0]++;
+                    if(online(target, a, b, c) <= 0) fans[1]++;
                 }
 
                 int[] notFans = new int[2];
                 for(int k = 0; k < sizes[1]; k++) {
                     Coordinate target = notFan.get(k);
 
-                    if(a * target.x + b * target.y + c > 0) notFans[0]++;
-                    if(a * target.x + b * target.y + c < 0) notFans[1]++;
+                    if(online(target, a, b, c) > 0) notFans[0]++;
+                    if(online(target, a, b, c) < 0) notFans[1]++;
                 }
 
-                if(notFans[0] != 0 && notFans[1] != 0) continue;
-
+                if(notFans[0] * notFans[1] != 0) continue;
                 if(notFans[0] == 0) result = Math.max(fans[0], result);
                 if(notFans[1] == 0) result = Math.max(fans[1], result);
             }
         }
-
-        return result;
     }
 
     private static boolean isSame(Coordinate c1, Coordinate c2) {
         return c1.x == c2.x && c1.y == c2.y;
+    }
+
+    private static int online(Coordinate target, int a, int b, int c) {
+        return a * target.x + b * target.y - c;
     }
 }
