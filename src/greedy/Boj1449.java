@@ -7,18 +7,17 @@ import java.util.StringTokenizer;
 /**
  * 
  * 	@author minchoba
- *	백준 1149번: 수리공 항승
+ *	백준 1449번: 수리공 항승
  *
- *	@see https://www.acmicpc.net/problem/1149/
+ *	@see https://www.acmicpc.net/problem/1449/
  *
  */
-public class Boj1149 {
+public class Boj1449 {
 	public static void main(String[] args) throws Exception{
-		// 버퍼를 통한 값 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
-		int L = Integer.parseInt(st.nextToken()) - 1;	// 양쪽 0.5 만큼 제외
+		int L = Integer.parseInt(st.nextToken()) - 1;			// remove each side 0.5
 		
 		int tapes = 0;
 		int[] leak = new int[N];
@@ -28,19 +27,19 @@ public class Boj1149 {
 			leak[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		Arrays.sort(leak);		// 누수가 발생한 위치를 오름차순 정렬
+		Arrays.sort(leak);
 
 		for(int i = 0; i < N; i++) {
 			int tmp=0;
 			tapes++;
 			
 			for(int j = i + 1; j < N; j++) {
-				if(leak[i] + L >= leak[j]) tmp++;	// leak[i] + L >= leak[j]이면 범위 L로 커버 가능
+				if(leak[i] + L >= leak[j]) tmp++;				// leak[i] + L >= leak[j], can covered
 				else break;
 			}
-			i += tmp;		// L로 커버 가능한 누수의 갯수를 구하여 반복횟수에서 제외시킴
+			i += tmp;
 		}
 		
-		System.out.println(tapes);		// 필요한 테잎 수 출력
+		System.out.println(tapes);
 	}
 }
