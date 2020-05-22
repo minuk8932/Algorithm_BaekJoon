@@ -7,7 +7,6 @@ public class Boj16965 {
 
     private static ArrayList<Integer>[] graph;
     private static boolean[] visit;
-    private static int[] parent;
 
     private static class Pair {
         int idx;
@@ -24,17 +23,16 @@ public class Boj16965 {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        parent = new int[N];
-        Arrays.fill(parent, -1);
 
         visit = new boolean[N];
+
+        StringBuilder sb = new StringBuilder();
+        ArrayList<Pair> section = new ArrayList<>();
+
         graph = new ArrayList[N];
         for(int i = 0; i < N; i++) {
             graph[i] = new ArrayList<>();
         }
-
-        StringBuilder sb = new StringBuilder();
-        ArrayList<Pair> section = new ArrayList<>();
 
         int count = 0;
 
@@ -46,46 +44,48 @@ public class Boj16965 {
 
             if (cmd == 1) {
                 section.add(new Pair(count++, f, t));
-                makeSection(section);
             }
             else {
-                sb.append(find(t - 1) == find(f - 1) ? 1: 0).append(NEW_LINE);
+                makeSection(section);
+                sb.append(bfs(--f, --t)).append(NEW_LINE);
             }
         }
 
         System.out.println(sb.toString());
     }
 
+    private static int bfs(int start, int end) {
+        if (start == end) return 1;
+
+        visit = new boolean[visit.length];
+
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(start);
+
+        visit[start] = true;
+
+        while(!q.isEmpty()) {
+            int current = q.poll();
+
+            for(int next: graph[current]) {
+                if(visit[next]) continue;
+                visit[next] = true;
+
+                if(next == end) return 1;
+                q.offer(next);
+            }
+        }
+
+        return 0;
+    }
+
     private static void makeSection(ArrayList<Pair> sec) {
         for (Pair current: sec) {
             for (Pair another: sec) {
-                if ((current.from < another.from && another.from < current.to)
-                        || (current.from < another.to && another.to < current.to)) {
-
-                    merge(another.idx, current.idx);
-                }
+                if (current.to <= another.from || current.from >= another.to) continue;
+                graph[current.idx].add(another.idx);
+                graph[another.idx].add(current.idx);
             }
-        }
-    }
-
-    private static int find(int x) {
-        if (parent[x] < 0) return x;
-        else return parent[x] = find(parent[x]);
-    }
-
-    private static void merge(int x, int y) {
-        x = find(x);
-        y = find(y);
-
-        if (x == y) return;
-
-        if (parent[x] < parent[y]) {
-            parent[x] += parent[y];
-            parent[y] = x;
-        }
-        else {
-            parent[y] += parent[x];
-            parent[x] = y;
         }
     }
 }
