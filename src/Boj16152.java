@@ -17,7 +17,6 @@ public class Boj16152 {
             st = new StringTokenizer(br.readLine());
             int cmd = Integer.parseInt(st.nextToken());
             int a = Integer.parseInt(st.nextToken());
-
         }
     }
 
