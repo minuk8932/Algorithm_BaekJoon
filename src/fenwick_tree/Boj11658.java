@@ -1,3 +1,5 @@
+package fenwick_tree;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;

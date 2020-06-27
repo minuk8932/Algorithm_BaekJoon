@@ -34,7 +34,7 @@ public class Boj4963 {
 			if(w == 0 && h == 0){						// 마지막 입력이 0 0 일때까지 무한 반복
 				break;
 			}
-			
+
 			int[][] map = new int[h][w];
 			for(int i = 0; i < h; i++){
 				st = new StringTokenizer(br.readLine(), SPACE);
