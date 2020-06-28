@@ -9,8 +9,21 @@ import java.util.StringTokenizer;
 public class Boj14904 {
     private static int[][] capacity;
     private static int[][] flow;
+    private static int[][] candies;
+
+    private static ArrayList<Node>[] connected;
 
     private static int N;
+
+    private static class Node {
+        int node;
+        int candy;
+
+        public Node(int node, int candy) {
+            this.node = node;
+            this.candy = candy;
+        }
+    }
 
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,23 +31,37 @@ public class Boj14904 {
         N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
+        candies = new int[N][N];
+        for(int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+
+            for(int j = 0; j < N; j++) {
+                candies[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        int size = graphModeling(K);
+        System.out.println(networkFlow(size - 2,  size - 1));
+    }
+
+    private static int graphModeling(int k) {           // mcmf
         int size = N * N + 2;
 
-        ArrayList<Integer>[] path = new ArrayList[size];
+        connected = new ArrayList[size];
         for(int i = 0; i < size; i++) {
-            path[i] = new ArrayList<>();
+            connected[i] = new ArrayList<>();
         }
 
         capacity = new int[size][size];
         flow = new int[size][size];
 
-        capacity[size - 2][0] = K;
-        path[size - 2].add(0);
-        path[0].add(size - 2);
+        capacity[size - 2][0] = k;
+        capacity[size - 3][size - 1] = k;
 
-        capacity[size - 3][size - 1] = K;
-        path[size - 3].add(size - 1);
-        path[size - 1].add(size - 3);
+        connected[size - 2].add(new Node(0, 0));
+        connected[0].add(new Node(size - 2, 0));
+        connected[size - 3].add(new Node(size - 1, 0));
+        connected[size - 1].add(new Node(size - 3, 0));
 
         for(int row = 0; row < N; row++){
             for(int col = 0; col < N; col++){
@@ -43,57 +70,64 @@ public class Boj14904 {
 
                 for(int i = 0; i < 2; i++) {
                     if (outOfRange(nextRow[i], nextCol[i])) continue;
-                    int current = row + col * N;
-                    int next = nextRow[i] + nextCol[i] * N;
+                    int current = row * N + col;
+                    int next = nextRow[i] * N + nextCol[i];
 
-                    capacity[current][next] = 11;
-                    path[current].add(next);
-                    path[next].add(current);
+                    capacity[current][next] = k;
+                    connected[current].add(new Node(next, candies[nextRow[i]][nextCol[i]]));
+                    connected[next].add(new Node(current, 0));
                 }
             }
         }
 
-        System.out.println(networkFlow(N, path, N, 1));
+        return size;
     }
 
-    private static int networkFlow(int n, ArrayList<Integer>[] list, int source, int sink) {
+    private static int networkFlow(int src, int snk) {
         int result = 0;
-        int[] visit = new int[n * 2];
 
-        while(true) {						// 일반적인 에드몬드 카프 알고리즘
+        int[] visit = new int[N * N + 2];
+        boolean[] empty = new boolean[N * N + 2];
+
+        while(true) {
             Arrays.fill(visit, -1);
 
-            Queue<Integer> q = new LinkedList<>();
-            q.offer(source);
+            Queue<Node> q = new LinkedList<>();
+            q.offer(new Node(src, 0));
+
+            int candy = 0;
 
             while(!q.isEmpty()) {
-                int current = q.poll();
+                Node current = q.poll();
 
-                for(int next: list[current]) {
-                    if(visit[next] != -1) continue;
+                for(Node next: connected[current.node]) {
+                    if(visit[next.node] != -1) continue;
+                    if(capacity[current.node][next.node] <= flow[current.node][next.node]) continue;
+                    visit[next.node] = current.node;
+                    if(next.node == snk) break;
 
-                    if(capacity[current][next] - flow[current][next] > 0) {
-                        visit[next] = current;
-                        if(next == sink) break;
-
-                        q.offer(next);
+                    if(!empty[next.node]){
+                        empty[next.node] = true;
+                        candy += next.candy;
                     }
+
+                    q.offer(next);
                 }
             }
 
-            if(visit[sink] == -1) break;
+            if(visit[snk] == -1) break;
 
             int minFlow = Integer.MAX_VALUE;
-            for(int i = sink; i != source; i = visit[i]) {
+            for(int i = snk; i != src; i = visit[i]) {
                 minFlow = Math.min(minFlow, capacity[visit[i]][i] - flow[visit[i]][i]);
             }
 
-            for(int i = sink; i != source; i = visit[i]) {
+            for(int i = snk; i != src; i = visit[i]) {
                 flow[visit[i]][i] += minFlow;
                 flow[i][visit[i]] -= minFlow;
             }
 
-            result += minFlow;
+            result += candy;
         }
 
         return result;
