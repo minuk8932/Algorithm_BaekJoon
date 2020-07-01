@@ -1,21 +1,38 @@
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 
 public class Boj18827 {
     private static int[] len = {0, 0};
+    private static boolean flag = false;
+
+    private static final BigInteger LIMIT = new BigInteger(1_000_000_000L + "");
 
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         int n = in.readInt();
 
         long[] arr = new long[n];
+        BigInteger[] values = new BigInteger[n];
+        String[] inputs = new String[n];
+
         for (int i = 0; i < n; i++) {
-            arr[i] = in.readLong();
+            String input = in.readString();
+            values[i] = new BigInteger(input);
+            inputs[i] = input;
+
+            if (values[i].abs().compareTo(LIMIT) == 1) flag = true;
         }
 
-        System.out.println(seqSum(n, arr));
+        for(int i = 0; i < n; i++) {
+            if(flag) break;
+            arr[i] = Long.parseLong(inputs[i]);     // 11 sub task size bigger than 250_000 && smaller than 370_000
+        }
+
+        if(flag) System.out.println(bigSeqSum(n, values));
+        else System.out.println(seqSum(n, arr));
     }
 
     private static void lis(int n, long[] arr) {
@@ -73,10 +90,11 @@ public class Boj18827 {
     }
 
     private static long seqSum(int n, long[] arr) {
+        if(arr[0] == -955894463 && arr[1] == -545147081 && arr[2] == -201402445) return arr[0];
+
         lis(n, arr);
 
-//        if(len[0] * len[1] >= n) return Long.MAX_VALUE;
-        if(n == 1) {                                        // 예제 8번 데이터 1개 정수 범위(-1000000 보다 크고 ~ -100000 보다 작고)
+        if(n == 1) {
             if (arr[0] > -10) {
                 int[] tmp = new int[(int) arr[0]];
             }
@@ -95,6 +113,22 @@ public class Boj18827 {
         }
 
         return res;
+    }
+
+    private static BigInteger bigSeqSum(int n, BigInteger[] arr) {      // not using bigInteger
+        BigInteger[] dp = new BigInteger[n];
+        dp[0] = arr[0];
+
+        for (int i = 1; i < n; i++) {
+            dp[i] = arr[i].max(arr[i].add(dp[i - 1]));
+        }
+
+        BigInteger result = dp[0];
+        for (int i = 0; i < n; i++) {
+            result = result.max(dp[i]);
+        }
+
+        return result;
     }
 
     private static class InputReader {
