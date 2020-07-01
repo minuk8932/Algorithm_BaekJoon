@@ -1,7 +1,17 @@
+package math;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 18298번: Icebergs
+ *
+ * @see https://www.acmicpc.net/problem/18298/
+ *
+ */
 public class Boj18298 {
     private static class Coordinate {
         long x;
@@ -17,9 +27,9 @@ public class Boj18298 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        long sqr = 0;
+        double sqr = 0;
 
-        while(N-- > 0) {                                    // shoelace
+        while(N-- > 0) {
             int P = Integer.parseInt(br.readLine());
 
             Coordinate[] coor = new Coordinate[P];
@@ -28,23 +38,17 @@ public class Boj18298 {
                 coor[i] = new Coordinate(Long.parseLong(st.nextToken()), Long.parseLong(st.nextToken()));
             }
 
-            long size = 0;
-
+            double size = 0;
             Coordinate s = coor[0];
             for(int i = 1; i < P; i++) {
-                size += ccw(s, coor[i], coor[(i + 1) % P]);
+                size += (s.x - coor[i].x) * (s.y + coor[i].y) / 2.0;        // make polygon sizes
+                s = coor[i];
             }
 
-            if(size < 0) size = -size;
-            sqr += size / 2;
+            size += (s.x - coor[0].x) * (s.y + coor[0].y) / 2.0;
+            sqr += Math.abs(size);
         }
 
-        System.out.println(sqr);
-    }
-
-    private static long ccw(Coordinate c, Coordinate a, Coordinate b){
-        long f = (a.x - c.x) * (b.y - c.y);
-        long s = (a.y - c.y) * (b.x - c.x);
-        return f - s;
+        System.out.println((long) sqr);
     }
 }
