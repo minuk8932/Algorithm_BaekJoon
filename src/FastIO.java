@@ -16,7 +16,7 @@ public class FastIO {
 		int b = in.readInt();
 
 		out.printLine(a + " " + b);
-		out.print((a + b) * a / 2); 
+		out.print((a + b) * a / 2);
 	}
 
 	private static class InputReader {
