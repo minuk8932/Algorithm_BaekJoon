@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 /**
  *
  * @author exponential-e
- * 백준 16896번: 더곱이일 게임
+ * 백준 16896번: 더일곱이 게임
  *
  * @see https://www.acmicpc.net/problem/16896
  *
