@@ -1,8 +1,18 @@
+package dynamic_programming;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 15681번: 트리와 쿼리
+ *
+ * @see https://www.acmicpc.net/problem/15681/
+ *
+ */
 public class Boj15681 {
     private static ArrayList<Integer>[] path;
     private static int[] size;
@@ -46,7 +56,7 @@ public class Boj15681 {
         for(int next: path[current]) {
             if (next == parent) continue;
 
-            result += recursion(next, current);
+            result += recursion(next, current);     // count subtree size
         }
 
         return size[current] = result;
