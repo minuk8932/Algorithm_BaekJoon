@@ -40,10 +40,10 @@ public class Boj1944 {
 				if(maze[i][j] == 'S' || maze[i][j] == 'K') key[i][j] = value++;		// 노드 설정
 			}
 		}
-		
+
 		boolean search = bfs(maze, N, key);
 		
-		if(search) {		
+		if(search) {
 			parent = new int[M + 1];
 			init(M);
 			
