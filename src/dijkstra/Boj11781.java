@@ -19,6 +19,7 @@ public class Boj11781 {
     private static boolean[][] jam;
     private static long[] cost;
     private static long S, E;
+    private static long INF = 4_000_000_000_000_000_000L;
 
     private static class Node implements Comparable<Node>{
         int node;
@@ -48,7 +49,7 @@ public class Boj11781 {
         cost = new long[N];
         for(int i = 0; i < N ;i++) {
             path[i] = new ArrayList<>();
-            cost[i] = Long.MAX_VALUE;
+            cost[i] = INF;
         }
 
         while(M-- > 0) {
@@ -66,12 +67,11 @@ public class Boj11781 {
             if(t2 == 1) jam[B][A] = true;
         }
 
-        System.out.println(dijstra());
+        long result = dijstra();
+        System.out.println(result / 2 + (result % 2 == 1 ? ".5": ""));
     }
 
-    private static double dijstra() {
-        double max = 0;
-
+    private static long dijstra() {
         PriorityQueue<Node> pq = new PriorityQueue<>();
         cost[0] = 0;
 
@@ -82,37 +82,42 @@ public class Boj11781 {
             if(cost[current.node] < current.cost) continue;
 
             for(Node next: path[current.node]) {                // check traffic jam
-                long nextCost = cost[current.node] + (jam[current.node][next.node] ? calculation(current.node, next.cost): next.cost);
+                long nextCost =  (jam[current.node][next.node]
+                        ? calculation(current.node, next.cost): next.cost + cost[current.node]);
 
                 if(cost[next.node] <= nextCost) continue;
                 cost[next.node] = nextCost;
-                max = Math.max(cost[next.node], max);
 
                 pq.offer(new Node(next.node, cost[next.node]));
             }
         }
 
-        return max / 2.0;
+        long max = 0;
+        for(int i = 0; i < cost.length; i++) {
+            max = Math.max(max, cost[i]);
+        }
+
+        return max;
     }
 
-    private static long calculation(int cur, long ncost) {                  // cal quitting time
-        if(cost[cur] >= E) return ncost;
-        long diff = -cost[cur];
+    private static long calculation(int node, long ncost) {                  // cal quitting time
+        long diff = -cost[node];
 
-        if (cost[cur] < S) {
-            diff += S;
-            long interval = E - S;
+        if (cost[node] < S) {
+            if (cost[node] + ncost >= S) {
+                diff += S;
 
-            if (diff >= ncost) return ncost;
-            if ((ncost - diff) * 2 <= interval) return ncost * 2 - diff;
+                long interval = Math.min(E - S, (ncost - diff) * 2);
+                return cost[node] + ncost + interval / 2;
+            }
 
-            return ncost + interval / 2;
+            return cost[node] + ncost;
         }
-        else {
-            diff += E;
-            if (ncost * 2 <= diff) return ncost * 2;
 
-            return ncost + diff / 2;
-        }
+        if (cost[node] >= E) return cost[node] + ncost;
+
+        diff += E;
+        long interval = Math.min(diff, ncost * 2);
+        return cost[node] + ncost + interval / 2;
     }
 }
