@@ -58,7 +58,7 @@ package dynamic_programming;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class Boj1003 {						// must be changed name to Main
+public class Boj1003 {						// must be changed name to 'Main' before submit.
 	private static int[] chk = new int[2];
 	private static final String SPACE = " ";
 	private static final String NEW_LINE = "\n";
