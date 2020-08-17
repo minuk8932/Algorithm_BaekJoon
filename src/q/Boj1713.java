@@ -1,4 +1,4 @@
-package queue;
+package q;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Collections;
