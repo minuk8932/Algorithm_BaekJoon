@@ -4,9 +4,7 @@ import java.util.*;
 
 public class Boj16965 {
     private static final String NEW_LINE = "\n";
-
     private static ArrayList<Integer>[] graph;
-    private static boolean[] visit;
 
     private static class Pair {
         int idx;
@@ -24,17 +22,15 @@ public class Boj16965 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        visit = new boolean[N];
-
         StringBuilder sb = new StringBuilder();
         ArrayList<Pair> section = new ArrayList<>();
 
-        graph = new ArrayList[N];
-        for(int i = 0; i < N; i++) {
+        graph = new ArrayList[N + 1];
+        for(int i = 0; i <= N; i++) {
             graph[i] = new ArrayList<>();
         }
 
-        int count = 0;
+        int count = 1;
 
         while (N-- > 0) {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -44,10 +40,10 @@ public class Boj16965 {
 
             if (cmd == 1) {
                 section.add(new Pair(count++, f, t));
+                makeSection(section);
             }
             else {
-                makeSection(section);
-                sb.append(bfs(--f, --t)).append(NEW_LINE);
+                sb.append(bfs(f, t)).append(NEW_LINE);
             }
         }
 
@@ -55,21 +51,19 @@ public class Boj16965 {
     }
 
     private static int bfs(int start, int end) {
-        if (start == end) return 1;
-
-        visit = new boolean[visit.length];
+        HashSet<Integer> visit = new HashSet<>();
 
         Queue<Integer> q = new LinkedList<>();
         q.offer(start);
 
-        visit[start] = true;
+        visit.add(start);
 
         while(!q.isEmpty()) {
             int current = q.poll();
 
             for(int next: graph[current]) {
-                if(visit[next]) continue;
-                visit[next] = true;
+                if(visit.contains(next)) continue;
+                visit.add(next);
 
                 if(next == end) return 1;
                 q.offer(next);
@@ -80,8 +74,13 @@ public class Boj16965 {
     }
 
     private static void makeSection(ArrayList<Pair> sec) {
-        for (Pair current: sec) {
-            for (Pair another: sec) {
+        int size = sec.size();
+
+        for(int i = 0; i < size; i++) {
+            for(int j = i + 1; j < size; j++) {
+                Pair current = sec.get(i);
+                Pair another = sec.get(j);
+
                 if (current.to <= another.from || current.from >= another.to) continue;
                 graph[current.idx].add(another.idx);
                 graph[another.idx].add(current.idx);
