@@ -15,7 +15,6 @@ import java.util.StringTokenizer;
 public class Boj18783 {
     private static int[][] parent;
     private static int[] cows;
-    private static int[] rotate;
 
     private static final String NEW_LINE = "\n";
 
@@ -38,7 +37,6 @@ public class Boj18783 {
 
         parent = new int[N][31];
         cows = new int[N];
-        rotate = new int[N];
 
         Range[] r = new Range[M];
         for(int i = 0; i < M; i++) {
@@ -75,7 +73,7 @@ public class Boj18783 {
     private static void findOne(Range[] arr) {
         for(int i = 0; i < cows.length; i++) {
             cows[i] = i;
-            rotate[i] = i;
+            parent[i][0] = i;
         }
 
         for(Range r: arr) {
@@ -91,16 +89,12 @@ public class Boj18783 {
     }
 
     private static void swap(int src, int snk) {
-        int tmp = rotate[src];
-        rotate[src] = rotate[snk];
-        rotate[snk] = tmp;
+        int tmp = parent[src][0];
+        parent[src][0] = parent[snk][0];
+        parent[snk][0] = tmp;
     }
 
     private static void connection(int n) {
-        for(int i = 0; i < n; i++) {
-            parent[i][0] = rotate[i];
-        }
-
         for(int p = 1; p < 31; p++) {                   // make n times rotating relations
             for (int cur = 0; cur < n; cur++) {
                 parent[cur][p] = parent[parent[cur][p - 1]][p - 1];
