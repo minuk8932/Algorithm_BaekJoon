@@ -89,8 +89,8 @@ public class Boj1003 {						// must be changed name to 'Main' before submit.
 
 <br><br>
 # Reference Site
-[Exponential-e blog](https://exponential-e.tistory.com/) written by minuk8932 for Algorithms and CS concepts. (only Korean)
-[Search sequence, OEIS] (https://oeis.org/) 
+[Exponential-e blog](https://exponential-e.tistory.com/) written by minuk8932 for Algorithms and CS concepts. (only Korean) <br>
+[OEIS](https://oeis.org/) Search sequence.
 
 
 <br><br>
