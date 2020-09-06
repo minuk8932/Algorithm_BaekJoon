@@ -87,6 +87,11 @@ public class Boj1003 {						// must be changed name to 'Main' before submit.
 ![](https://github.com/minuk8932/Algorithm_BaekJoon/blob/master/img/grading_type.png)
 - Please refer to this [link](https://www.acmicpc.net/help/judge) for more information. (only korean)
 
+<br><br>
+# Reference Site
+[Exponential-e blog](https://exponential-e.tistory.com/) written by minuk8932 for Algorithms and CS concepts. (only Korean)
+[Search sequence, OEIS] (https://oeis.org/) 
+
 
 <br><br>
 # License
