@@ -40,42 +40,10 @@ public class FoodSafetyData {
     }
 
     public static void main(String[] args) {
-        read();
-//        BufferedWriter bufWriter = null;
-//
-//        try{
-//            bufWriter = Files.newBufferedWriter(Paths.get("/Users/exponential-e/Desktop/foodsafety_contest/output/out(8001-9000).txt"),Charset.forName("UTF-8"));
-//            StringBuilder make = new StringBuilder();
-//
-//            for(FoodDefinition fd: foods) {
-//                make.append(fd.name).append(fd.region).append(fd.brand);
-//                make.append(fd.total).append(fd.type);
-//                make.append(fd.kcal).append(fd.car).append(fd.pro).append(fd.fat);
-//                make.append(fd.sug).append(fd.nat).append(fd.cho).append(fd.satFat).append(fd.traFat);
-//
-//                make.append(NEW_LINE).append(NEW_LINE);
-//            }
-//            bufWriter.write(make.toString());
-//        }
-//        catch(FileNotFoundException e){
-//            e.printStackTrace();
-//        }
-//        catch(IOException e){
-//            e.printStackTrace();
-//        }
-//        finally{
-//            try{
-//                if(bufWriter != null){
-//                    bufWriter.close();
-//                }
-//            }
-//            catch(IOException e){
-//                e.printStackTrace();
-//            }
-//        }
+        generator();
     }
 
-    private static void read(){
+    private static void generator(){
         BufferedReader br = null;
         BufferedWriter bw = null;
 
