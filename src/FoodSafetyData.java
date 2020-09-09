@@ -9,12 +9,14 @@ public class FoodSafetyData {
     private static StringBuilder build;
 
     private static final String COLON = ": ";
+    private static final String COMMA_SPACE = ", ";
     private static final String NEW_LINE = "\n";
     private static final String TAG_SPECIFY = "</row>";
     private static final String NUTRIENT = "<NUTR_CONT";
     private static final String FOOD_NAME = "<DESC_KOR>";
     private static final String REGION = "<SAMPLING_REGION_NAME>";
     private static final String BRAND = "<MAKER_NAME>";
+    private static final String TYPE = "<GROUP_NAME>";
     private static final String TOTAL_QUANTITY = "<SERVING_SIZE>";
 
     private static final String[] CATEGORY =
@@ -22,16 +24,16 @@ public class FoodSafetyData {
 
     private static class FoodDefinition {
         String name; String region; String brand;
-        String total;
+        String total; String type;
         String kcal; String car; String pro; String fat;
         String sug; String nat; String cho; String satFat; String traFat;
 
         public FoodDefinition(String name, String region, String brand,
-                              String total,
+                              String total, String type,
                               String kcal, String car, String pro, String fat,
                               String sug, String nat, String cho, String satFat, String traFat) {
             this.name = name; this.region = region; this.brand = brand;
-            this.total = total;
+            this.total = total; this.type = type;
             this.kcal = kcal; this.car = car; this.pro = pro; this.fat = fat;
             this.sug = sug; this.nat = nat; this.cho = cho; this.satFat = satFat; this.traFat = traFat;
         }
@@ -39,57 +41,76 @@ public class FoodSafetyData {
 
     public static void main(String[] args) {
         read();
-        BufferedWriter bufWriter = null;
-
-        try{
-            bufWriter = Files.newBufferedWriter(Paths.get("/Users/exponential-e/Desktop/foodsafety_contest/output.txt"),Charset.forName("UTF-8"));
-            StringBuilder make = new StringBuilder();
-
-            for(FoodDefinition fd: foods) {
-                make.append(fd.name).append(fd.region).append(fd.brand);
-                make.append(fd.total);
-                make.append(fd.kcal).append(fd.car).append(fd.pro).append(fd.fat);
-                make.append(fd.sug).append(fd.nat).append(fd.cho).append(fd.satFat).append(fd.traFat);
-
-                make.append(NEW_LINE);
-            }
-            bufWriter.write(make.toString());
-        }
-        catch(FileNotFoundException e){
-            e.printStackTrace();
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
-        finally{
-            try{
-                if(bufWriter != null){
-                    bufWriter.close();
-                }
-            }
-            catch(IOException e){
-                e.printStackTrace();
-            }
-        }
+//        BufferedWriter bufWriter = null;
+//
+//        try{
+//            bufWriter = Files.newBufferedWriter(Paths.get("/Users/exponential-e/Desktop/foodsafety_contest/output/out(8001-9000).txt"),Charset.forName("UTF-8"));
+//            StringBuilder make = new StringBuilder();
+//
+//            for(FoodDefinition fd: foods) {
+//                make.append(fd.name).append(fd.region).append(fd.brand);
+//                make.append(fd.total).append(fd.type);
+//                make.append(fd.kcal).append(fd.car).append(fd.pro).append(fd.fat);
+//                make.append(fd.sug).append(fd.nat).append(fd.cho).append(fd.satFat).append(fd.traFat);
+//
+//                make.append(NEW_LINE).append(NEW_LINE);
+//            }
+//            bufWriter.write(make.toString());
+//        }
+//        catch(FileNotFoundException e){
+//            e.printStackTrace();
+//        }
+//        catch(IOException e){
+//            e.printStackTrace();
+//        }
+//        finally{
+//            try{
+//                if(bufWriter != null){
+//                    bufWriter.close();
+//                }
+//            }
+//            catch(IOException e){
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     private static void read(){
         BufferedReader br = null;
+        BufferedWriter bw = null;
 
         try{
-            br = Files.newBufferedReader(Paths.get("/Users/exponential-e/Desktop/foodsafety_contest/FoodSafetyData1.txt"), Charset.forName("UTF-8"));
+            for(int x = 0; x < 30; x++) {
+                String inputPath = "/Users/exponential-e/Desktop/foodsafety_contest/input/FoodSafetyData" + (x + 1) + ".txt";
+                br = Files.newBufferedReader(Paths.get(inputPath), Charset.forName("UTF-8"));
 
-            for(int i = 0; i < foods.length; i++){
-                String line = "";
-                foods[i] = new FoodDefinition("", "", ""
-                        , "", "", "", "", ""
-                , "", "", "", "", "");
+                for (int i = 0; i < foods.length; i++) {
+                    String line = "";
+                    foods[i] = new FoodDefinition("", "", ""
+                            , "", "", "", "", "", ""
+                            , "", "", "", "", "");
 
-                while((line = br.readLine()) != null) {
-                    if (line.contains(TAG_SPECIFY)) break;
-                    System.out.println(line);
-                    makeDatas(line, i);
+                    while ((line = br.readLine()) != null) {
+                        if (line.contains(TAG_SPECIFY)) break;
+                        makeDatas(line, i);
+                    }
                 }
+
+                String outputPath = "/Users/exponential-e/Desktop/foodsafety_contest/output/out(" + (x * 1000 + 1) + "-" + ((x + 1) * 1000) + ").txt";
+
+                bw = Files.newBufferedWriter(Paths.get(outputPath), Charset.forName("UTF-8"));
+                StringBuilder make = new StringBuilder();
+
+                for (FoodDefinition fd : foods) {
+                    make.append(fd.name).append(fd.region).append(fd.brand);
+                    make.append(fd.total).append(fd.type);
+                    make.append(fd.kcal).append(fd.car).append(fd.pro).append(fd.fat);
+                    make.append(fd.sug).append(fd.nat).append(fd.cho).append(fd.satFat).append(fd.traFat);
+
+                    make.append(NEW_LINE).append(NEW_LINE);
+                }
+
+                bw.write(make.toString());
             }
         }
         catch(FileNotFoundException e){
@@ -162,6 +183,10 @@ public class FoodSafetyData {
             extract("상호 명", BRAND.length(), input.toCharArray());
             foods[idx].brand = build.toString();
         }
+        else if(input.contains(TYPE)) {
+            extract("분류",  TYPE.length(), input.toCharArray());
+            foods[idx].type = build.toString();
+        }
     }
 
     private static void extract(String header, int start, char[] chars) {
@@ -173,6 +198,6 @@ public class FoodSafetyData {
             valueBuilder.append(chars[x]);
         }
 
-        build.append(valueBuilder.toString()).append(NEW_LINE);
+        build.append(valueBuilder.toString()).append(COMMA_SPACE);
     }
 }
