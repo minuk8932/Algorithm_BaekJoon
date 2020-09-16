@@ -91,17 +91,17 @@ public class Boj19237 {
         while(count <= 1000) {
             HashMap<Integer, Integer> hmap = new HashMap<>();
 
-            for(int idx = 0; idx < m; idx++){               // remained smell
+            while(!smells.isEmpty()) {
+                Pair current = smells.poll();
+                hmap.put(current.value, current.count);
+            }
+
+            for(int idx = 0; idx < m; idx++){                   // remained smell records
                 if(removed[idx]) continue;
                 Shark current = sharks[idx];
 
                 int sInfo = makeInfo(current.row, current.col, idx);
-                smells.offer(new Pair(sInfo, K));
-            }
-
-            while(!smells.isEmpty()) {                      // record
-                Pair current = smells.poll();
-                hmap.put(current.value, current.count);
+                hmap.put(sInfo, K);
             }
 
             for(int idx = 0; idx < m; idx++){
