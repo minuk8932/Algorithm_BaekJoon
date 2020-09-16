@@ -21,7 +21,7 @@ public class Boj2231 {
 		int leng = input.length();
 		String nine = "";
 		
-		for(int i = 0; i < leng - 1; i++) {
+		for(int i = 0; i < leng; i++) {
 			nine += MAKER;
 		}
 		
