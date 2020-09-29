@@ -10,17 +10,17 @@ import java.io.InputStreamReader;
  * 	@see https://www.acmicpc.net/problem/6109/
  *
  */
-public class Boj6109 {
+public class Boj6190 {
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
 		
-		System.out.println(bfs(N));
+		System.out.println(search(N));
 	}
 	
-	private static int bfs(int n) {
+	private static int search(int n) {
 		int count = 0;
-		int loop = n;
+		long loop = n;
 		
 		while(loop != 1) {			
 			if(loop % 2 == 0) loop /= 2;
