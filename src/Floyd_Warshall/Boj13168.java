@@ -57,9 +57,18 @@ public class Boj13168 {
 
             pay[city1][city2] = pay[city2][city1] = Math.min(pay[city1][city2], cost);          // make cost buy ticket or not
 
-            if(method.equals(FREE[0]) || method.equals(FREE[1]) || method.equals(FREE[2])) free[city1][city2] = free[city2][city1] = 0;
-            else if(method.equals(DISCOUNT[0]) || method.equals(DISCOUNT[1])) free[city1][city2] = free[city2][city1] = Math.min(cost / 2.0, free[city1][city2]);
-            else free[city1][city2] = free[city2][city1] = Math.min(cost, free[city1][city2]);
+            if(method.equals(FREE[0]) || method.equals(FREE[1]) || method.equals(FREE[2])) {
+                free[city1][city2] = 0;
+                free[city2][city1] = 0;
+            }
+            else if(method.equals(DISCOUNT[0]) || method.equals(DISCOUNT[1])) {
+                free[city1][city2] = Math.min(cost / 2.0, free[city1][city2]);
+                free[city2][city1] = free[city1][city2];
+            }
+            else{
+                free[city1][city2] = Math.min(cost, free[city1][city2]);
+                free[city2][city1] = free[city1][city2];
+            }
         }
 
         System.out.println(floydWashall(R));
@@ -75,7 +84,7 @@ public class Boj13168 {
             }
         }
 
-        int[] total = new int[2];
+        double[] total = new double[2];
         int size = must.size();
 
         for (int i = 0; i < size - 1; i++) {                    // find total cost
