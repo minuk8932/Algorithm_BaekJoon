@@ -1,7 +1,7 @@
-package implementation;
+package stack;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.StringTokenizer;
 
 /**
@@ -26,8 +26,8 @@ public class Boj17952 {
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
-		
-		ArrayList<Test> list = new ArrayList<>();
+
+		ArrayDeque<Test> stack = new ArrayDeque<>();
 		int result = 0, idx = -1;
 		
 		while(N-- > 0) {
@@ -36,9 +36,12 @@ public class Boj17952 {
 			
 			if(cmd == 0) {
 				if(idx == -1) continue;						// not any more test
-				list.get(idx).time--;
-				
-				if(list.get(idx).time == 0) result += list.get(idx--).score;
+				if(stack.isEmpty()) continue;
+				Test current = stack.pop();
+				current.time--;
+
+				if(current.time == 0) result += current.score;
+				else stack.push(new Test(current.score, current.time));
 			}
 			else {											// add test
 				int s = Integer.parseInt(st.nextToken());
@@ -50,7 +53,7 @@ public class Boj17952 {
 				}
 				
 				idx++;
-				list.add(new Test(s, t));
+				stack.push(new Test(s, t));
 			}
 		}
 		
