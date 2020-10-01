@@ -23,6 +23,7 @@ public class Boj1733 {
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
+		int M = 0;
 		
 		connected = new ArrayList[N];
 		for(int i = 0; i < N; i++) {
@@ -33,18 +34,21 @@ public class Boj1733 {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			int num1 = Integer.parseInt(st.nextToken()) - 1;
 			int num2 = Integer.parseInt(st.nextToken()) - 1;
-			
+
+			M = Math.max(num1, M);
+			M = Math.max(num2, M);
+
 			connected[i].add(num1);
 			connected[i].add(num2);
 		}
 		
-		System.out.println(bipartiteMatch(N));
+		System.out.println(bipartiteMatch(N, M));
 	}
 	
-	private static String bipartiteMatch(int n) {
+	private static String bipartiteMatch(int n, int m) {
 		visit = new int[n];
 		aMatch = new int[n];
-		bMatch = new int[1_000_000];
+		bMatch = new int[m + 1];
 		
 		Arrays.fill(aMatch, -1);
 		Arrays.fill(bMatch, -1);
