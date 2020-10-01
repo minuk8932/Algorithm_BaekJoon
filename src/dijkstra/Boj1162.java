@@ -46,15 +46,15 @@ public class Boj1162 {
 		int M = Integer.parseInt(st.nextToken());
 		int K = Integer.parseInt(st.nextToken());
 		
-		ArrayList<Node>[] road = new ArrayList[N + 1];
-		for(int i = 0; i < N + 1; i++) {
+		ArrayList<Node>[] road = new ArrayList[N];
+		for(int i = 0; i < N; i++) {
 			road[i] = new ArrayList<>();
 		}
 		
 		while(M-- > 0) {
 			st = new StringTokenizer(br.readLine());
-			int edge1 = Integer.parseInt(st.nextToken());
-			int edge2 = Integer.parseInt(st.nextToken());
+			int edge1 = Integer.parseInt(st.nextToken()) - 1;
+			int edge2 = Integer.parseInt(st.nextToken()) - 1;
 			int cost = Integer.parseInt(st.nextToken());
 			
 			road[edge1].add(new Node(edge2, cost));
@@ -65,46 +65,43 @@ public class Boj1162 {
 	}
 	
 	private static long dijkstra(int n, int k, ArrayList<Node>[] list) {
-		long[][] isVisited = new long[n + 1][k + 1];
-		for(int i = 0; i < n + 1; i++) {
-			Arrays.fill(isVisited[i], INF);
+		long[][] cost = new long[n][k + 1];
+		for(int i = 0; i < n; i++) {
+			Arrays.fill(cost[i], INF);
 		}
 		
 		PriorityQueue<Node> pq = new PriorityQueue<>();
-		pq.offer(new Node(1, 0, 0));
+		pq.offer(new Node(0, 0, k));
 			
-		isVisited[1][0] = 0;
+		cost[0][k] = 0;
 			
 		while(!pq.isEmpty()) {
 			Node current = pq.poll();
+
+			if(cost[current.edge][current.pave] < current.cost) continue;
 			
 			for(Node next: list[current.edge]) {
-				if(isVisited[next.edge][current.pave] > isVisited[current.edge][current.pave] + next.cost) {		// 포장 없이 이동
-					isVisited[next.edge][current.pave] = isVisited[current.edge][current.pave] + next.cost;
-					
-					pq.offer(new Node(next.edge, isVisited[next.edge][current.pave], current.pave));
-					
-					if(current.pave < k) {					// 포장 횟수가 남은 경우
-						int nextPave = current.pave + 1;
-						
-						if(isVisited[next.edge][nextPave] > current.cost) {		// 포장 후 이동
-							isVisited[next.edge][nextPave] = current.cost;
-								
-							pq.offer(new Node(next.edge, isVisited[next.edge][nextPave], nextPave));
-						}
+				if(current.pave > 0) {
+					if(cost[next.edge][current.pave - 1] > cost[current.edge][current.pave]) {				// paving
+						cost[next.edge][current.pave - 1] = cost[current.edge][current.pave];
+						pq.offer(new Node(next.edge, cost[next.edge][current.pave - 1], current.pave - 1));
 					}
 				}
+
+				if(cost[next.edge][current.pave] <= cost[current.edge][current.pave] + next.cost) continue;	// not paving
+				cost[next.edge][current.pave] = cost[current.edge][current.pave] + next.cost;
+				pq.offer(new Node(next.edge, cost[next.edge][current.pave], current.pave));
 			}
 		}
 		
-		return getMinCost(n, k, isVisited);
+		return getMinCost(n, k, cost);
 	}
 	
 	private static long getMinCost(int n, int k, long[][] arr) {
 		long min = INF;
 		
-		for(int i = 0; i < k + 1; i++) {			// 0 ~ k 번 포장 중 최소 비용
-			if(arr[n][i] < min) min = arr[n][i];
+		for(int i = 0; i < k + 1; i++) {
+			if(arr[n - 1][i] < min) min = arr[n - 1][i];
 		}
 		
 		return min;
