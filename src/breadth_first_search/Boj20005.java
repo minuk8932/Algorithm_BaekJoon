@@ -15,15 +15,16 @@ import java.util.*;
 public class Boj20005 {
     private static final char BLOCK = 'X';
     private static final char BOSS = 'B';
+    private static final char EMPTY = '.';
     private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
     private static final int ROW = 0, COL = 1;
 
     private static int N, M;
-    private static int HP;
+    private static long HP;
     private static int[][] visit;
     private static char[][] map;
 
-    private static Point[] player;
+    private static Point boss = new Point(-1, -1);
     private static HashMap<Character, Long> deal = new HashMap<>();
     private static boolean[][] timer = new boolean[1_000_001][26];
     private static HashSet<Integer> value = new HashSet<>();
@@ -56,16 +57,12 @@ public class Boj20005 {
         int P = Integer.parseInt(st.nextToken());
 
         map = new char[N][M];
-        player = new Point[P];
-        int index = 0;
-
         for(int i = 0; i < N; i++) {
             String input = br.readLine();
 
             for(int j = 0; j < M; j++) {
                 map[i][j] = input.charAt(j);
-
-                if(map[i][j] >= 'a' && map[i][j] <= 'z') player[index++] = new Point(i, j);
+                if(map[i][j] == BOSS) boss = new Point(i, j);
             }
         }
 
@@ -74,47 +71,40 @@ public class Boj20005 {
             deal.put(st.nextToken().charAt(0), Long.parseLong(st.nextToken()));
         }
 
-        HP = Integer.parseInt(br.readLine());
+        HP = Long.parseLong(br.readLine());
         System.out.println(dealer());
     }
 
     private static int dealer() {
-        for(int p = 0; p < player.length; p++) {
-            visit = new int[N][M];
-            bfs(p);
-        }
+        visit = new int[N][M];
+        bfs();
 
         int count = 0;
-        int time = 0;
         long totalDeal = 0;
 
+
         for(int t = 0; t < timer.length; t++) {                     // boss hunting
-            if(HP <= 0) break;
-            ArrayList<Player> list = new ArrayList<>();
+            long d = 0;
 
             for(int a = 0; a < 26; a++) {
                 if(!timer[t][a]) continue;
-                list.add(new Player((char) ('a' + a), t));
                 count++;
+                d += deal.get((char) (a + 'a'));
             }
 
-            for(Player p: list) {
-                if(time == 0) totalDeal += deal.get(p.name);
-                else totalDeal += deal.get(p.name) * (t - time);
-            }
-
+            totalDeal += d;
             HP -= totalDeal;
-            time = t;
+            if(HP <= 0) break;
         }
 
         return count;
     }
 
-    private static void bfs(int start) {
+    private static void bfs() {
         Queue<Point> q = new LinkedList<>();
-        q.offer(player[start]);
+        q.offer(boss);
 
-        visit[player[start].row][player[start].col] = 1;
+        visit[boss.row][boss.col] = 1;
 
         while(!q.isEmpty()) {
             Point current = q.poll();
@@ -127,9 +117,9 @@ public class Boj20005 {
                 if(map[nextRow][nextCol] == BLOCK || visit[nextRow][nextCol] != 0) continue;
                 visit[nextRow][nextCol] = visit[current.row][current.col] + 1;
 
-                if(map[nextRow][nextCol] == BOSS){              // arrived time
-                    timer[visit[nextRow][nextCol] - 1][map[player[start].row][player[start].col] - 'a'] = true;
-                    return;
+                if(map[nextRow][nextCol] != EMPTY){              // arrived time
+                    timer[visit[current.row][current.col]][map[nextRow][nextCol] - 'a'] = true;
+                    value.add(visit[current.row][current.col]);
                 }
 
                 q.offer(new Point(nextRow, nextCol));
