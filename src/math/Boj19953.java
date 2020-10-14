@@ -1,11 +1,21 @@
+package math;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 19953번: 영재의 산책
+ *
+ * @see https://www.acmicpc.net/problem/19953
+ *
+ */
 public class Boj19953 {
     private static ArrayList<Integer> period = new ArrayList<>();
+    private static boolean[] visit = new boolean[10];
 
     private static class Point {
         int x;
@@ -25,40 +35,34 @@ public class Boj19953 {
         int t = Integer.parseInt(st.nextToken());
 
         getPeriod(v, m);
-        Point result = coordinate(t);
+        Point result = coordinate(v, t - 1);
         System.out.println(result.x + " " + result.y);
     }
 
-    private static Point coordinate(int time) {
-        int size = period.size();
+    private static Point coordinate(int v, int time) {
+        int lcm = period.size() * 4 / getGcd(period.size(), 4);
 
-        int gcd = getGcd(period.size(), 4);
-        int lcm = size * 4 / gcd;
-
-        Point p = new Point(0, 0);
-
-        int loop = lcm;
-        int add = 0;
-        int index = 0;
-
-        while(loop-- > 0) {
-            if(add % 2 == 0) p.y += (add < 2 ? 1: -1) * period.get(index);
-            else p.x += (add < 2 ? 1: -1) * period.get(index);
-            index++;
-            index %= size;
-            add++;
-            add %= 4;
-        }
+        Point p = rotating(new Point(0, 0), lcm);
 
         int value = time / lcm;
         int mod = time % lcm;
 
-        p.x *= value;
-        p.y *= value;
+        return rotating(new Point(p.x * value, p.y * value + v), mod);
+    }
 
-        while(mod-- > 0) {
-            if(add % 2 == 0) p.y += (add < 2 ? 1: -1) * period.get(index);
+    private static int getGcd (int a, int b) {
+        if(b == 0) return a;
+        return getGcd(b, a % b);
+    }
+
+    private static Point rotating(Point p, int loop) {          // find position by (directions, velocity) period
+        int size = period.size();
+        int add = 0, index = 0;
+
+        while(loop-- > 0) {
+            if(add % 2 == 1) p.y += (add < 2 ? -1: 1) * period.get(index);
             else p.x += (add < 2 ? 1: -1) * period.get(index);
+
             index++;
             index %= size;
             add++;
@@ -69,19 +73,16 @@ public class Boj19953 {
     }
 
     private static void getPeriod(int v, int m) {
-        HashSet<Integer> set = new HashSet<>();
         int start = v;
+        start *= m;
+        start %= 10;
 
-        while(!set.contains(start)) {
-            set.add(start);
+        while(!visit[start]) {                          // velocity period
+            visit[start] = true;
             period.add(start);
+
             start *= m;
             start %= 10;
         }
-    }
-
-    private static int getGcd(int a, int b) {
-        if(b == 0) return a;
-        return getGcd(b, a % b);
     }
 }
