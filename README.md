@@ -81,6 +81,7 @@ public class Boj1003 {						// must be changed name to 'Main' before submit.
 }
 ```
 
+
 <br><br>
 # Judgement format
 
@@ -89,8 +90,11 @@ public class Boj1003 {						// must be changed name to 'Main' before submit.
 
 <br><br>
 # Reference Site
+[![solved.ac tier](http://mazassumnida.wtf/api/generate_badge?boj=exponential_e)](https://solved.ac/exponential_e) <br><br>
+[SOLVED.AC](https://solved.ac/profile/exponential_e) **Tier rank** <br>
+[BOJ](https://www.acmicpc.net/user/exponential_e) Boj Personal Rank **Exponential_e** <br>
 [Exponential-e blog](https://exponential-e.tistory.com/) written by minuk8932 for Algorithms and CS concepts. (only Korean) <br>
-[OEIS](https://oeis.org/) Search sequence.
+[OEIS](https://oeis.org/) Search sequence. <br>
 
 
 <br><br>
