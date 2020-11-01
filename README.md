@@ -24,11 +24,14 @@ Other languages env <br>
 <br><br>
 # Available language
 **Total 57** <br>
-> Commonly used
-> - **Java**
-> - **C++**, **C++11**, **C++14**, **C++17**
-> - **C**, **C11**
-> - **Python3**, **PyPy**, **PyPy3**
+
+<details markdown="1">
+<summary> Commonly used </summary>
+　　Java <br>
+　　C++, C++11, C++14, C++17 <br>
+　　C, C11 <br>
+　　Python3, PyPy, PyPy3
+</details>
 
 <br><br>
 # Configuration
@@ -89,12 +92,15 @@ public class Boj1003 {						// must be changed name to 'Main' before submit.
 - Please refer to this [link](https://www.acmicpc.net/help/judge) for more information. (only korean)
 
 <br><br>
-# Reference Site
+# Reference
 [![solved.ac tier](http://mazassumnida.wtf/api/generate_badge?boj=exponential_e)](https://solved.ac/exponential_e) <br><br>
-[SOLVED.AC](https://solved.ac/profile/exponential_e) **Tier rank** <br>
-[BOJ](https://www.acmicpc.net/user/exponential_e) Boj Personal Rank **Exponential_e** <br>
-[Exponential-e blog](https://exponential-e.tistory.com/) written by minuk8932 for Algorithms and CS concepts. (only Korean) <br>
-[OEIS](https://oeis.org/) Search sequence. <br>
+<details markdown="1">
+<summary> Sites </summary>
+　<a href = "https://solved.ac"> SOLVED.AC </a> Tier Rank <br>
+　<a href = "https://www.acmicpc.net/user/exponential_e"> Boj Exponential_e </a> Personal Rank <br>
+　<a href = "https://exponential-e.tistory.com"> Exponential-e Blog </a> written by minuk8932 for Algorithms and CS concepts (only Korean) <br>
+　<a href = "https://oeis.org"> OEIS </a> Search sequence <br>
+</details>
 
 
 <br><br>
