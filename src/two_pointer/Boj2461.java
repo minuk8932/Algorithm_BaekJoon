@@ -56,7 +56,7 @@ public class Boj2461 {
         int result = Integer.MAX_VALUE;
         int max = class1Classify(n, arr);
 
-        int loop = n * (m - 1);
+        int loop = n * m;
 
         while(loop-- > 0) {                                 // total calculation
             Student current = pq.poll();
