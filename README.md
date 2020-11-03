@@ -96,9 +96,9 @@ public class Boj1003 {						// must be changed name to 'Main' before submit.
 [![solved.ac tier](http://mazassumnida.wtf/api/generate_badge?boj=exponential_e)](https://solved.ac/exponential_e) <br><br>
 <details markdown="1">
 <summary> Sites </summary>
-　<a href = "https://solved.ac"> SOLVED.AC </a> Tier Rank <br>
-　<a href = "https://www.acmicpc.net/user/exponential_e"> Boj Exponential_e </a> Personal Rank <br>
-　<a href = "https://exponential-e.tistory.com"> Exponential-e Blog </a> written by minuk8932 for Algorithms and CS concepts (only Korean) <br>
+　<a href = "https://solved.ac"> SOLVED.AC </a> <b> Tier Rank </b> <br>
+　<a href = "https://www.acmicpc.net/user/exponential_e"> Boj Personal Rank </a> <b> Exponential_e </b> <br>
+　<a href = "https://exponential-e.tistory.com"> Exponential-e Blog </a> written by minuk8932 for <b> Algorithms and CS concepts </b> (only Korean) <br>
 　<a href = "https://oeis.org"> OEIS </a> Search sequence <br>
 </details>
 
