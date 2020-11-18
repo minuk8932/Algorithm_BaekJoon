@@ -1,2 +1,2 @@
-public class Default {
+class Default {
 }
