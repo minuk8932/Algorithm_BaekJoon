@@ -15,9 +15,9 @@ import java.util.*;
 public class Boj2651 {
     private static final String NEW_LINE = "\n";
     private static final String SPACE = " ";
-    private static final int INF = 1_000_000_000;
+    private static final long INF = 10_000_000_000L;
 
-    private static int[] prefix, dp;
+    private static long[] prefix, dp;
     private static int N, threshold;
     private static ArrayList<Integer> path = new ArrayList<>();
 
@@ -26,7 +26,7 @@ public class Boj2651 {
         threshold = Integer.parseInt(br.readLine());
         N = Integer.parseInt(br.readLine());
 
-        prefix = new int[N + 2];
+        prefix = new long[N + 2];
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         for(int i = 0; i < N + 1; i++) {
@@ -39,9 +39,9 @@ public class Boj2651 {
             vertex[i] = Integer.parseInt(st.nextToken());
         }
 
-        dp = new int[N + 2];
+        dp = new long[N + 2];
         Arrays.fill(dp, INF);
-        int cost = recursion(vertex, 0);
+        long cost = recursion(vertex, 0);
 
         System.out.println(print(vertex, cost));
     }
@@ -60,11 +60,11 @@ public class Boj2651 {
         return sb.toString();
     }
 
-    private static int recursion(int[] v, int current) {
+    private static long recursion(int[] v, int current) {
         if(dp[current] != INF) return dp[current];
         if(prefix[N + 1] - prefix[current] <= threshold) return dp[current] = 0;
 
-        int result = dp[current + 1] + v[current];
+        long result = dp[current + 1] + v[current];
 
         for(int next = current + 1; next <= N; next++) {
             if(prefix[next] - prefix[current] > threshold) continue;
