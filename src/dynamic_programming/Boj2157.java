@@ -11,14 +11,12 @@ import java.util.StringTokenizer;
  * @author exponential-e
  *
  * 백준 2157번: 여행
- * @see https://www.acmicpc.net/problem/2157/
+ * @see https://www.acmicpc.net/problem/2157
  *
  */
 public class Boj2157 {
     private static int[][] dp;
     private static int N, M;
-
-    private static final int INF = -2_000_000_000;
 
     private static ArrayList<Node>[] path;
 
@@ -38,7 +36,6 @@ public class Boj2157 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
-
         int[][] map = new int[N][N];
 
         while(K-- > 0) {
@@ -51,17 +48,38 @@ public class Boj2157 {
         }
 
         init(map);
-        int result = recursion(0, 1);
-        System.out.println(result < 0 ? 0: result);
+        System.out.println(memoization());
+    }
+
+    private static int memoization() {
+        dp = new int[M + 1][N];
+        for(Node start: path[0]) {
+            dp[2][start.node] = Math.max(dp[2][start.node], start.cost);
+        }
+
+        for(int i = 2; i < M; i++) {
+            for(int j = 0; j < N; j++) {                // find best way
+                if(dp[i][j] == 0) continue;
+
+                for (Node next : path[j]) {
+                    dp[i + 1][next.node] = Math.max(dp[i + 1][next.node], dp[i][j] + next.cost);
+                }
+            }
+        }
+
+        int result = 0;
+        for(int i = 0; i <= M; i++) {
+            result = Math.max(dp[i][N - 1], result);
+        }
+
+        return result;
     }
 
     private static void init(int[][] input) {
         path = new ArrayList[N];
-        dp = new int[N][N];
 
         for(int i = 0; i < N; i++) {
             path[i] = new ArrayList<>();
-            Arrays.fill(dp[i], -1);
         }
 
         for(int i = 0; i < N; i++){
@@ -70,19 +88,5 @@ public class Boj2157 {
                 path[i].add(new Node(j, input[i][j]));
             }
         }
-    }
-
-    private static int recursion(int current, int count) {
-        if (current == N - 1) return 0;
-        if (count >= M) return INF;
-
-        if (dp[current][count] != -1) return dp[current][count];
-
-        for (Node next: path[current]) {                // memoization cost
-            if (current > next.node) continue;
-            dp[current][count] = Math.max(dp[current][count], recursion(next.node, count + 1) + next.cost);
-        }
-
-        return dp[current][count];
     }
 }
