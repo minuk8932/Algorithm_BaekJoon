@@ -1,30 +1,23 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
-import java.util.PriorityQueue;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class Boj20390 {
-    private static PriorityQueue<Node> pq = new PriorityQueue<>();
     private static long A, B, C, D;
     private static final long LIMIT = 10_000_000_000L;
 
     private static int[] parent;
 
-    private static class Node implements Comparable<Node>{
-        int node1;
-        int node2;
-        long cost;
+    private static class Data {
+        int index;
+        long v1;
+        long v2;
 
-        public Node(int node1, int node2, long cost) {
-            this.node1 = node1;
-            this.node2 = node2;
-            this.cost = cost;
-        }
-
-        @Override
-        public int compareTo(Node n) {
-            return this.cost < n.cost ? -1: 1;
+        public Data(int index, long v1, long v2) {
+            this.index = index;
+            this.v1 = v1;
+            this.v2 = v2;
         }
     }
 
@@ -48,65 +41,40 @@ public class Boj20390 {
         B %= C;
 
         init(X);
-        System.out.println(mst());
-    }
-
-    private static long mst(){
-        long cost = 0;
-
-        while(!pq.isEmpty()) {
-            Node current = pq.poll();
-
-            if(merged(current.node1, current.node2)) continue;
-            cost += current.cost;
-        }
-
-        return cost;
+        System.out.println();
     }
 
     private static void init(long[] x) {
-        parent = new int[x.length];
+        ArrayList<Data> pairs = new ArrayList<>();
 
         for(int i = 0; i < x.length; i++) {
-            parent[i] = -1;
+            Data data = new Data(-1, x[i], Long.MAX_VALUE);
 
             for(int j = i + 1; j < x.length; j++) {
-                pq.offer(new Node(i, j, distance(x[i], x[j])));
+                if(find(i) == find(j)) continue;
+                if(data.v2 < x[j]) continue;
+
+                data.index = j;
+                data.v2 = x[j];
             }
+
+            merge(i, data.index);
+            pairs.add(data);
         }
-    }
-
-    private static long distance(long x1, long x2) {
-        long a = calculator(x1, A);
-        long b = calculator(x2, B);
-
-        long result = ((a + b) % C) ^ D;
-        return result;
-    }
-
-    private static long calculator(long x, long v) {
-        long r = (x * v) % C;
-        if(x < LIMIT && v < LIMIT) return r;
-
-        BigInteger X = new BigInteger(x + "");
-        BigInteger V = new BigInteger(v + "");
-
-        X = (X.multiply(V)).mod(new BigInteger(C + ""));
-        return Long.parseLong(X.toString());
     }
 
     private static int find(int x) {
         if(parent[x] < 0) return x;
-        else return parent[x] = find(parent[x]);
+        return parent[x] = find(parent[x]);
     }
 
-    private static boolean merged(int x, int y) {
+    private static void merge(int x, int y) {
         x = find(x);
         y = find(y);
 
-        if(x == y) return true;
+        if(x == y) return;
 
-        if(parent[x] < parent[y]) {
+        if (parent[x] < parent[y]) {
             parent[x] += parent[y];
             parent[y] = x;
         }
@@ -114,7 +82,5 @@ public class Boj20390 {
             parent[y] += parent[x];
             parent[x] = y;
         }
-
-        return false;
     }
 }

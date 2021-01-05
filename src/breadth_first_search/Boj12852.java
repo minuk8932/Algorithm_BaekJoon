@@ -36,6 +36,10 @@ public class Boj12852 {
 	}
 	
 	private static void search(int n) {
+		if(n == 1){
+			System.out.println(0 + "\n" + 1);
+			return;
+		}
 		Queue<Sequence> q = new LinkedList<>();
 		
 		q.offer(new Sequence(n, "" + n));
@@ -55,9 +59,8 @@ public class Boj12852 {
 				if(next == 1) {													// get Shortest
 					StringBuilder sb = new StringBuilder();
 					sb.append(visit[next] - 1).append(NEW_LINE).append(current.res).append(SPACE).append(next);
-					
+
 					System.out.println(sb.toString());
-					
 					return;
 				}
 				
