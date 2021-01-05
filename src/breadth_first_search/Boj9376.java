@@ -82,6 +82,7 @@ public class Boj9376 {
 					int k = cost[0][i][j] + cost[1][i][j] + cost[2][i][j] - 3;		// find min cost
 
 					if (map[i][j] == DOOR) k -= 2;
+					if (k < 0) continue;
 					if (result > k) result = k;
 				}
 			}
