@@ -32,7 +32,7 @@ public class Boj2042 {
 		
 		int parent = S - 1;
 		while(parent-- > 0) {
-			int son = parent * 2;
+			int son = parent << 1;
 			tree[parent] = tree[son] + tree[son + 1];
 		}
 		
@@ -57,7 +57,7 @@ public class Boj2042 {
 			S <<= 1;
 		}
 
-		tree = new long[S * 2];
+		tree = new long[S << 1];
 	}
 
 	/**
@@ -73,14 +73,16 @@ public class Boj2042 {
 		int newIdx = start + oldNumIdx - 1;
 		tree[newIdx] = newNum;
 		
-		while((newIdx /= 2) > 1) {
-			int son = newIdx * 2;
+		while((newIdx >>= 1) > 1) {
+			int son = newIdx << 1;
 			tree[newIdx] = tree[son] + tree[son + 1];
 		}
 	}
 
 	/**
 	 * Make section sum
+	 *
+	 * line 93: out of range
 	 *
 	 * @param start
 	 * @param from
@@ -90,11 +92,11 @@ public class Boj2042 {
 	 * @return		check (left + right)
 	 */
 	private static long getSectionSum(int start, long from, long to, int l, int r) {
-		if(r < from || l > to) return 0;				// out of range
+		if(r < from || l > to) return 0;
 		if(from <= l && to >= r) return tree[start];
 		
-		int mid = (l + r) / 2;
-		int next = start * 2;
+		int mid = (l + r) >> 1;
+		int next = start << 1;
 
 		return getSectionSum(next, from, to, l, mid) + getSectionSum(next + 1, from, to, mid + 1, r);
 	}
