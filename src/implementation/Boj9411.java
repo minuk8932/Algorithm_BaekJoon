@@ -1,8 +1,18 @@
+package implementation;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 9411번: 실수 계산
+ *
+ * @see https://www.acmicpc.net/problem/9411
+ *
+ */
 public class Boj9411 {
 
     private static final String TERMINATE = "0";
@@ -37,96 +47,103 @@ public class Boj9411 {
         System.out.println(sb.toString());
     }
 
-    private static String formula() {
-        StringBuilder number = new StringBuilder();
+    /**
+     *
+     * Add positive & negative each other, exception dot
+     *
+     * @param flag
+     * @return
+     */
+    private static int[] adder(boolean flag) {
         int[] result = new int[61];
 
-        for(int i = 0; i < result.length; i++) {
-            if(value[0][i] == EMPTY || i == 30) continue;
-            result[i] = value[0][i] - '0';
+        for(int i = 0; i < value.length; i++) {
+            if(positive[i] != flag) continue;
+            int carry = 0;
+
+            for(int j = 60; j > 30; j--) {
+                int v = value[i][j] == EMPTY ? 0: value[i][j] - '0';
+                int sum = result[j] + v + carry;
+
+                result[j] = sum % 10;
+                carry = sum / 10;
+            }
+
+            for(int j = 29; j >= 0; j--) {
+                int v = value[i][j] == EMPTY ? 0: value[i][j] - '0';
+                int sum = result[j] + v + carry;
+
+                result[j] = sum % 10;
+                carry = sum / 10;
+            }
         }
 
+        return result;
+    }
+
+    private static String formula() {
+        int[][] result = new int[2][61];
+
+        result[0] = adder(true);
+        result[1] = adder(false);
+
+        boolean flag = true;
+        for(int i = 0; i < 61; i++) {
+            if (result[0][i] > result[1][i]) break;
+            if (result[1][i] > result[0][i]){
+                flag = false;
+                break;
+            }
+        }
+
+        int[] answer = new int[61];
         int carry = 0;
-        int x = positive[0] ? 1: -1;
+        for(int i = 60; i >= 0; i--) {
+            int sub = flag ? result[0][i] - result[1][i] + carry: result[1][i] - result[0][i] + carry;
 
-        for(int i = 1; i < value.length; i++) {
-            int t = positive[i] ? 1: -1;
-            int last = 0;
-
-            for(int j = result.length - 1; j >= 0; j--) {
-                if(value[i][j] == DIVIDER) continue;
-
-                int a = result[j] * x;
-                int b = (value[i][j] == EMPTY ? 0: value[i][j] - '0') * t;
-
-                int add = a + b + carry;
-                last = add;
-
-                if(add < 0) {
-                    carry = -1;
-                    add += 10;
-                }
-                else {
-                    carry = add > 9 ? 1: 0;
-                }
-
-                result[j] = add % 10;
+            if (sub < 0){
+                carry = -1;
+                sub += 10;
+            }
+            else {
+                carry = 0;
             }
 
-            x = last < 0 ? -1: 1;
+            answer[i] = sub;
         }
 
-        if(carry == -1) {
-            int c = 0;
-
-            for(int i = result.length - 1; i > 30; i--) {
-                if(result[i] == 0){
-                    c = 0;
-                    continue;
-                }
-
-                result[i] = 10 - result[i] + c;
-                c = -1;
-            }
-
-            int s = 0;
-            for(int i = 0; i < 30; i++) {
-                s = i;
-                if(result[i] != 9) break;
-            }
-
-            for(int i = 29; i >= s; i--) {
-                if(result[i] == 9) break;
-                result[i] = 10 - result[i] + c;
-            }
-
-            for(int i = s - 1; i >= 0; i--) {
-                result[i] = 0;
-            }
-
-            number.append(NEGATIVE);
-        }
+        StringBuilder number = new StringBuilder();
+        if(!flag) number.append(NEGATIVE);
 
         int start = 0, end = 60;
         for(int i = 0; i < 30; i++) {
             start = i;
-            if(result[i] != 0) break;
+            if(answer[i] != 0) break;
         }
 
         for(int i = 60; i > 30; i--) {
             end = i;
-            if(result[i] != 0) break;
+            if(answer[i] != 0) break;
         }
 
-        if(end == 31 && result[end] == 0) end = 29;
+        if(end == 31 && answer[end] == 0) end = 29;
         for(int i = start; i <= end; i++) {
             if(i == 30) number.append(DIVIDER);
-            else number.append(result[i]);
+            else number.append(answer[i]);
         }
 
         return number.toString();
     }
 
+    /**
+     *
+     * String to char array
+     *
+     * line 164: dot
+     * line 167 ~ 177: input numbers before dot & after dot each other
+     *
+     * @param inputs
+     */
     private static void valueSpecify(ArrayList<String> inputs){
         int size = inputs.size();
         int idx = 0;
