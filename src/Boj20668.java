@@ -1,5 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
@@ -56,10 +59,10 @@ public class Boj20668 {
             path[B].add(new Node(A, L, L, 1, K));
         }
 
-        System.out.println(String.format("%.9f", dijkstra(N)));
+        System.out.println(dijkstra(N));
     }
 
-    private static double dijkstra(int n) {
+    private static String dijkstra(int n) {
         PriorityQueue<Node> pq = new PriorityQueue<>();
         pq.offer(new Node(0, 0, 0, 1, 1));
         dist[0][0] = 0;
@@ -70,7 +73,7 @@ public class Boj20668 {
             if(dist[current.node][0] * current.velocity < dist[current.node][1] * current.leng) continue;
 
             for(Node next: path[current.node]) {
-                int[] velo = {current.velocity + 1, current.velocity - 1, current.velocity};
+                int[] velo = {current.velocity + 1, current.velocity, current.velocity - 1};
 
                 for(int v: velo) {
                     if(v > next.velocity || v < 1) continue;
@@ -93,7 +96,8 @@ public class Boj20668 {
             }
         }
 
-        return dist[n - 1][0] / (double) dist[n - 1][1];
+        DecimalFormat decimal = new DecimalFormat(".000000000");
+        return decimal.format(new BigDecimal(dist[n - 1][0] + "").divide(new BigDecimal(dist[n - 1][1] + "")));
     }
 
     private static boolean shorter(Node next, Node current, long head, long tail) {
