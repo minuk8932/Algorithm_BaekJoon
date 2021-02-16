@@ -103,8 +103,9 @@ public class Boj16074 {
 
             Mountaineer mt = new Mountaineer(x1 * M + y1, x2 * M + y2);
             int LCA = lca(mt);
+            int result = Math.max(height[x1][y1], height[x2][y2]);
 
-            sb.append(findMaxCost(deep[LCA], mt, x1, y1, x2, y2)).append(NEW_LINE);
+            sb.append(Math.max(findMaxCost(deep[LCA], mt), result)).append(NEW_LINE);
         }
 
         System.out.println(sb.toString());
@@ -117,17 +118,13 @@ public class Boj16074 {
      *
      * @param depth
      * @param mt
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
      * @return
      */
-    private static int findMaxCost(int depth, Mountaineer mt, int x1, int y1, int x2, int y2) {
+    private static int findMaxCost(int depth, Mountaineer mt) {
+        int max = 0;
+
         int x = mt.from;
         int y = mt.to;
-
-        int result = Math.max(height[x1][y1], height[x2][y2]);
         int xx = deep[x] - depth;
         int yy = deep[y] - depth;
 
@@ -137,19 +134,19 @@ public class Boj16074 {
             if(shift <= xx){
                 xx -= shift;
 
-                result = Math.max(result, cost[x][p]);
+                max = Math.max(max, cost[x][p]);
                 x = treeParent[x][p];
             }
 
             if(shift <= yy){
                 yy -= shift;
 
-                result = Math.max(result, cost[y][p]);
+                max = Math.max(max, cost[y][p]);
                 y = treeParent[y][p];
             }
         }
 
-        return result;
+        return max;
     }
 
     /**
