@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Boj16707 {
 
-	private static ArrayList<LandMark> input = new ArrayList<>();
 	private static ArrayList<Integer>[] connection;
 
 	private static int[][] capacity;
@@ -13,27 +12,15 @@ public class Boj16707 {
 
 	private static final int INF = 1_000_000_000;
 
-	private static class LandMark {
-		int node1;
-		int node2;
-		int cost;
-
-		public LandMark(int node1, int node2, int cost) {
-			this.node1 = node1;
-			this.node2 = node2;
-			this.cost = cost;
-		}
-	}
-
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 
-		int size = N * 4 + 3;
+		int size = N * 2 + 3;
 		int src = 0;
-		int stop = N * 2 + 1;
+		int stop = size - 2;
 		int snk = size - 1;
 
 		capacity = new int[size][size];
@@ -47,50 +34,32 @@ public class Boj16707 {
 
 		while(M-- > 0) {
 			st = new StringTokenizer(br.readLine());
-			int node1 = Integer.parseInt(st.nextToken()) - 1;
-			int node2 = Integer.parseInt(st.nextToken()) - 1;
-			int cost = Integer.parseInt(st.nextToken());
+			int node1 = Integer.parseInt(st.nextToken());
+			int node2 = Integer.parseInt(st.nextToken());
+			int c = Integer.parseInt(st.nextToken());
 
-			input.add(new LandMark(node1, node2, cost));
+			linker(node1 + N, node2, c, 1);
 		}
 
 		for(int i = 1; i <= N; i++) {
-			capacity[src][i] = 1;
-			connection[src].add(i);
-			connection[i].add(src);
-
-			capacity[i + N][stop] = 1;
-			connection[i + N].add(stop);
-			connection[stop].add(i + N);
-
-			capacity[stop][N * 2 + 1 + i] = 1;
-			connection[N * 2 + 1 + i].add(stop);
-			connection[stop].add(N * 2 + 1 + i);
-
-			capacity[N * 3 + 1 + i][snk] = 1;
-			connection[N * 3 + 1 + i].add(snk);
-			connection[snk].add(N * 3 + 1 + i);
+			linker(i, i + N, 0, 1);
 		}
 
-		linker(input, 1, N + 1);
-		linker(input, 2 * N + 2, 3 * N + 2);
+		linker(src, 1, 0, 1);
+		linker(2, stop, 0, 1);
+		linker(stop, N + 2, 0, 1);
+		linker(N, snk, 0, 1);
 
-		System.out.println(maximumFlowMinimumCost(src, stop, size)
-				+ maximumFlowMinimumCost(stop, snk, size));
+		System.out.println(maximumFlowMinimumCost(src, stop, size) + maximumFlowMinimumCost(stop, snk, size));
 	}
 
-	private static void linker(ArrayList<LandMark> input, int add1, int add2) {
-		for(LandMark in: input) {
-			int from = in.node1 + add1;
-			int to = in.node2 + add2;
+	private static void linker(int from, int to, int value, int cap) {
+		connection[from].add(to);
+		connection[to].add(from);
 
-			connection[from].add(to);
-			connection[to].add(from);
-			capacity[from][to] = 1;
-
-			cost[from][to] = in.cost;
-			cost[to][from] = -in.cost;
-		}
+		capacity[from][to] = cap;
+		cost[from][to] = value;
+		cost[to][from] = -value;
 	}
 
 	private static int maximumFlowMinimumCost(int S, int T, int N) {
