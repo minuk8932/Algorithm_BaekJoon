@@ -31,19 +31,11 @@ public class Boj13884 {
 
             int[] arr = new int[N];
             int[] sorted = new int[N];
-            int loop = N % 10 == 0 ? N: ((N / 10) + 1) * 10;
-            int i = 0;
 
-            while(loop > 0) {
-                st = new StringTokenizer(br.readLine());
-
-                while(st.hasMoreTokens()) {
-                    arr[i] = Integer.parseInt(st.nextToken());
-                    sorted[i] = arr[i];
-                    i++;
-                }
-
-                loop -= 10;
+            for(int i = 0; i < N; i++) {
+                if(i % 10 == 0) st = new StringTokenizer(br.readLine());
+                arr[i] = Integer.parseInt(st.nextToken());
+                sorted[i] = arr[i];
             }
 
             Arrays.sort(sorted);
