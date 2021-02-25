@@ -17,9 +17,9 @@ public class Boj20931 {
     private static final String ADD = "ad-hoc";
     private static final String NEW_LINE = "\n";
 
-    private static int[][] parent = new int[200_000][61];
+    private static int[][] parent = new int[200_000][21];
     private static int[] depth = new int[200_000];
-    private static long[][] cost = new long[200_000][61];
+    private static long[][] cost = new long[200_000][21];
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -53,7 +53,7 @@ public class Boj20931 {
      * @return
      */
     private static int search(int target, long length) {
-        for(int i = 60; i >= 0; i--){
+        for(int i = 20; i >= 0; i--){
             long jump = 1L << i;
 
             if(jump > depth[target] || length < cost[target][i]) continue;
@@ -80,7 +80,7 @@ public class Boj20931 {
         parent[index][0] = prev;
         cost[index][0] = L;
 
-        for(int p = 1; p < 61; p++){
+        for(int p = 1; p < 21; p++){
             parent[index][p] = parent[parent[index][p - 1]][p - 1];
             cost[index][p] = cost[index][p - 1] + cost[parent[index][p - 1]][p - 1];
         }
