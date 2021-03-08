@@ -2,6 +2,7 @@ package dynamic_programming;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 /**
  * 
@@ -12,44 +13,39 @@ import java.io.InputStreamReader;
  *
  */
 public class Boj1463 {
-	private static final int MAX = 1_000_001;
-	private static final int ZERO = 0;
-	private static final int ONE = 1;
+	private static int[] dp;
 
 	public static void main(String[] args) throws Exception {
-		// 버퍼를 통한 값 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int val = Integer.parseInt(br.readLine());
-		int[] token = new int[MAX];
+		int X = Integer.parseInt(br.readLine());
+		dp = new int[X + 1];
+		Arrays.fill(dp, -1);
 
-		token[1] = ZERO;					// 1~3 각 연산에 따른 결과를 입력
-		token[2] = ONE;
-		token[3] = ONE;
+		dp[1] = 0;
+		System.out.println(recursion(X));
+	}
 
-		for (int i = 4; i <= val; i++) {		// 4부터 메모이제이션을 통한 값 도출
+	/**
+	 *
+	 * Top-Down
+	 *
+	 * line 45: x / 3 case
+	 * line 46: x / 2 case
+	 * line 47: x - 1 case
+	 *
+	 * @param x
+	 * @return current case & memoization
+	 */
+	private static int recursion(int x) {
+		if(x == 1) return 0;
 
-			int res = 0;
+		if(dp[x] != -1) return dp[x];
+		int result = Integer.MAX_VALUE;
 
-			if (i % 3 == ZERO) {			// 3으로 나누어 떨어지면, 해당 인덱스의 token을 받아오고
-				res = token[i / 3];
-			}
+		if(x % 3 == 0) result = Math.min(recursion(x / 3), result);
+		if(x % 2 == 0) result = Math.min(recursion(x >> 1), result);
+		if(x >= 1) result = Math.min(recursion(x - 1), result);
 
-			if (i % 2 == ZERO) {		// 2로 나누어 떨어지면서
-				if (res != ZERO) {					// 0이 아닌경우
-					res = Math.min(token[i / 2], res);		// 결과에 2로나눈 인덱스의 토큰값과, 결과 중 최솟 값을 담아줌
-				} else {				// 0인 경우, 2로 나누는 인덱스의 토큰값을 담음
-					res = token[i / 2];
-				}
-			}
-
-			if (res == ZERO) {			// 만약 0이면, 이전 인덱스 값을 결과에 담
-				res = token[i - 1];
-			} else {							// 0이아니면 최솟값을 받아옴
-				res = Math.min(res, token[i - 1]);
-			}
-			token[i] = res + 1;
-		}
-
-		System.out.println(token[val]);		// 받아온 값에 해당하는 결과 출력
+		return dp[x] = result + 1;
 	}
 }
