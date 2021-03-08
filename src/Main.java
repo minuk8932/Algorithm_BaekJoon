@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Main {
 
-    private static final int MOD = 15_746;
+    private static final int MOD = 10_007;
     private static int[] dp;
 
     public static void main(String[] args) throws Exception {
@@ -17,12 +17,13 @@ public class Main {
     }
 
     private static int recursion(int n) {
-        if(n == 0) return 1;
-        if(dp[n] != -1) return dp[n];
+        if (n == 0) return 1;
+        if (n == 1) return 1;
+        if (dp[n] != -1) return dp[n];
 
         int result = recursion(n - 1);
+        if (n >= 2) result = modulation(result, recursion(n - 2) * 2);
 
-        if(n >= 2) result = modulation(result, recursion(n - 2));
         return dp[n] = result;
     }
 
