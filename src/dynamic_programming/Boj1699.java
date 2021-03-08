@@ -1,6 +1,7 @@
 package dynamic_programming;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 /**
  * 
@@ -12,27 +13,49 @@ import java.io.InputStreamReader;
  */
 
 public class Boj1699 {
-	public static void main(String[] args) throws Exception{
-		// 버퍼를 통한 값 입력
+
+	private static int[] dp;
+	private static int[] pows;
+	private static final int INF = 1_000_000_000;
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
-		int[] dp = new int[N + 1];
-		
-		br.close();
-		
-		for(int i = 1; i < N + 1; i++){
-			dp[i] = i;
+
+		int max = (int) Math.sqrt(N);
+
+		dp = new int[N + 1];
+		Arrays.fill(dp, -1);
+
+		pows = new int[max];
+		for(int i = 0; i < max; i++) {
+			pows[i] = -(i + 1) * (i + 1);
 		}
-		
-		
-		for (int i = 1; i < N + 1; i++) {
-			for (int j = 1; j * j < i + 1; j++) {	// LIS와 유사하게 풀이 가능, 제곱수의 합 이므로 해당 제곱수까지의 경우를 연산하는 반복문
-                if (dp[i] > dp[i - j * j] + 1) {		//	현재 dp 배열에서 제곱수의 합 개수와, 이전 제곱수의 합에 1을 더한 것 중
-                    dp[i] = dp[i - j * j] + 1;			//	더 큰 값을 dp배열에 할당
-                }
-            }
-        }
-		
-		System.out.println(dp[N]);				// 해당 값에서의 제곱수의 합 출력
+
+		Arrays.sort(pows);
+		System.out.println(recursion(N));
+	}
+
+	/**
+	 *
+	 * recursion
+	 *
+	 * line 54 ~ 57: add -pows and make n to zero
+	 *
+	 * @param n
+	 * @return
+	 */
+	private static int recursion(int n) {
+		if (n == 0) return 0;
+
+		if (dp[n] != -1) return dp[n];
+		int result = INF;
+
+		for(int nxt: pows) {
+			if (n < -nxt) continue;
+			result = Math.min(result, recursion(n + nxt));
+		}
+
+		return dp[n] = result + 1;
 	}
 }
