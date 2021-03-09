@@ -56,4 +56,3 @@ public class Boj11052 {
 		return dp[cards] = result;
 	}
 }
-}
