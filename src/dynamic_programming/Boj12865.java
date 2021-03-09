@@ -1,61 +1,74 @@
 package dynamic_programming;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /**
  * 
- * 	@author minchoba
+ * 	@author exponential-e
  *	백준 12865번: 평범한 배낭
  *
  *	@see https://www.acmicpc.net/problem/12865/
  *
  */
-public class Boj12865 {	
-	private static class Sack{
-		int w;
-		int c;
-		
-		public Sack(int w, int c) {
-			this.w = w;
-			this.c = c;
+public class Boj12865 {
+
+	private static Item[] items;
+	private static int[][] dp;
+	private static int N;
+
+	private static class Item {
+		int weight;
+		int value;
+
+		public Item(int weight, int value) {
+			this.weight = weight;
+			this.value = value;
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());
 		int K = Integer.parseInt(st.nextToken());
 
-		Sack[] map = new Sack[N + 1];
-		map[0] = new Sack(-1, -1);
-		
-		for (int i = 1; i < N + 1; i++) {
+		items = new Item[N];
+		for(int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
-			int weigh = Integer.parseInt(st.nextToken());
-			int value = Integer.parseInt(st.nextToken());
+			items[i] = new Item(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+		}
 
-			map[i] = new Sack(weigh, value);
+		dp = new int[N][K + 1];
+		for(int i = 0; i < dp.length; i++) {
+			Arrays.fill(dp[i], -1);
 		}
-	
-		System.out.println(search(N, K, map));
+
+		System.out.println(recursion(N - 1, K));
 	}
-	
-	private static int search(int N, int W, Sack[] knap) {
-		int[][] dp = new int[N + 1][W + 1];
-		
-		for(int i = 1; i < N + 1; i++) {
-			for(int j = 0; j < W + 1; j++) {
-				if(j < knap[i].w) {					// j보다 i번째 무게가 더 무거운 경우: 여유 공간이 없다.
-					dp[i][j] = dp[i - 1][j];		// 이전 값으로 유지
-					continue;
-				}
-				
-				dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - knap[i].w] + knap[i].c);	// 다음에 얻을 수 있는 최대 이익
-			}
+
+	/**
+	 *
+	 * Recursion
+	 *
+	 * line 66: next napsack not select
+	 * line 68 ~ 70: next napsack select
+	 *
+	 * @param n
+	 * @param k
+	 * @return
+	 */
+	private static int recursion(int n, int k) {
+		if(n < 0) return 0;
+
+		if(dp[n][k] != -1) return dp[n][k];
+		int result = recursion(n - 1, k);
+
+		if(items[n].weight <= k) {
+			result = Math.max(result, recursion(n - 1, k - items[n].weight) + items[n].value);
 		}
-		
-		return dp[N][W];
+
+		return dp[n][k] = result;
 	}
 }
