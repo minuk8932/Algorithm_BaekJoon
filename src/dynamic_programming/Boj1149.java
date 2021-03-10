@@ -13,36 +13,71 @@ import java.util.StringTokenizer;
  */
 public class Boj1149 {
 	private static int[][] dp;
-	
-	public static void main(String[] args) throws Exception{
+	private static RGB[] rgb;
+
+	private static class RGB{
+		int R;
+		int G;
+		int B;
+
+		public RGB(int R, int G, int B) {
+			this.R = R;
+			this.G = G;
+			this.B = B;
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
-		
-		dp = new int[N][3];
-		
-		int[][] home = new int[N][3];
-		for(int i = 0; i < N; i++) {
+
+		rgb = new RGB[N + 1];
+		for(int i = 1; i <= N; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			
-			for(int j = 0; j < 3; j++) {
-				home[i][j] = Integer.parseInt(st.nextToken());
+			rgb[i] = new RGB(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+		}
+
+		dp = new int[N + 1][4];
+		for (int i = 1; i <= N; i++) {
+			dp[i][0] = dp[i][1] = dp[i][2] = dp[i][3] = -1;
+		}
+
+		System.out.println(painting(N, 3));
+	}
+
+	/**
+	 *
+	 * Painting
+	 *
+	 * line 68 ~ 78: check minimum cost, by current R/G/B cases
+	 *
+	 * @param home
+	 * @param color
+	 * @return
+	 */
+	private static int painting(int home, int color) {
+		if(home == 0) return 0;
+		if(dp[home][color] != -1) return dp[home][color];
+		int result = Integer.MAX_VALUE;
+
+		if(color == 3) {
+			result = Math.min(painting(home, 0)
+					, Math.min(painting(home, 1), painting(home, 2)));
+		}
+		else {
+			switch (color) {
+				case 0:
+					result = Math.min(painting(home - 1, 1), painting(home - 1, 2)) + rgb[home].R;
+					break;
+				case 1:
+					result = Math.min(painting(home - 1, 0), painting(home - 1, 2)) + rgb[home].G;
+					break;
+				case 2:
+					result = Math.min(painting(home - 1, 1), painting(home - 1, 0)) + rgb[home].B;
+					break;
 			}
 		}
-		
-		System.out.println(memo(N, home));
-	}
-	
-	private static int memo(int n, int[][] home) {
-		dp[n - 1][0] = home[n - 1][0];								// colored blue, red, green the last home
-		dp[n - 1][1] = home[n - 1][1];
-		dp[n - 1][2] = home[n - 1][2];
-		
-		for(int i = n - 2; i >= 0; i--) {							// get min each case
-			dp[i][0] = Math.min(dp[i + 1][1], dp[i + 1][2]) + home[i][0];
-			dp[i][1] = Math.min(dp[i + 1][0], dp[i + 1][2]) + home[i][1];
-			dp[i][2] = Math.min(dp[i + 1][1], dp[i + 1][0]) + home[i][2];
-		}
-		
-		return Math.min(dp[0][0], Math.min(dp[0][1], dp[0][2]));	// total
+
+		return dp[home][color] = result;
 	}
 }
