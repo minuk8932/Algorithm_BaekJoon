@@ -2,10 +2,7 @@ package dynamic_programming;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  *
@@ -16,11 +13,11 @@ import java.util.StringTokenizer;
  *
  */
 public class Boj2213 {
-    private static int[] population;
+
+    private static PriorityQueue pq = new PriorityQueue();
+    private static ArrayList<Integer>[] edges;
+    private static int[] vertex;
     private static int[][] dp;
-    private static boolean[] visit;
-    private static ArrayList<Integer>[] tree;
-    private static ArrayList<Integer> path = new ArrayList<>();
 
     private static final String NEW_LINE = "\n";
     private static final String SPACE = " ";
@@ -29,13 +26,15 @@ public class Boj2213 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        population = new int[N + 1];
-        tree = new ArrayList[N + 1];
+        vertex = new int[N + 1];
+        edges = new ArrayList[N + 1];
+        dp = new int[N + 1][3];
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for(int i = 1; i <= N; i++) {
-            population[i] = Integer.parseInt(st.nextToken());
-            tree[i] = new ArrayList<>();
+        for(int i = 0; i <= N; i++) {
+            if(i != 0) vertex[i] = Integer.parseInt(st.nextToken());
+            edges[i] = new ArrayList<>();
+            dp[i][0] = dp[i][1] = dp[i][2] = -1;
         }
 
         int loop = N - 1;
@@ -44,61 +43,77 @@ public class Boj2213 {
             int node1 = Integer.parseInt(st.nextToken());
             int node2 = Integer.parseInt(st.nextToken());
 
-            tree[node1].add(node2);
-            tree[node2].add(node1);
+            edges[node1].add(node2);
+            edges[node2].add(node1);
         }
-
-        System.out.println(makeList(N));
-    }
-
-    private static String makeList(int n) {
-        dp = new int[2][n + 1];
-        visit = new boolean[n + 1];
-        Arrays.fill(dp[0], -1);
-        Arrays.fill(dp[1], -1);
-
-        int[] result = {recursion(0, 1, 0), recursion(0, 1, 1)};
 
         StringBuilder sb = new StringBuilder();
+        int[] result = {recursion(0, 1, 0), recursion(0, 1, 1)};
+
         sb.append(Math.max(result[0], result[1])).append(NEW_LINE);
+        if(result[1] >= result[0]) vertexTrace(0, 1, 1);
+        else vertexTrace(0, 1, 0);
 
-        findpath(0, 1);
-        Collections.sort(path);
-
-        for(int p: path) {
-            sb.append(p).append(SPACE);
+        while(!pq.isEmpty()) {
+            sb.append(pq.poll()).append(SPACE);
         }
 
-        return sb.toString();
+        System.out.println(sb.toString());
     }
 
-    private static void findpath(int prev, int current) {
-        if (dp[1][current] > dp[0][current]) {              // find path by declaration
-            if(!visit[prev]) {
-                visit[current] = true;
-                path.add(current);
+    /**
+     *
+     * Vertex trace
+     *
+     * line 84 ~ 90: compare current visit or not, and check before state
+     *
+     * @param prev
+     * @param current
+     * @param select
+     */
+    private static void vertexTrace(int prev, int current, int select) {
+        if(select == 1) pq.offer(current);
+
+        for(int next: edges[current]) {
+            if(prev == next) continue;
+
+            int left = recursion(current,  next, 0);
+            int right = recursion(current,  next, 1);
+
+
+            if (left > right) {
+                vertexTrace(current, next, 0);
+            }
+            else {
+                if(select == 1) vertexTrace(current, next, 0);
+                else vertexTrace(current, next, 1);
             }
         }
-
-        for (int next : tree[current]) {
-            if (next == prev) continue;
-            findpath(current, next);
-        }
     }
 
-    private static int recursion(int prev, int current, int flag){       // @see Boj1949
-        if(dp[flag][current] != -1) return dp[flag][current];
-        dp[flag][current] = flag == 1 ? population[current]: 0;
+    /**
+     *
+     * Recursion
+     *
+     * line 113 ~ 114: add all cases, visit or not
+     *
+     * @param prev
+     * @param current
+     * @param select
+     * @return
+     */
+    private static int recursion(int prev, int current, int select) {
+        int result = dp[current][select];
+        if(result != -1) return result;
+        result = select == 1 ? vertex[current]: 0;
 
-        int result = dp[flag][current];
+        for(int next: edges[current]) {
+            if(prev == next) continue;
 
-        for(int next: tree[current]) {
-            if(next == prev) continue;
-
-            if(flag == 0) result += Math.max(recursion(current, next, 0), recursion(current, next, 1));
+            if(select == 0) result += Math.max(recursion(current, next, 0), recursion(current, next, 1));
             else result += recursion(current, next, 0);
         }
 
-        return dp[flag][current] = result;
+        return dp[current][select] = result;
     }
 }
