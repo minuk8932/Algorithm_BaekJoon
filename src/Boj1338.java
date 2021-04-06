@@ -1,10 +1,13 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Boj1338 {
 
     private static final String NO = "Unknwon Number";
+    private static Set<Long> visit = new HashSet<>();
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,10 +27,13 @@ public class Boj1338 {
         long result = Long.MAX_VALUE;
 
         long target = y;
-        long time = 1L;
+//        long time = 1L;
+        long time = from / x - y;
 
         while(!outOfRange(x, from, to, target)) {
-            if(target >= from && target <= to){
+//            System.out.println(from + " " + to + " " + target + " " + time);
+            if(target >= from && target <= to && !visit.contains(target)){
+                visit.add(target);
                 result = target;
                 count++;
             }
