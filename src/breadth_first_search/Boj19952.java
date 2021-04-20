@@ -64,11 +64,23 @@ public class Boj19952 {
         System.out.println(sb.toString());
     }
 
+    /**
+     *
+     * Breadth First Search
+     *
+     * line 98: can reach
+     * line 100: used all
+     *
+     * @param force
+     * @param start
+     * @param end
+     * @return
+     */
     private static boolean bfs(int force, Point start, Point end) {
         Queue<Point> q = new LinkedList<>();
         q.offer(start);
 
-        visit[start.row][start.col] = force;            // current remained force
+        visit[start.row][start.col] = force;
 
         while(!q.isEmpty()) {
             Point current = q.poll();
@@ -83,8 +95,9 @@ public class Boj19952 {
                 int curHeight = map[current.row][current.col];
                 int nxtHeight = map[nextRow][nextCol];
                 
-                if(visit[current.row][current.col] < nxtHeight - curHeight) continue;       // can climb ?
+                if(visit[current.row][current.col] < nxtHeight - curHeight) continue;
                 visit[nextRow][nextCol] = visit[current.row][current.col] - 1;
+                if(visit[nextRow][nextCol] < 0) return false;
 
                 if(nextRow == end.row && nextCol == end.col) return true;
                 q.offer(new Point(nextRow, nextCol));
