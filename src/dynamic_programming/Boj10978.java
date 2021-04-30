@@ -34,7 +34,7 @@ public class Boj10978 {
 
     /**
      *
-     * Recrusion
+     * Recursion
      *
      * recursion(n - 1) * (n - 1): a -> b and others
      * recursion(n - 2) * (n - 1): a -> b, b -> a and others
