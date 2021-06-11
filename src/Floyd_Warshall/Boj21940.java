@@ -37,7 +37,7 @@ public class Boj21940 {
             road[from][to] = cost;
         }
 
-        floydWashall(N);
+        floydWarshall(N);
         int K = Integer.parseInt(br.readLine());
         st = new StringTokenizer(br.readLine());
 
