@@ -29,7 +29,7 @@ public class Boj1043 {
         int count = Integer.parseInt(st.nextToken());
 
         visit = new boolean[N];
-        for(int i = 0; i < count; i++) {                            // truth
+        for(int i = 0; i < count; i++) {
             int person = Integer.parseInt(st.nextToken()) - 1;
             visit[person] = true;
             q.offer(person);
@@ -48,17 +48,21 @@ public class Boj1043 {
             st = new StringTokenizer(br.readLine());
             count = Integer.parseInt(st.nextToken()) - 1;
 
-            int prev = Integer.parseInt(st.nextToken()) - 1;
-            query[i].add(prev);
+            try {
+                int prev = Integer.parseInt(st.nextToken()) - 1;
+                query[i].add(prev);
 
-            while(count-- > 0){                                     // make graph
-                int current = Integer.parseInt(st.nextToken()) - 1;
-                part[prev].add(current);
-                part[current].add(prev);
+                while(count-- > 0){
+                    int current = Integer.parseInt(st.nextToken()) - 1;
+                    part[prev].add(current);
+                    part[current].add(prev);
 
-                query[i].add(current);
+                    query[i].add(current);
 
-                prev = current;
+                    prev = current;
+                }
+            } catch (NoSuchElementException nsee) {
+                break;
             }
         }
 
@@ -71,7 +75,7 @@ public class Boj1043 {
 
             for(int next: part[current]) {
                 if(visit[next]) continue;
-                visit[next] = true;                     // truth propagtion
+                visit[next] = true;
 
                 q.offer(next);
             }
@@ -87,7 +91,7 @@ public class Boj1043 {
             }
 
             if(flag) continue;
-            count++;                                    // can lie
+            count++;
         }
 
         return count;
