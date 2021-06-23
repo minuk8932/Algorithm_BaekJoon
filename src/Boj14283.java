@@ -49,7 +49,6 @@ public class Boj14283 {
             int node1 = Integer.parseInt(st.nextToken()) - 1;
             int node2 = Integer.parseInt(st.nextToken()) - 1;
             int cost = Integer.parseInt(st.nextToken());
-            result += cost;
 
             linker(node1, node2, cost);
         }
@@ -88,6 +87,7 @@ public class Boj14283 {
     private static void networkFlow() {
         prev = new int[N];
         boolean[][] visit = new boolean[N][N];
+        int flowValue = 0;
 
         while (true) {
             Arrays.fill(prev, -1);
@@ -122,43 +122,8 @@ public class Boj14283 {
                 flow[prev[i]][i] += minFlow;
                 flow[i][prev[i]] -= minFlow;
             }
+
+            flowValue += minFlow;
         }
-
-        while (true) {
-            min = new Pair(-1, -1, Integer.MAX_VALUE);
-
-            if (linked()) break;
-            result -= min.cost;
-            flow[min.prev][min.current] = 0;
-        }
-    }
-
-    private static boolean linked() {
-        for (Pair p : pairs) {
-            if (flow[p.prev][p.current] <= 0) continue;
-            Pair except = new Pair(p.prev, p.current, weight[p.prev][p.current]);
-            Arrays.fill(prev, -1);
-
-            Queue<Integer> q = new LinkedList<>();
-            q.offer(S);
-
-            while (!q.isEmpty()) {
-                int current = q.poll();
-
-                for (int next : connection[current]) {
-                    if (flow[current][next] <= 0) continue;
-                    if (prev[next] != -1) continue;
-                    if (except.prev == current && except.current == next) continue;
-
-                    prev[next] = current;
-                    q.offer(next);
-                }
-            }
-
-            if (prev[T] == -1) return true;
-            if (min.cost > except.cost) min = new Pair(except.prev, except.current, except.cost);
-        }
-
-        return false;
     }
 }
