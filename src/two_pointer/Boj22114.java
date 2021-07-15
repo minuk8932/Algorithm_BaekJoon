@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 /**
@@ -17,7 +18,8 @@ import java.util.function.Function;
 public class Boj22114 {
 
     private static int[] L;
-    private static BiFunction<Integer, Integer, Boolean> compare;
+    private static final BiPredicate<Integer, Integer> COMPARE = (x, y) -> x < y - 1;
+    private static final BiPredicate<Boolean, Boolean> AND = (x, y) -> x && y;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -39,9 +41,9 @@ public class Boj22114 {
      *
      * Two pointer
      *
-     * line 56 ~ 60: pre define functions (adder, compare, switcher, getMax)
-     * line 64 ~ 69: just move forward
-     * line 71 ~ 87: when CY can't move by K jump case
+     * line 60 ~ 63: pre define functions (adder, compare, switcher, getMax)
+     * line 67 ~ 72: just move forward
+     * line 74 ~ 90: when CY can't move by K jump case
      *
      * @param N
      * @param K
@@ -55,25 +57,24 @@ public class Boj22114 {
         int result = 0;
         int flag = 0;
 
-        Function<Integer, Integer> adder = x -> x + 1;
-        Function<Boolean, Boolean> switcher = x -> !x;
+        final Function<Integer, Integer> ADDER = x -> x + 1;
+        final Function<Boolean, Boolean> SWITCHER = x -> !x;
 
-        BiFunction<Integer, Integer, Integer> getMax = (x, y) -> Math.max(x, y);
-        compare = (x, y) -> x < y - 1;
+        final BiFunction<Integer, Integer, Integer> MAX = (x, y) -> Math.max(x, y);
 
         while (outOfRange(start, end, N)) {
 
-            if(compare.apply(L[end], K + 2)){
-                blocks = adder.apply(blocks);
-                end = adder.apply(end);
+            if(COMPARE.test(L[end], K + 2)){
+                blocks = ADDER.apply(blocks);
+                end = ADDER.apply(end);
 
                 continue;
             }
 
             if(jumpped) {
-                start = adder.apply(flag);
-                result = getMax.apply(result, blocks);
-                jumpped = switcher.apply(jumpped);
+                start = ADDER.apply(flag);
+                result = MAX.apply(result, blocks);
+                jumpped = SWITCHER.apply(jumpped);
 
                 end = start;
 
@@ -81,18 +82,18 @@ public class Boj22114 {
                 flag = 0;
             }
             else {
-                blocks = adder.apply(blocks);
-                jumpped = switcher.apply(jumpped);
+                blocks = ADDER.apply(blocks);
+                jumpped = SWITCHER.apply(jumpped);
 
                 flag = end;
-                end = adder.apply(end);
+                end = ADDER.apply(end);
             }
         }
 
-        return getMax.apply(result, blocks);
+        return MAX.apply(result, blocks);
     }
 
     private static boolean outOfRange(int a, int b, final int N) {
-        return compare.apply(a, N) && compare.apply(b, N);
+        return AND.test(COMPARE.test(a, N), COMPARE.test(b, N));
     }
 }
