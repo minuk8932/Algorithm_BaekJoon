@@ -17,13 +17,18 @@ public class Boj1913 {
 	
 	private static final char SPACE = ' ';
 	private static final char NEW_LINE = '\n';
+
+	private static StringBuilder sb = new StringBuilder();
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
 		int num = Integer.parseInt(br.readLine());
 		
-		getRes(N, num);
+		Point result = getRes(N, num);
+		sb.append(result.row + 1).append(SPACE).append(result.col + 1);
+
+		System.out.println(sb.toString());
 	}
 	
 	private static class Point{
@@ -36,27 +41,27 @@ public class Boj1913 {
 		}
 	}
 	
-	private static void getRes(int n, int target) {
-		StringBuilder sb = new StringBuilder();
+	private static Point getRes(int n, int target) {
+
 		int[][] arr = new int[n][n];
 		
 		int loop = n * n;
 		int num = 1;
 		int move = 1;
 		int repeat = 0;
-		
+
 		Point start = new Point(n / 2, n / 2);
-		Point res = new Point(-1, -1);
-		
+		Point res = start;
+
 		arr[start.row][start.col] = num++;
 		
 OUTER:	while(true) {
 			for(final int[] DIRECTION: DIRECTIONS) {
-				for(int j = 0; j < move; j++) {					// 1 1 / 2 2 / 3 3 .... 빙글빙글 달팽이
+				for(int j = 0; j < move; j++) {
 					int nextRow = start.row + DIRECTION[ROW];
 					int nextCol = start.col + DIRECTION[COL];
 					
-					if(num > loop) break OUTER;			// 숫자가 N^2 넘어가면 종료
+					if(num > loop) break OUTER;
 					arr[nextRow][nextCol] = num++;
 					
 					if(arr[nextRow][nextCol] == target) res = new Point(nextRow, nextCol);
@@ -74,9 +79,7 @@ OUTER:	while(true) {
 		}
 		
 		sb.append(getSnail(n, arr));
-		sb.append(res.row + 1).append(SPACE).append(res.col + 1);
-		
-		System.out.println(sb);		// 결과 출력
+		return res;
 	}
 	
 	private static StringBuilder getSnail(int n, int[][] arr) {
