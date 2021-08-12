@@ -24,7 +24,6 @@ public class Boj21772 {
     private static final char SWEET_POTATO = 'S';
 
     private static int max;
-    private static boolean[][] visit;
 
     private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
     private static final int ROW = 0, COL = 1;
@@ -47,7 +46,6 @@ public class Boj21772 {
         int T = Integer.parseInt(st.nextToken());
 
         map = new char[R][C];
-        visit = new boolean[R][C];
         for(int i = 0; i < R; i++) {
             String input = br.readLine();
 
@@ -74,21 +72,16 @@ public class Boj21772 {
             int nextCol = current.col + DIRECTION[COL];
 
             if(outOfRange(nextRow, nextCol)) continue;
-            if(visit[nextRow][nextCol]) continue;
             if(map[nextRow][nextCol] == BLOCK) continue;
-            visit[nextRow][nextCol] = true;
 
             if(map[nextRow][nextCol] != SWEET_POTATO) {
                 recursion(new Point(nextRow, nextCol), t - 1, count);
-                visit[nextRow][nextCol] = false;
                 continue;
             }
 
             map[nextRow][nextCol] = EMPTY;
             recursion(new Point(nextRow, nextCol), t - 1, count + 1);
             map[nextRow][nextCol] = SWEET_POTATO;
-
-            visit[nextRow][nextCol] = false;
         }
     }
 
