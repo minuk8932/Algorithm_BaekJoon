@@ -1,4 +1,5 @@
 package math;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
@@ -17,18 +18,24 @@ public class Boj2527 {
 	private static final char L = 'b';
 	private static final char P = 'c';
 	private static final char N = 'd';
+
+	private static class Point {
+		int x;
+		int y;
+
+		public Point(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
 	
 	private static class Rectangle{
-		int x1;
-		int y1;
-		int x2;
-		int y2;
-		
-		public Rectangle(int x1, int y1, int x2, int y2) {
-			this.x1 = x1;
-			this.y1 = y1;
-			this.x2 = x2;
-			this.y2 = y2;
+		Point p1;
+		Point p2;
+
+		public Rectangle(Point p1, Point p2) {
+			this.p1 = p1;
+			this.p2 = p2;
 		}
 	}
 	
@@ -37,45 +44,33 @@ public class Boj2527 {
 		StringBuilder sb = new StringBuilder();
 		
 		for(int test = 0; test < 4; test++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
 			Rectangle[] sqr = new Rectangle[2];
-			
+
+			StringTokenizer st = new StringTokenizer(br.readLine());
 			for(int r = 0; r < 2; r++) {
-				sqr[r] = new Rectangle(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),
-						Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+				sqr[r] = new Rectangle(
+						new Point(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())),
+						new Point(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()))
+				);
 			}
-			
-			sb.append(judge(sqr)).append(NEW_LINE);
+
+			Rectangle compress = new Rectangle(
+					new Point(Math.max(sqr[0].p1.x, sqr[1].p1.x), Math.max(sqr[0].p1.y, sqr[1].p1.y)),
+					new Point(Math.min(sqr[0].p2.x, sqr[1].p2.x), Math.min(sqr[0].p2.y, sqr[1].p2.y))
+			);
+
+			sb.append(judge(compress)).append(NEW_LINE);
 		}
 		
 		System.out.println(sb);
 	}
 	
-	private static char judge(Rectangle[] arr) {
-		if(none(arr[0], arr[1])) return N;
-		else if(point(arr[0], arr[1])) return P;
-		else if(line(arr[0], arr[1])) return L;
-		else return R;
-	}
-	
-	private static boolean none(Rectangle r1, Rectangle r2) {			// 서로 다른 영역
-		if(r1.x1 > r2.x2 || r1.x2 < r2.x1 || r1.y2 < r2.y1 || r2.y2 < r1.y1) return true;
-		return false;
-	}
-	
-	private static boolean point(Rectangle r1, Rectangle r2) {			// 접점 존재
-		if((r1.x2 == r2.x1 && r1.y2 == r2.y1) || 
-				(r1.x2 == r2.x1 && r1.y1 == r2.y2) || 
-				(r1.x1 == r2.x2 && r1.y2 == r2.y1) || 
-				(r1.x1 == r2.x2 && r1.y1 == r2.y2)) return true;
-		return false;
-	}
-	
-	private static boolean line(Rectangle r1, Rectangle r2) {			// 접선 존재
-		if((r1.x2 == r2.x1 && r1.y2 != r2.y1) ||
-				(r1.x1 == r2.x2 && r1.y2 != r2.y1) || 
-				(r1.y1 == r2.y2 && r1.x2 != r2.x1) ||
-				(r1.y1 == r2.y2 && r1.x1 != r2.x2)) return true;
-		return false;
+	private static char judge(Rectangle rec) {
+		Point diff = new Point(rec.p2.x - rec.p1.x, rec.p2.y - rec.p1.y);
+
+		if(diff.x > 0 && diff.y > 0) return R;
+		else if(diff.x < 0 || diff.y < 0) return N;
+		else if(diff.x == 0 && diff.y == 0) return P;
+		return L;
 	}
 }
