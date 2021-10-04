@@ -39,7 +39,7 @@ public class Boj2824 {
             for (int i = 0; i < loop; i++) {
                 result = result * key;                      // make gcd
 
-                if (result > INF) {
+                if (result >= INF) {
                     compressed = true;
                     result %= INF;
                 }
