@@ -35,7 +35,7 @@ public class Boj1477 {
     }
 
     private static int binarySearch(int n, int m, int l, int[] r) {
-        int start = 0, end = l;
+        int start = 1, end = l - 1;
         int result = 0;
 
         while (start <= end) {
@@ -43,6 +43,7 @@ public class Boj1477 {
             int count = 0;
 
             for(int i = 1; i < n; i++) {                // between i ~ i+1, has enough interval compare with mid
+                if (r[i] - r[i - 1] <= mid) continue;
                 count += (r[i] - r[i - 1] - 1) / mid;
             }
 
