@@ -1,11 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class Boj23260 {
 
@@ -13,9 +10,11 @@ public class Boj23260 {
     private static final int SIZE = 1_000_000;
 
     private static int primes;
-    private static int compositions;
+    private static long compositions;
     private static boolean[] prime = new boolean[SIZE + 1];
-    private static Map<Long, Integer> dp = new HashMap<>();
+
+    private static long[] factorial = new long[SIZE + 1];
+    private static long[] inverse = new long[SIZE + 1];
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,7 +23,6 @@ public class Boj23260 {
         int K = Integer.parseInt(st.nextToken());
 
         eratosThenes();
-        // 소수 갯수(p) p_C_k-1 * 합성 수 갯수
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
             int number = Integer.parseInt(st.nextToken());
@@ -36,40 +34,45 @@ public class Boj23260 {
         System.out.println(calculation(K));
     }
 
-    private static int calculation(int k) {
+    private static long calculation(int k) {
         if(primes + 1 < k) return 0;
         if(compositions == 0) return combination(primes, k);
 
-        return MODULATION_MUL.apply(combination(primes, k - 1), compositions);
+        return MODULATION.apply(combination(primes, k - 1), compositions);
     }
 
-    private static int combination(int n, int r) {
-        int head = 1;
-        for(int i = 0; i < r; i++) {
-            head = MODULATION_MUL.apply(head, n--);
-        }
+    private static long combination(int n, int r) {
+        makeFacto();
+        getInverse();
 
-        int tail = 1;
-        while(r > 0) {
-            tail = MODULATION_MUL.apply(tail, r--);
-        }
-
-        fastPow(tail, MOD - 2, MOD);
-        return 0;
+        return MODULATION.apply(MODULATION.apply(inverse[n - r], inverse[r]), factorial[n]);
     }
 
-    private static int fastPow(int base, int exp, int mod) {
-        int result = 1;
+    private static void makeFacto() {
+        factorial[0] = 1;
 
-        for (; exp > 0; exp >>= 1, base = (base * base) % mod) {
-            if ((exp & 1) != 1) continue;
-            result = (result * base) % mod;
+        for (int i = 1; i <= SIZE; i++) {
+            factorial[i] = MODULATION.apply(factorial[i - 1], (long) i);
         }
-
-        return result;
     }
 
-    private static void eratosThenes() {                // 최대 78,499
+    private static void getInverse() {
+        inverse[SIZE] = pow(factorial[SIZE], MOD - 2);
+
+        for (int i = SIZE - 1; 0 <= i; i--) {
+            inverse[i] = MODULATION.apply(inverse[i + 1], 1L + i);
+        }
+    }
+
+    private static long pow (long a, long p) {
+        if (p == 0) return 1;
+        if (p % 2 == 1) return MODULATION.apply(pow(a, p - 1), a);
+
+        long half = pow(a, p >> 1) % MOD;
+        return MODULATION.apply(half, half);
+    }
+
+    private static void eratosThenes() {
         Arrays.fill(prime, true);
         prime[0] = prime[1] = false;
 
@@ -84,6 +87,5 @@ public class Boj23260 {
         prime[1] = true;
     }
 
-    private static final BiFunction<Integer, Integer, Integer> MODULATION_MUL = (x, y) -> ((x % MOD) * (y % MOD)) % MOD;
-    private static final BiFunction<Integer, Integer, Integer> MODULATION_SUM = (x, y) -> ((x % MOD) + (y % MOD)) % MOD;
+    private static final BiFunction<Long, Long, Long> MODULATION = (x, y) -> ((x % MOD) * (y % MOD)) % MOD;
 }
