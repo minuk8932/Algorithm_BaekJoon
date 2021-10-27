@@ -2,6 +2,7 @@ package sort;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 import java.util.function.BiPredicate;
@@ -24,12 +25,20 @@ public class Boj23056 {
     private static int[] limit;
 
     private static class Student {
-        int classify;
-        String name;
+        private int classify;
+        private String name;
 
         public Student(int classify, String name) {
             this.classify = classify;
             this.name = name;
+        }
+
+        public int getMod() {
+            return -this.classify % 2;
+        }
+
+        public int getLength(){
+            return this.name.length();
         }
     }
 
@@ -39,21 +48,10 @@ public class Boj23056 {
         int N = PARSE_INT.apply(st.nextToken());
         int M = PARSE_INT.apply(st.nextToken());
 
-        PriorityQueue<Student> pq = new PriorityQueue<>((x, y) -> {
-            int xmod = x.classify % 2;
-            int ymod = y.classify % 2;
-
-            if(xmod == ymod) {
-                if(x.classify == y.classify) {
-                    if(x.name.length() == y.name.length()) return x.name.compareTo(y.name);
-                    return x.name.length() - y.name.length();
-                }
-
-                return x.classify - y.classify;
-            }
-
-            return (ymod) - (xmod);
-        });
+        PriorityQueue<Student> pq = new PriorityQueue<>(Comparator.comparingInt(Student::getMod)
+                .thenComparingInt(stu -> stu.classify)
+                .thenComparingInt(Student::getLength)
+                .thenComparing(stu -> stu.name));
 
         limit = new int[N + 1];
 
