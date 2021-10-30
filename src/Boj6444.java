@@ -46,7 +46,7 @@ public class Boj6444 {
 					}
 
 					if(val != 0) sheets.put(target, val);
-					sb.append(sheets.containsKey(target) ? sheets.get(target): 0).append(SPACE);
+					sb.append((sheets.containsKey(target) ? sheets.get(target): 0) + SPACE);
 				}
 				sb.append(NEW_LINE);
 			}
