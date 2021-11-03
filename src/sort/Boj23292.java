@@ -1,4 +1,4 @@
-package APC;
+package sort;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class A {
+public class Boj23292 {
 
     private static final int DELIMITER = 100;
 

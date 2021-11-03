@@ -1,4 +1,4 @@
-package APC;
+package simulation;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
-public class B {
+public class Boj23293 {
 
     private static TreeSet<Integer> badRequestPlayer = new TreeSet<>();
     private static TreeSet<Integer> badRequestLog = new TreeSet<>();
