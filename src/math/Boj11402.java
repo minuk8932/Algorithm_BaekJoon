@@ -31,11 +31,17 @@ public class Boj11402 {
         mod = M;
 
         init();
+        System.out.println(process(N, K, M));
+    }
+
+    private static long process(long n, long k, long m) {
+        if(k == 0) return 1 % m;
+
         long result = 1L;
 
-        while (N > 0 || K > 0) {
-            long modN = N % M;
-            long modK = K % M;
+        while (n > 0 || k > 0) {
+            long modN = n % m;
+            long modK = k % m;
 
             if(modN < modK) {
                 result = 0;
@@ -43,14 +49,14 @@ public class Boj11402 {
             }
 
             result = MODULATION_MUL.apply(result, MODULATION_MUL.apply(factorial[(int) modN]
-                    , MODULATION_MUL.apply(pow(factorial[(int) (modN - modK)], M - 2)
-                            , pow(factorial[(int) modK], M - 2))));
+                    , MODULATION_MUL.apply(pow(factorial[(int) (modN - modK)], m - 2)
+                            , pow(factorial[(int) modK], m - 2))));
 
-            N /= M;
-            K /= M;
+            n /= m;
+            k /= m;
         }
 
-        System.out.println(result);
+        return result;
     }
 
     /**
