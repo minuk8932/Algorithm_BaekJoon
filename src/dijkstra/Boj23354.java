@@ -1,7 +1,17 @@
+package dijkstra;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 23354번: 군탈 체포조
+ *
+ * @see https://www.acmicpc.net/problem/23354
+ *
+ */
 public class Boj23354 {
 
     private static boolean[] visit;
@@ -71,14 +81,12 @@ public class Boj23354 {
         int min = INF;
 
         for (int p: permutation) {
-            int from = p % 10;
-            int cost = dist[0][from];
-            p /= 10;
+            int from = 0;
+            int cost = 0;
 
             while(p > 0) {
                 int to = p % 10;
                 cost += dist[from][to];
-                System.out.println(from + " " + to);
 
                 p /= 10;
                 from = to;
@@ -114,7 +122,7 @@ public class Boj23354 {
 
         Queue<Point> pq = new PriorityQueue<>(Comparator.comparingInt(x -> x.val));
         pq.offer(deserter.get(from));
-        cost[from][to] = 0;
+        cost[deserter.get(from).row][deserter.get(from).col] = 0;
 
         while(!pq.isEmpty()) {
             Point current = pq.poll();
@@ -126,7 +134,7 @@ public class Boj23354 {
 
                 if (outOfRange(nextRow, nextCol)) continue;
 
-                int nextcost =  map[nextRow][nextCol] == -1 ? 0 :map[nextRow][nextCol];
+                int nextcost = map[nextRow][nextCol] == -1 ? 0 :map[nextRow][nextCol];
                 if (cost[nextRow][nextCol] <= current.val + nextcost) continue;
                 cost[nextRow][nextCol] = current.val + nextcost;
 
