@@ -1,10 +1,18 @@
-package sogang;
+package breadth_first_search;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class J {
+/**
+ *
+ * @author exponential-e
+ * 백준 23747번: 와드
+ *
+ * @see https://www.acmicpc.net/problem/23747
+ *
+ */
+public class Boj23747 {
 
     private static final char WARD = 'W';
     private static final char UP = 'U';
@@ -16,7 +24,7 @@ public class J {
 
     private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
     private static final int ROW = 0, COL = 1;
-    private static final int CIPHER = 1_000;
+    private static final int CIPHER = 10_000;
 
     private static final String NEW_LINE = "\n";
 
@@ -86,12 +94,19 @@ public class J {
             }
         }
 
-        holdPosition(s);
         for(int w: warded) {
             floodFill(new Point(w / CIPHER, w % CIPHER));
         }
+
+        holdPosition(s);
     }
 
+    /**
+     *
+     * User position
+     *
+     * @param current
+     */
     private static void holdPosition(Point current) {
         visit[current.row][current.col] = true;
 
@@ -104,6 +119,12 @@ public class J {
         }
     }
 
+    /**
+     *
+     * Ward position
+     *
+     * @param start
+     */
     private static void floodFill(Point start) {
         Queue<Point> q = new ArrayDeque<>();
         q.offer(start);
