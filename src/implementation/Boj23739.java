@@ -1,4 +1,4 @@
-package sogang;
+package implementation;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -6,12 +6,12 @@ import java.io.InputStreamReader;
 /**
  *
  * @author exponential-e
- * 백준 서강 B번: 벼락치기
+ * 백준 23739번: 벼락치기
  *
- * @see https://www.acmicpc.net/contest/problem/725/2
+ * @see https://www.acmicpc.net/contest/problem/23739
  *
  */
-public class B {
+public class Boj23739 {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());

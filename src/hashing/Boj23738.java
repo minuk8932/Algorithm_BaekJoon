@@ -1,4 +1,4 @@
-package sogang;
+package hashing;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,12 +8,12 @@ import java.util.Map;
 /**
  *
  * @author exponential-e
- * 백준 서강 A번: Ресторан
+ * 백준 23739번: Ресторан
  *
- * @see https://www.acmicpc.net/contest/problem/725/1
+ * @see https://www.acmicpc.net/contest/problem/23738
  *
  */
-public class A {
+public class Boj23738 {
 
     private static Map<Character, String> mapper = new HashMap<>();
 

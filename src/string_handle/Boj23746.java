@@ -1,4 +1,4 @@
-package sogang;
+package string_handle;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -7,12 +7,12 @@ import java.util.*;
 /**
  *
  * @author exponential-e
- * 백준 서강 I번: 문자열 압축 해제
+ * 백준 23746번: 문자열 압축 해제
  *
- * @see https://www.acmicpc.net/contest/problem/725/9
+ * @see https://www.acmicpc.net/contest/problem/23746
  *
  */
-public class I {
+public class Boj23746 {
 
     private static Map<Character, String> matching = new HashMap<>();
     private static List<Character> result = new ArrayList<>();

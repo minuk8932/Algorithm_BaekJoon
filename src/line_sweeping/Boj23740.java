@@ -1,4 +1,4 @@
-package sogang;
+package line_sweeping;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -7,12 +7,12 @@ import java.util.*;
 /**
  *
  * @author exponential-e
- * 백준 서강 D번: 버스 노선 개편하기
+ * 백준 23740번: 버스 노선 개편하기
  *
- * @see https://www.acmicpc.net/contest/problem/725/4
+ * @see https://www.acmicpc.net/contest/problem/23740
  *
  */
-public class D {
+public class Boj23740 {
 
     private static Queue<Route> pq;
 
