@@ -1,11 +1,10 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Boj9025 {
+
+    private static final int INF = 1_000_000_000;
 
     private static int[] parent;
     private static Queue<Node> pq;
@@ -38,19 +37,35 @@ public class Boj9025 {
 
             init(n);
 
+            int[][] inputs = new int[n][n];
+            for(int i = 0; i < n; i++) {
+                Arrays.fill(inputs[i], INF);
+            }
+
             while(m-- > 0) {
                 st = new StringTokenizer(br.readLine());
                 int from = Integer.parseInt(st.nextToken()) - 1;
                 int to = Integer.parseInt(st.nextToken()) - 1;
                 int cost = Integer.parseInt(st.nextToken());
 
-                pq.offer(new Node(from, to, cost));
+                inputs[from][to] = Math.min(cost, inputs[from][to]);
+                inputs[to][from] = inputs[from][to];
             }
 
+            offering(inputs);
             sb.append(processing(s, t)).append(NEW_LINE);
         }
 
         System.out.println(sb.toString());
+    }
+
+    private static void offering(int[][] inputs) {
+        for(int i = 0; i < inputs.length; i++) {
+            for(int j = i + 1; j < inputs[i].length; j++) {
+                if(inputs[i][j] == INF) continue;
+                pq.offer(new Node(i, j, inputs[i][j]));
+            }
+        }
     }
 
     private static int processing(int S, int T) {
