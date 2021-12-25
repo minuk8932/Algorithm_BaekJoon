@@ -1,17 +1,24 @@
+package search;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 23835번: 어떤 우유의 배달목록 (Easy)
+ *
+ * @see https://www.acmicpc.net/problem/23835
+ *
+ */
 public class Boj23835 {
 
     private static final String NEW_LINE = "\n";
 
     private static List<Integer>[] rooms;
     private static long[] milk;
-    private static long[] passed;
+    private static int[] passed;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -36,7 +43,7 @@ public class Boj23835 {
         StringBuilder sb = new StringBuilder();
         int Q = Integer.parseInt(br.readLine());
 
-        passed = new long[N];
+        passed = new int[N];
 
         while(Q-- > 0) {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -46,12 +53,7 @@ public class Boj23835 {
                 int u = Integer.parseInt(st.nextToken()) - 1;
                 int v = Integer.parseInt(st.nextToken()) - 1;
 
-                Arrays.fill(passed, -1L);
-                passed[u] = 0;
-                dfs(u, v);
-
-                milk[v] += passed[v];
-                passed[v] = -1;
+                bfs(u, v);
                 recursion(v, u);
             }
             else {
@@ -63,26 +65,48 @@ public class Boj23835 {
         System.out.print(sb.toString());
     }
 
+    /**
+     *
+     * DFS: Tracking reverse track
+     *
+     * @param current
+     * @param target
+     */
     private static void recursion(int current, int target) {
         if(current == target) return;
+        milk[current] += passed[current];
 
         for(int next: rooms[current]) {
-            if(passed[next] == -1) continue;
-            milk[next] += passed[next];
-            passed[next] = -1;
-
+            if(passed[next] + 1 != passed[current]) continue;
             recursion(next, target);
         }
     }
 
-    private static void dfs(int current, int target) {
-        if(current == target) return;
+    /**
+     *
+     * BFS: Flood fill until end
+     *
+     * @param start
+     * @param end
+     */
+    private static void bfs(int start, int end) {
+        Arrays.fill(passed, -1);
 
-        for(int next: rooms[current]) {
-            if(passed[next] != -1) continue;
-            passed[next] = passed[current] + 1;
+        Queue<Integer> q = new ArrayDeque<>();
+        q.offer(start);
 
-            dfs(next, target);
+        passed[start] = 0;
+
+        while(!q.isEmpty()) {
+            int current = q.poll();
+
+            for(int next: rooms[current]) {
+                if(passed[next] != -1) continue;
+                passed[next] = passed[current] + 1;
+
+                if(next == end) return;
+                q.offer(next);
+            }
         }
     }
 }
