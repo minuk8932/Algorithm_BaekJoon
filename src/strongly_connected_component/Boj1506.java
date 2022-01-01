@@ -80,7 +80,6 @@ public class Boj1506 {
             if(number[next] == 0) {
                 recursion(next);
                 lowest[current] = Math.min(lowest[current], lowest[next]);
-
                 continue;
             }
 
