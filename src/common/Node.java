@@ -1,6 +1,6 @@
 package common;
 
-class Node {
+public class Node {
     private int node;
     private int cost;
 
