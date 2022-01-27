@@ -1,3 +1,5 @@
+package common;
+
 class Node {
     private int node;
     private int cost;
