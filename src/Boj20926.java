@@ -3,17 +3,16 @@ import common.Point;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class Boj20926 {
 
-    private static final String TERRA = "T";
-    private static final String ROCK = "R";
-    private static final String HOLE = "H";
-    private static final String EXIT = "E";
+    private static final char TERRA = 'T';
+    private static final char ROCK = 'R';
+    private static final char HOLE = 'H';
+    private static final char EXIT = 'E';
 
     private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
     private static final int ROW = 0;
@@ -37,26 +36,26 @@ public class Boj20926 {
 
         map = new int[H][W];
         for(int i = 0; i < H; i++) {
-            st = new StringTokenizer(br.readLine());
+            String input = br.readLine();
 
             for(int j = 0; j < W; j++) {
-                String component = st.nextToken();
+                char component = input.charAt(j);
                 Point p = Point.pointWithCost(i, j, 0);
 
-                if(HOLE.equals(component)) {
+                if(HOLE == component) {
                     holes.add(INDEX_ENCODER.apply(p));
                 }
-                else if(TERRA.equals(component)) {
+                else if(TERRA == component) {
                     start = p;
                 }
-                else if(EXIT.equals(component)) {
+                else if(EXIT == component) {
                     end = p;
                 }
-                else if(ROCK.equals(component)) {
+                else if(ROCK == component) {
                     rocks.add(INDEX_ENCODER.apply(p));
                 }
                 else {
-                    map[p.getRow()][p.getCol()] = Integer.parseInt(st.nextToken());
+                    map[p.getRow()][p.getCol()] = component - '0';
                 }
             }
         }
@@ -65,52 +64,62 @@ public class Boj20926 {
     }
 
     private static int bfs() {
-        int[][][] visit = visitInitiate();
+        int[][] visit = visitInitiate();
+        int answer = INF;
 
-        Queue<Point> pq = new PriorityQueue<>(Comparator.comparingInt(p -> p.getCost()));
+        Queue<Point> pq = new ArrayDeque<>();
         pq.offer(start);
 
-        visit[4][start.getRow()][start.getCol()] = 0;
+        visit[start.getRow()][start.getCol()] = 0;
 
         while(!pq.isEmpty()) {
             Point current = pq.poll();
 
-            for(int dir = 0; dir < 4; dir++) {
-                int nextRow = current.getRow() + DIRECTIONS[dir][ROW];
-                int nextCol = current.getCol() + DIRECTIONS[dir][COL];
+            for(final int[] DIRECTION: DIRECTIONS) {
+                int nextRow = current.getRow() + DIRECTION[ROW];
+                int nextCol = current.getCol() + DIRECTION[COL];
                 int nextCost = 0;
 
-                Point next = Point.pointWithDirection(nextRow, nextCol, 0);
+                Point next = Point.pointWithCost(nextRow, nextCol, 0);
+
                 boolean arrived = false;
+                boolean blocked = false;
 
                 while(!OUT_OF_RANGE.test(next)
                         && !holes.contains(INDEX_ENCODER.apply(next))) {
 
                     nextCost += map[nextRow][nextCol];
-                    arrived = rocks.contains(INDEX_ENCODER.apply(next)) || IS_END.test(end, next);
-                    if(arrived) break;
+                    arrived = IS_END.test(end, next);
+                    blocked = rocks.contains(INDEX_ENCODER.apply(next));
+                    if(arrived || blocked) break;
 
-                    nextRow += DIRECTIONS[dir][ROW];
-                    nextCol += DIRECTIONS[dir][COL];
+                    nextRow += DIRECTION[ROW];
+                    nextCol += DIRECTION[COL];
+                    next = Point.pointWithCost(nextRow, nextCol, 0);
                 }
 
-                if(!arrived) continue;
-                if(visit[dir][nextRow][nextCol] <= visit[current.ge][nextRow][nextCol])
+                if(blocked) {
+                    next = Point.pointWithCost(nextRow - DIRECTION[ROW], nextCol - DIRECTION[COL], 0);
+                }
+
+                if(!arrived && !blocked) continue;
+                if(visit[next.getRow()][next.getCol()] <= visit[current.getRow()][current.getCol()] + nextCost) continue;
+                visit[next.getRow()][next.getCol()] = visit[current.getRow()][current.getCol()] + nextCost;
+
+                if(arrived) answer = Math.min(visit[next.getRow()][next.getCol()], answer);
+
+                pq.offer(Point.pointWithCost(next.getRow(), next.getCol(), visit[next.getRow()][next.getCol()]));
             }
         }
 
-
-
-        return 0;
+        return answer == INF ? -1: answer;
     }
 
-    private static int[][][] visitInitiate() {
-        int[][][] arr = new int[5][H][W];
+    private static int[][] visitInitiate() {
+        int[][] arr = new int[H][W];
 
         for(int i = 0; i < arr.length; i++) {
-            for(int j = 0; j < arr[i].length; j++) {
-                Arrays.fill(arr[i][j], INF);
-            }
+            Arrays.fill(arr[i], INF);
         }
 
         return arr;
