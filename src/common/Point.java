@@ -3,21 +3,25 @@ package common;
 public class Point {
     private int row;
     private int col;
-    private int cost;
+    private int dir;
 
     public Point(int row, int col) {
         this.row = row;
         this.col = col;
     }
 
-    public Point(int row, int col, int cost) {
+    public Point(int row, int col, int dir) {
         this.row = row;
         this.col = col;
-        this.cost = cost;
+        this.dir = dir;
     }
 
-    public static Point pointWithCost(int row, int col, int cost) {
-        return new Point(row, col, cost);
+    public static Point pointWithDirection(int row, int col, int dir) {
+        return new Point(row, col, dir);
+    }
+
+    public int getDir() {
+        return dir;
     }
 
     public int getRow() {
@@ -28,7 +32,4 @@ public class Point {
         return col;
     }
 
-    public int getCost() {
-        return cost;
-    }
 }
