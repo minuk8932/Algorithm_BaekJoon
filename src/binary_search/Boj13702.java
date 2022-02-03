@@ -19,20 +19,21 @@ public class Boj13702 {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        int[] pot = new int[N];
+        long[] pot = new long[N];
         long sum = 0;
         for(int i = 0; i < N; i++){
-            pot[i] = Integer.parseInt(br.readLine());
+            pot[i] = Long.parseLong(br.readLine());
             sum += pot[i];
         }
 
         System.out.println(make(N, K, pot, sum));
     }
 
-    private static long make(int n, int k, int[] p, long sum){
+    private static long make(int n, int k, long[] p, long sum){
         long result = 0;
-
         long start = 0, end = sum / k;
+
+        if(k == 1) return sum;
 
         while(start <= end) {
             long mid = (start + end) / 2;
