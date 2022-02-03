@@ -1,27 +1,43 @@
 package common;
 
 public class Point {
-    private int row;
-    private int col;
-    private int cost;
+    private final int row;
+    private final int col;
+    private final int cost;
 
-    public Point(int row, int col) {
-        this.row = row;
-        this.col = col;
+    public static class Builder {
+        // must
+        private final int row;
+        private final int col;
+
+        // opt
+        private int cost;
+
+        public Builder (int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
+
+        public Builder cost(int value) {
+            cost = value;
+            return this;
+        }
+
+        public Point build() {
+            return new Point(this);
+        }
     }
 
-    public Point(int row, int col, int cost) {
-        this.row = row;
-        this.col = col;
-        this.cost = cost;
+    private Point(Builder builder) {
+        row = builder.row;
+        col = builder.col;
+        cost = builder.cost;
     }
 
     public static Point pointWithCost(int row, int col, int cost) {
-        return new Point(row, col, cost);
-    }
-
-    public int getCost() {
-        return cost;
+        return new Point.Builder(row, col)
+                .cost(cost)
+                .build();
     }
 
     public int getRow() {
@@ -32,4 +48,7 @@ public class Point {
         return col;
     }
 
+    public int getCost() {
+        return cost;
+    }
 }
