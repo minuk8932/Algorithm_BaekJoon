@@ -43,11 +43,11 @@ public class Boj20924 {
             int node2 = Integer.parseInt(st.nextToken()) - 1;
             int cost = Integer.parseInt(st.nextToken());
 
-            tree[node1].add(new Node(node2, cost));
-            tree[node2].add(new Node(node1, cost));
+            tree[node1].add(new Node.Builder(node2, cost).build());
+            tree[node2].add(new Node.Builder(node1, cost).build());
         }
 
-        recursion(-1, new Node(R, 0));
+        recursion(-1, new Node.Builder(R, 0).build());
         costTracker(giga);
 
         System.out.println(stem + " " + getMax());
