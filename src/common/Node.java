@@ -1,19 +1,38 @@
 package common;
 
 public class Node {
-    private int node;
-    private int another;
-    private int cost;
+    private final int node;
+    private final int cost;
 
-    public Node(int node, int cost) {
-        this.node = node;
-        this.cost = cost;
+    private final int another;
+
+    public static class Builder {
+        //must
+        private final int node;
+        private final int cost;
+
+        // opt
+        private int another;
+
+        public Builder(int node, int cost) {
+            this.node = node;
+            this.cost = cost;
+        }
+
+        public Builder another(int value) {
+            another = value;
+            return this;
+        }
+
+        public Node build() {
+            return new Node(this);
+        }
     }
 
-    public Node(int node, int another, int cost) {
-        this.node = node;
-        this.another = another;
-        this.cost = cost;
+    private Node(Node.Builder builder) {
+        node = builder.node;
+        cost = builder.cost;
+        another = builder.another;
     }
 
     public int getAnother() {
