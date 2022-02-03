@@ -22,7 +22,7 @@ public class Boj2492 {
             int X = Integer.parseInt(st.nextToken());
             int Y = Integer.parseInt(st.nextToken());
 
-            diamonds[i] = new Coordinate(X, Y);
+            diamonds[i] = new Coordinate.Builder(X, Y).build();
         }
 
         System.out.println(coverage(diamonds));
