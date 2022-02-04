@@ -3,6 +3,8 @@ package common;
 public class RealCoordinate {
     private final double x;
     private final double y;
+    private final double z;
+    private final double r;
 
     public static class Builder {
         // must
@@ -11,6 +13,7 @@ public class RealCoordinate {
 
         // opt
         private double z;
+        private double r;
 
         public Builder(double x, double y) {
             this.x = x;
@@ -22,6 +25,11 @@ public class RealCoordinate {
             return this;
         }
 
+        public Builder r(double value) {
+            r = value;
+            return this;
+        }
+
         public RealCoordinate build() {
             return new RealCoordinate(this);
         }
@@ -30,6 +38,8 @@ public class RealCoordinate {
     private RealCoordinate(Builder builder) {
         x = builder.x;
         y = builder.y;
+        z = builder.z;
+        r = builder.r;
     }
 
     public double getX() {
@@ -38,5 +48,13 @@ public class RealCoordinate {
 
     public double getY() {
         return y;
+    }
+
+    public double getZ() {
+        return z;
+    }
+
+    public double getR() {
+        return r;
     }
 }
