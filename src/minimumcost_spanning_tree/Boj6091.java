@@ -35,7 +35,8 @@ public class Boj6091 {
 
             for(int another = one + 1; another < N; another++) {
                 int cost = Integer.parseInt(st.nextToken());
-                pq.offer(new Node.Builder(one, cost)
+                pq.offer(new Node.Builder(one)
+                        .cost(cost)
                         .another(another)
                 .build());
             }

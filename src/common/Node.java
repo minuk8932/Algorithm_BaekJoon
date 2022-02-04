@@ -2,21 +2,31 @@ package common;
 
 public class Node {
     private final int node;
-    private final int cost;
 
+    private final int cost;
+    private final double doubleCost;
     private final int another;
 
     public static class Builder {
         //must
         private final int node;
-        private final int cost;
-
         // opt
         private int another;
+        private int cost;
+        private double doubleCost;
 
-        public Builder(int node, int cost) {
+        public Builder(int node) {
             this.node = node;
-            this.cost = cost;
+        }
+
+        public Builder cost(int value) {
+            cost = value;
+            return this;
+        }
+
+        public Builder doubleCost(double value) {
+            doubleCost = value;
+            return this;
         }
 
         public Builder another(int value) {
@@ -32,6 +42,7 @@ public class Node {
     private Node(Node.Builder builder) {
         node = builder.node;
         cost = builder.cost;
+        doubleCost =  builder.doubleCost;
         another = builder.another;
     }
 
@@ -45,5 +56,9 @@ public class Node {
 
     public int getCost() {
         return cost;
+    }
+
+    public double getDoubleCost() {
+        return doubleCost;
     }
 }
