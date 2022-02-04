@@ -1,15 +1,26 @@
+package minimumcost_spanning_tree;
+
 import common.Node;
 import common.RealCoordinate;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 22813번: Building a Space Station
+ *
+ * @see https://www.acmicpc.net/problem/22813
+ *
+ */
 public class Boj22813 {
 
-    private static Queue<Node> pq = new PriorityQueue<>();
+    private static Queue<Node> pq;
     private static int[] parent;
     private static final String NEW_LINE = "\n";
 
@@ -21,6 +32,7 @@ public class Boj22813 {
             int N = Integer.parseInt(br.readLine());
             if (N == 0) break;
 
+            pq = new PriorityQueue<>(Comparator.comparingDouble(Node::getDoubleCost));
             RealCoordinate[] coordinates = new RealCoordinate[N];
             parent = new int[N];
 
@@ -46,9 +58,23 @@ public class Boj22813 {
         System.out.println(sb.toString());
     }
 
+    /**
+     *
+     * Minimum cost Spanning Tree
+     *
+     * @return
+     */
     private static String mst() {
+        double total = 0;
 
-        return "";
+        while(!pq.isEmpty()) {
+            Node current = pq.poll();
+
+            if(merged(current.getNode(), current.getAnother())) continue;
+            total += current.getDoubleCost();
+        }
+
+        return String.format("%.3f", total);
     }
 
     private static void linkage(RealCoordinate[] coordinates) {
@@ -64,11 +90,21 @@ public class Boj22813 {
         }
     }
 
+    /**
+     *
+     * Euclidean Adjacent: make cost, node to node
+     *
+     * @param c1
+     * @param c2
+     * @return
+     */
     private static double euclideanAdjacent(RealCoordinate c1, RealCoordinate c2) {
         double xdiff = c2.getX() - c1.getX();
         double ydiff = c2.getY() - c1.getY();
+        double zdiff = c2.getZ() - c1.getZ();
 
-        double total = (xdiff * xdiff + ydiff * ydiff) - (c1.getR() + c2.getR());
+        double total = Math.sqrt(xdiff * xdiff + ydiff * ydiff + zdiff * zdiff)
+                - (c1.getR() + c2.getR());
         return total < 0 ? 0: total;
     }
 
