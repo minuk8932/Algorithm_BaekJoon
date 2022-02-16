@@ -8,7 +8,14 @@ public class Boj24458 {
     private static Deque<Coordinate> stack = new ArrayDeque<>();
     private static List<Coordinate> prison = new ArrayList<>();
 
-    private static final int INF = 1_000_000_000;
+    private static Set<Long> jailer = new HashSet<>();
+    private static Set<Long> prisoner = new HashSet<>();
+    private static int jailers;
+
+    private static final int INF = 2_000_000_000;
+    private static final long SHIFT = 200_000_000L;
+    private static final long CIPHER = 1_000_000_000L;
+
     private static Coordinate min = new Coordinate.Builder(INF, INF).build();
 
     public static void main(String[] args) throws Exception {
@@ -22,6 +29,9 @@ public class Boj24458 {
 
             minProcessing(x, y);
             prison.add(new Coordinate.Builder(x, y).build());
+
+            long index = indexing(x, y);
+            prisoner.add(index);
         }
 
         int M = Integer.parseInt(br.readLine());
@@ -33,28 +43,99 @@ public class Boj24458 {
 
             minProcessing(x, y);
             prison.add(new Coordinate.Builder(x, y).build());
+
+            long index = indexing(x, y);
+            if(jailer.contains(index)) continue;
+            jailer.add(index);
         }
 
         sorting();
         convexHull(N + M);
 
-        System.out.println();
+        rearranging();
+        System.out.println(supervising());
     }
 
+    private static long indexing(int x, int y) {
+        return CIPHER * (SHIFT + x) + (SHIFT + y);
+    }
+
+    private static int supervising() {
+        int count = 0;
+        int size = 0;
+        int p = prisoner.size();
+
+        while(!stack.isEmpty()) {
+            Coordinate current = stack.poll();
+            long index = indexing(current.getX(), current.getY());
+            System.out.println(index);
+
+            if(jailer.contains(index)){
+                jailers++;
+                count += (size == 0 ? 0: size - 1);
+                size = 0;
+                continue;
+            }
+
+            size++;
+        }
+
+        if(p == size - jailers) return p;
+        return count + (size == 0 ? 0: size - 1);
+    }
+
+    private static void rearranging() {
+        int size = stack.size();
+
+        while(size-- > 0) {
+            Coordinate current = stack.poll();
+            long index = indexing(current.getX(), current.getY());
+
+            if(!jailer.contains(index)) {
+                stack.offer(current);
+                continue;
+            }
+
+            jailers++;
+            break;
+        }
+    }
+
+    /**
+     * 보통 CCW 0 인 경우 제외하지만, 비감시 구역 체크를 위해 포함
+     *
+     * 반례
+     * 6
+     * 1 1
+     * 3 0
+     * 6 2
+     * 7 3
+     * 4 5
+     * 1 4
+     * 2
+     * 1 0
+     * 7 5
+     *
+     * 1 0 에서 그래엄 스캔 시작 -> 1,1 스택에 들어가야하지만 안들어감 (스캔 방향 때문에)
+     */
     private static void convexHull(int N) {
         stack.push(prison.get(0));
         stack.push(prison.get(1));
 
         for (int idx = 2; idx < N; idx++) {
             Coordinate next = prison.get(idx);
-            int count = 0;
+            System.out.println(next.getX() + " " + next.getY());
 
             while (stack.size() >= 2) {
                 Coordinate second = stack.pop();
                 Coordinate first = stack.peek();
 
-                if (CCW(first, second, next) <= 0){
-                    count++;
+                if (CCW(first, second, next) < 0){
+                    System.out.println("----");
+                    System.out.println(CCW(first, second, next));
+                    System.out.println(first.getX() + " " + first.getY());
+                    System.out.println(second.getX() + " " + second.getY());
+                    System.out.println(next.getX() + " " + next.getY());
                     continue;
                 }
 
@@ -62,20 +143,19 @@ public class Boj24458 {
                 break;
             }
 
-            System.out.println(count);
             stack.push(next);
         }
     }
 
     private static void sorting() {
-        Collections.sort(prison, (p1, p2) -> {
-            long c = CCW(min, p1, p2);
+        Collections.sort(prison, (c1, c2) -> {
+            long c = CCW(min, c1, c2);
 
             if (c > 0) return -1;
             else if (c < 0) return 1;
             else if (c == 0) {
-                long a = distancePow(min, p1);
-                long b = distancePow(min, p2);
+                long a = distancePow(min, c1);
+                long b = distancePow(min, c2);
 
                 if (a < b) return -1;
                 else if (a > b) return 1;
@@ -98,11 +178,12 @@ public class Boj24458 {
     }
 
     private static long CCW(Coordinate v1, Coordinate v2, Coordinate v3) {
-        return (v1.getX() * v2.getY() + v2.getX() * v3.getY() + v3.getX() * v1.getY()) -
-                (v3.getX() * v2.getY() + v2.getX() * v1.getY() + v1.getX() * v3.getY());
+        return ((long) v1.getX() * v2.getY() + (long) v2.getX() * v3.getY() + (long) v3.getX() * v1.getY()) -
+                ((long) v3.getX() * v2.getY() + (long) v2.getX() * v1.getY() + (long) v1.getX() * v3.getY());
     }
 
     private static long distancePow(Coordinate c1, Coordinate c2) {
-        return (c2.getX() - c1.getX()) * (c2.getX() - c1.getX()) + (c2.getY() - c1.getY()) * (c2.getY() - c1.getY());
+        return (long) (c2.getX() - c1.getX()) * (long) (c2.getX() - c1.getX()) +
+                (long) (c2.getY() - c1.getY()) * (long) (c2.getY() - c1.getY());
     }
 }
