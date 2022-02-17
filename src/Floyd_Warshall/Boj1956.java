@@ -6,52 +6,58 @@ import java.util.StringTokenizer;
 
 public class Boj1956 {
 	private static final int NO_WAY = -1;
-	private static final int MAX = 10_001;
-	
+	private static final int MAX = 1_000_000_000;
 	private static final String SPACE = " ";
+
+	private static int[][] path;
+	private static int V;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), SPACE);
-		int V = Integer.parseInt(st.nextToken());
+		V = Integer.parseInt(st.nextToken());
 		int E = Integer.parseInt(st.nextToken());
 		
-		int[][] path = new int[V + 1][V + 1];
+		path = new int[V][V];
 		
-		for(int i = 0; i < V+1; i++){
+		for(int i = 0; i < V; i++){
 			Arrays.fill(path[i], MAX);
 		}
 		
-		for(int i = 0; i < E; i++){
+		while(E-- > 0){
 			st = new StringTokenizer(br.readLine(), SPACE);
-			path[Integer.parseInt(st.nextToken())][Integer.parseInt(st.nextToken())] = Integer.parseInt(st.nextToken());
+			int a = Integer.parseInt(st.nextToken()) - 1;
+			int b = Integer.parseInt(st.nextToken()) - 1;
+
+			path[a][b] = Integer.parseInt(st.nextToken());
 		}
-		
-		for(int via = 1; via < V + 1; via++){
-			for(int s = 1; s < V + 1; s++){
-				for(int e = 1; e < V + 1; e++){
+
+		floydWarshall();
+
+		int answer = getCycle();
+		System.out.println(answer == MAX ? NO_WAY: answer);
+	}
+
+	private static int getCycle() {
+		int cost = MAX;
+
+		for(int i = 0; i < V; i++){
+			for(int j = 0; j < V; j++){
+				if(path[i][j] == MAX || path[j][i] == MAX) continue;
+				cost = Math.min(cost, path[i][j] + path[j][i]);
+			}
+		}
+
+		return cost;
+	}
+
+	private static void floydWarshall() {
+		for(int via = 0; via < V; via++){
+			for(int s = 0; s < V; s++){
+				for(int e = 0; e < V; e++){
 					path[s][e] = Math.min(path[s][e], path[s][via] + path[via][e]);
 				}
 			}
-		}
-		
-		int res = MAX;
-		int chk = 0;
-		
-		for(int i = 1; i < V + 1; i++){
-			for(int j = 1; j < V + 1; j++){
-				if(path[i][j] != MAX && path[j][i] != MAX ){
-					res = Math.min(res, path[i][j] + path[j][i]);
-					chk++;
-				}
-			}
-		}
-		
-		if(chk == 0){
-			System.out.println(NO_WAY);
-		}
-		else{
-			System.out.println(res);
 		}
 	}
 
