@@ -7,7 +7,7 @@ import java.util.*;
 public class Boj24458 {
     private static Deque<Coordinate> stack = new ArrayDeque<>();
     private static List<Coordinate> prison = new ArrayList<>();
-
+    
     private static Set<Long> jailer = new HashSet<>();
     private static Set<Long> prisoner = new HashSet<>();
     private static int jailers;
