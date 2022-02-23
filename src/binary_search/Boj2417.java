@@ -2,8 +2,6 @@ package binary_search;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.text.NumberFormat;
-import java.util.StringTokenizer;
 
 /**
  * 
@@ -18,13 +16,13 @@ public class Boj2417 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		long n = Long.parseLong(br.readLine());
 
-		StringTokenizer st = new StringTokenizer(NumberFormat.getInstance().format(Math.ceil(Math.sqrt(n))), ",");
-		StringBuilder sb = new StringBuilder();
+		System.out.println(binarySearch(n));
+	}
 
-		while(st.hasMoreTokens()){
-			sb.append(st.nextToken());
-		}
+	private static long binarySearch(long target) {
+		long root = (long) Math.sqrt(target);
+		long pow = root * root;
 
-		System.out.println(sb.toString());
+		return root + (pow >= target ? 0: 1);
 	}
 }
