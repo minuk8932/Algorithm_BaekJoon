@@ -36,6 +36,7 @@ public class Boj16400 {
         dp = new int[n + 1];
         dp[0] = 1;
 
+        int size = primes.size();
         for(int i = 0; i < size; i++) {
             for(int j = primes.get(i); j <= n; j++) {
                 dp[j] = dp[j] + dp[j - primes.get(i)] % MOD;
