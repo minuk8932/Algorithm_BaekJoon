@@ -101,23 +101,6 @@ public class Boj24458 {
         }
     }
 
-    /**
-     * 보통 CCW 0 인 경우 제외하지만, 비감시 구역 체크를 위해 포함
-     *
-     * 반례
-     * 6
-     * 1 1
-     * 3 0
-     * 6 2
-     * 7 3
-     * 4 5
-     * 1 4
-     * 2
-     * 1 0
-     * 7 5
-     *
-     * 1 0 에서 그래엄 스캔 시작 -> 1,1 스택에 들어가야하지만 안들어감 (스캔 방향 때문에)
-     */
     private static void convexHull(int N) {
         stack.push(prison.get(0));
         stack.push(prison.get(1));
