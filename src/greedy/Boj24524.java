@@ -19,12 +19,11 @@ public class Boj24524 {
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String S = br.readLine();
-        String T = br.readLine();
-        int len = T.length();
+        char[] S = br.readLine().toCharArray();
+        char[] T = br.readLine().toCharArray();
 
-        for(int i = 0; i < len; i++) {
-            map.put(T.charAt(i), i + 1);
+        for(int i = 1; i <= T.length; i++) {
+            map.put(T[i - 1], i);
         }
 
         System.out.println(linearSearching(S));
@@ -39,23 +38,22 @@ public class Boj24524 {
      * @param src
      * @return
      */
-    private static int linearSearching(String src) {
-        int len = src.length();
+    private static int linearSearching(char[] src) {
         int size = map.size();
 
-        int[] arr = new int[size + 1];
-        arr[0] = len;
+        int[] chart = new int[size + 1];
+        chart[0] = src.length;
 
-        for (int i = 0; i < len; i++) {
-            if(!map.containsKey(src.charAt(i))) continue;
+        for (int i = 0; i < src.length; i++) {
+            if(!map.containsKey(src[i])) continue;
 
-            int index = map.get(src.charAt(i));
-            if (arr[index - 1] == 0) continue;
+            int index = map.get(src[i]);
+            if (chart[index - 1] == 0) continue;
 
-            arr[index - 1]--;
-            arr[index]++;
+            chart[index]++;
+            chart[index - 1]--;
         }
 
-        return arr[size];
+        return chart[size];
     }
 }
