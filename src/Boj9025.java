@@ -1,3 +1,5 @@
+import common.Node;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -7,7 +9,7 @@ public class Boj9025 {
     private static final int INF = 1_000_000_000;
     private static final String NEW_LINE = "\n";
 
-    private static List<Integer>[] path;
+    private static List<Node>[] path;
     private static int[] dist;
 
     public static void main(String[] args) throws Exception {
@@ -19,79 +21,85 @@ public class Boj9025 {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int n = Integer.parseInt(st.nextToken());
             int m = Integer.parseInt(st.nextToken());
-            int s = Integer.parseInt(st.nextToken());
-            int t = Integer.parseInt(st.nextToken());
+            int s = Integer.parseInt(st.nextToken()) - 1;
+            int t = Integer.parseInt(st.nextToken()) - 1;
 
             init(n);
 
-            int[][] inputs = new int[n + 1][n + 1];
+            int[][] inputs = new int[n][n];
             for(int i = 0; i < n; i++) {
                 Arrays.fill(inputs[i], INF);
             }
 
             while(m-- > 0) {
                 st = new StringTokenizer(br.readLine());
-                int from = Integer.parseInt(st.nextToken());
-                int to = Integer.parseInt(st.nextToken());
+                int from = Integer.parseInt(st.nextToken()) - 1;
+                int to = Integer.parseInt(st.nextToken()) - 1;
                 int cost = Integer.parseInt(st.nextToken());
 
                 inputs[from][to] = Math.min(cost, inputs[from][to]);
                 inputs[to][from] = inputs[from][to];
-                path[from].add(to);
-                path[to].add(from);
-
-                if (from == s) dist[to] = cost;
-                if (to == s) dist[from] = cost;
             }
 
-            sb.append(search(n, s, t, inputs)).append(NEW_LINE);
+            for(int i = 0; i < n; i++) {
+                for(int j = i + 1; j < n; j++) {
+                    path[i].add(new Node.Builder(j).cost(inputs[i][j]).build());
+                    path[j].add(new Node.Builder(i).cost(inputs[j][i]).build());
+                }
+            }
+
+            dijkstra(s);
+            sb.append(search(t)).append(NEW_LINE);
         }
 
-        br.close();
         System.out.println(sb.toString());
     }
 
-    private static int search(int n, int src, int snk, int[][] inputs) {
-        boolean[] visit = new boolean[n + 1];
-        int current = src;
+    private static int search(int snk) {
+        Queue<Node> q = new ArrayDeque<>();
+        q.offer(new Node.Builder(snk).cost(dist[snk]).build());
 
-        for (int node = 0; node < n; node++) {
-            visit[current] = true;
+        int min = INF;
 
-            for (int next: path[node]) {
-                if (next == src) continue;
+        while(!q.isEmpty()) {
+            Node current = q.poll();
 
-                if (dist[current] < inputs[current][next]) {
-                    if (dist[next] >= dist[current]) continue;
-                    dist[next] = dist[current];
-                }
-                else {
-                    if(dist[next] >= inputs[current][next]) continue;
-                    dist[next] = inputs[current][next];
-                }
+            for (Node next: path[current.getNode()]) {
+                if(dist[next.getNode()] != dist[current.getNode()] - current.getCost()) continue;
+                min = Math.min(min, -current.getCost());
+
+                q.offer(new Node.Builder(next.getNode()).cost(dist[next.getNode()]).build());
             }
-
-            int nextNode = 1;
-            while (nextNode <= n && visit[nextNode]) {
-                nextNode++;
-            }
-
-            for (int next = nextNode; next <= n; next++) {
-                if (visit[next] || dist[nextNode] > dist[next]) continue;
-                nextNode = next;
-            }
-
-            current = nextNode;
         }
 
-        return dist[snk];
+        return min;
+    }
+
+    private static void dijkstra(int src) {
+        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(Node::getCost));
+        pq.offer(new Node.Builder(src).cost(0).build());
+        Arrays.fill(dist, INF);
+
+        dist[src] = 0;
+
+        while(!pq.isEmpty()) {
+            Node current = pq.poll();
+            if(dist[current.getNode()] < current.getCost()) continue;
+
+            for(Node next: path[current.getNode()]) {
+                if(dist[next.getNode()] <= dist[current.getNode()] + next.getCost()) continue;
+                dist[next.getNode()] = dist[current.getNode()] + next.getCost();
+
+                pq.offer(new Node.Builder(next.getNode()).cost(dist[next.getNode()]).build());
+            }
+        }
     }
 
     private static void init(int n) {
-        dist = new int[n + 1];
-        path = new ArrayList[n + 1];
+        dist = new int[n];
+        path = new ArrayList[n];
 
-        for(int i = 0; i <= n; i++){
+        for(int i = 0; i < n; i++){
             dist[i] = -1;
             path[i] = new ArrayList<>();
         }
