@@ -85,17 +85,17 @@ public class Boj20926 {
     private static void dijkstra() {
         boolean[][] visit = new boolean[H][W];
 
-        Queue<Point> pq = new PriorityQueue<>(Comparator.comparingInt(point -> point.getCost()));
+        Queue<Point<Integer>> pq = new PriorityQueue<>(Comparator.comparingInt(Point::getCost));
         pq.offer(start);
 
         while(!pq.isEmpty()) {
-            Point current = pq.poll();
+            Point<Integer> current = pq.poll();
 
             if(visit[current.getRow()][current.getCol()]) continue;
             visit[current.getRow()][current.getCol()] = true;
 
             for(final int[] DIRECTION: DIRECTIONS) {
-                Point next = sliding(Point.pointWithCost(current.getRow(), current.getCol(), current.getCost())
+                Point<Integer> next = sliding(Point.pointWithCost(current.getRow(), current.getCol(), current.getCost())
                         , DIRECTION[ROW]
                         , DIRECTION[COL]);
                 if(next == null) continue;
@@ -105,8 +105,8 @@ public class Boj20926 {
         }
     }
 
-    private static Point sliding(Point current, int drow, int dcol){
-        Point next = Point.pointWithCost(current.getRow(), current.getCol(), 0);
+    private static Point sliding(Point<Integer> current, int drow, int dcol){
+        Point<Integer> next = Point.pointWithCost(current.getRow(), current.getCol(), 0);
         int cost = 0;
         boolean flag = false;
 

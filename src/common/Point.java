@@ -1,24 +1,24 @@
 package common;
 
-public class Point {
+public class Point<T> {
     private final int row;
     private final int col;
-    private final int cost;
+    private final T cost;
 
-    public static class Builder {
+    public static class Builder<T> {
         // must
         private final int row;
         private final int col;
 
         // opt
-        private int cost;
+        private T cost;
 
         public Builder (int row, int col) {
             this.row = row;
             this.col = col;
         }
 
-        public Builder cost(int value) {
+        public Builder cost(T value) {
             cost = value;
             return this;
         }
@@ -28,14 +28,14 @@ public class Point {
         }
     }
 
-    private Point(Builder builder) {
+    private Point(Builder<T> builder) {
         row = builder.row;
         col = builder.col;
         cost = builder.cost;
     }
 
     public static Point pointWithCost(int row, int col, int cost) {
-        return new Point.Builder(row, col)
+        return new Point.Builder<Integer>(row, col)
                 .cost(cost)
                 .build();
     }
@@ -48,7 +48,7 @@ public class Point {
         return col;
     }
 
-    public int getCost() {
+    public T getCost() {
         return cost;
     }
 }
