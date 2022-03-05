@@ -84,6 +84,10 @@ public class Boj1003 {						// must be changed name to 'Main' before submit.
 }
 ```
 
+<br><br>
+Please note that common package's class
+- refer to this [link](https://github.com/minuk8932/Algorithm_BaekJoon/tree/master/src/common) such as Point, Coordinate ... so on.
+
 
 <br><br>
 # Judgement format
