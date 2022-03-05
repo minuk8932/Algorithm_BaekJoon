@@ -32,8 +32,8 @@ public class Boj24463 {
     private static final char FILLER = '@';
     private static final char EMPTY = '.';
 
-    private static Point start;
-    private static Point end;
+    private static Point<Integer, Integer> start;
+    private static Point<Integer, Integer> end;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -88,13 +88,13 @@ public class Boj24463 {
         track[end.getRow()][end.getCol()] = true;
 
         while(!q.isEmpty()) {
-            Point current = q.poll();
+            Point<Integer, Integer> current = q.poll();
 
             for (final int[] DIRECTION: DIRECTIONS) {
                 int nextRow = current.getRow() + DIRECTION[ROW];
                 int nextCol = current.getCol() + DIRECTION[COL];
 
-                Point next = new Point.Builder(nextRow, nextCol).build();
+                Point<Integer, Integer> next = new Point.Builder(nextRow, nextCol).build();
 
                 if(OUT_OF_RANGE.test(next)) continue;
                 if(map[next.getRow()][next.getCol()] == BLOCK) continue;
@@ -113,13 +113,13 @@ public class Boj24463 {
         visit[start.getRow()][start.getCol()] = 1;
 
         while(!q.isEmpty()) {
-            Point current = q.poll();
+            Point<Integer, Integer> current = q.poll();
 
             for (final int[] DIRECTION: DIRECTIONS) {
                 int nextRow = current.getRow() + DIRECTION[ROW];
                 int nextCol = current.getCol() + DIRECTION[COL];
 
-                Point next = new Point.Builder(nextRow, nextCol).build();
+                Point<Integer, Integer> next = new Point.Builder(nextRow, nextCol).build();
 
                 if(OUT_OF_RANGE.test(next)) continue;
                 if(map[next.getRow()][next.getCol()] == BLOCK) continue;
@@ -131,9 +131,9 @@ public class Boj24463 {
         }
     }
 
-    private static final BiPredicate<Point, Character> EXIT_FINDER = (p, target) ->
+    private static final BiPredicate<Point<Integer, Integer>, Character> EXIT_FINDER = (p, target) ->
             (p.getRow() == 0 || p.getRow() == N - 1 || p.getCol() == 0 || p.getCol() == M - 1) && target == EMPTY;
 
-    private static final Predicate<Point> OUT_OF_RANGE = point ->
+    private static final Predicate<Point<Integer, Integer>> OUT_OF_RANGE = point ->
             point.getRow() < 0 || point.getRow() >= N || point.getCol() < 0 || point.getCol() >= M;
 }

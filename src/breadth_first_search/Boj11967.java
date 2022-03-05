@@ -20,7 +20,7 @@ public class Boj11967 {
 	private static final int ROW = 0, COL = 1;
 
 	private static boolean[][] on;
-	private static List<Point>[] light;
+	private static List<Point<Integer, Integer>>[] light;
 	private static int N;
 
 	public static void main(String[] args) throws Exception {
@@ -48,21 +48,21 @@ public class Boj11967 {
 		System.out.println(countRooms());
 	}
 
-	private static void bfs(Point start) {
+	private static void bfs(Point<Integer, Integer> start) {
 		on = new boolean[N][N];
 		boolean[][] visit = new boolean[N][N];
 		boolean[][] adjacent = new boolean[N][N];
 
-		Queue<Point> q = new ArrayDeque<>();
+		Queue<Point<Integer, Integer>> q = new ArrayDeque<>();
 		q.offer(start);
 
 		on[start.getRow()][start.getCol()] = true;
 		visit[start.getRow()][start.getCol()] = true;
 
 		while (!q.isEmpty()) {
-			Point current = q.poll();
+			Point<Integer, Integer> current = q.poll();
 
-			for(Point bulb: light[indexing(current.getRow(), current.getCol())]) {
+			for(Point<Integer, Integer> bulb: light[indexing(current.getRow(), current.getCol())]) {
 				if(on[bulb.getRow()][bulb.getCol()]) continue;
 				on[bulb.getRow()][bulb.getCol()] = true;
 			}
@@ -71,7 +71,7 @@ public class Boj11967 {
 				int nextRow = current.getRow() + DIRECTION[ROW];
 				int nextCol = current.getCol() + DIRECTION[COL];
 
-				Point next = new Point.Builder(nextRow, nextCol).build();
+				Point<Integer, Integer> next = new Point.Builder(nextRow, nextCol).build();
 
 				if(OUT_OF_RANGE.test(next)) continue;
 				adjacent[next.getRow()][next.getCol()] = true;
@@ -88,7 +88,7 @@ public class Boj11967 {
 		}
 	}
 
-	private static final Predicate<Point> OUT_OF_RANGE = p ->
+	private static final Predicate<Point<Integer, Integer>> OUT_OF_RANGE = p ->
 			p.getRow() < 0 || p.getCol() < 0 || p.getRow() >= N || p.getCol() >= N;
 
 	private static int indexing(int a, int b) {

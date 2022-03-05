@@ -64,14 +64,14 @@ public class Boj24513 {
             int size = q.size();
 
             while(size-- > 0) {
-                Point current = q.poll();
+                Point<Integer, Integer> current = q.poll();
                 if(village[current.getRow()][current.getCol()] == 3) continue;
 
                 for (final int[] DIRECTION : DIRECTIONS) {
                     int nextRow = DIRECTION[ROW] + current.getRow();
                     int nextCol = DIRECTION[COL] + current.getCol();
 
-                    Point next = new Point.Builder(nextRow, nextCol).build();
+                    Point<Integer, Integer> next = new Point.Builder(nextRow, nextCol).build();
 
                     if (OUT_OF_RANGE.test(next)) continue;
                     if (village[next.getRow()][next.getCol()] == -1) continue;
@@ -108,6 +108,6 @@ public class Boj24513 {
         return count;
     }
 
-    private static final Predicate<Point> OUT_OF_RANGE = p ->
+    private static final Predicate<Point<Integer, Integer>> OUT_OF_RANGE = p ->
             p.getRow() < 0 || p.getRow() >= N || p.getCol() < 0 || p.getCol() >= M;
 }

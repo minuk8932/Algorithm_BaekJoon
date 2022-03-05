@@ -21,7 +21,7 @@ public class Boj24426 {
     private static int[][] map;
     private static long[][] dp;
 
-    private static Point stopover;
+    private static Point<Integer, Integer> stopover;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -39,8 +39,8 @@ public class Boj24426 {
         StringTokenizer st = new StringTokenizer(br.readLine());
         stopover = new Point.Builder(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()))
                 .build();
-        Point start = new Point.Builder(0, 0).build();
-        Point end = new Point.Builder(n, n).build();
+        Point<Integer, Integer> start = new Point.Builder(0, 0).build();
+        Point<Integer, Integer> end = new Point.Builder(n, n).build();
 
         long one = path(start, stopover);
         long another = path(stopover, end);
@@ -50,7 +50,7 @@ public class Boj24426 {
         System.out.println(one + another - duplicate + " " + except);
     }
 
-    private static long pathExcept(Point start, Point end) {
+    private static long pathExcept(Point<Integer, Integer> start, Point<Integer, Integer> end) {
         dp = new long[n + 1][n + 1];
 
         boolean flag = false;
@@ -85,7 +85,7 @@ public class Boj24426 {
         return dp[end.getRow()][end.getCol()];
     }
 
-    private static long path(Point start, Point end) {
+    private static long path(Point<Integer, Integer> start, Point<Integer, Integer> end) {
         dp = new long[n + 1][n + 1];
         int s = start.getRow() == 0 ? 1: start.getRow();
         int e = start.getCol() == 0 ? 1: start.getCol();

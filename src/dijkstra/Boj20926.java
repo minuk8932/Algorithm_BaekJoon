@@ -50,7 +50,7 @@ public class Boj20926 {
 
             for(int j = 0; j < W; j++) {
                 char component = input.charAt(j);
-                Point p = Point.pointWithCost(i, j, 0);
+                Point<Integer, Integer> p = Point.pointWithCost(i, j, 0);
 
                 if(TERRA == component) {
                     start = p;
@@ -85,17 +85,17 @@ public class Boj20926 {
     private static void dijkstra() {
         boolean[][] visit = new boolean[H][W];
 
-        Queue<Point<Integer>> pq = new PriorityQueue<>(Comparator.comparingInt(Point::getCost));
+        Queue<Point<Integer, Integer>> pq = new PriorityQueue<>(Comparator.comparingInt(Point::getCost));
         pq.offer(start);
 
         while(!pq.isEmpty()) {
-            Point<Integer> current = pq.poll();
+            Point<Integer, Integer> current = pq.poll();
 
             if(visit[current.getRow()][current.getCol()]) continue;
             visit[current.getRow()][current.getCol()] = true;
 
             for(final int[] DIRECTION: DIRECTIONS) {
-                Point<Integer> next = sliding(Point.pointWithCost(current.getRow(), current.getCol(), current.getCost())
+                Point<Integer, Integer> next = sliding(Point.pointWithCost(current.getRow(), current.getCol(), current.getCost())
                         , DIRECTION[ROW]
                         , DIRECTION[COL]);
                 if(next == null) continue;
@@ -105,8 +105,8 @@ public class Boj20926 {
         }
     }
 
-    private static Point sliding(Point<Integer> current, int drow, int dcol){
-        Point<Integer> next = Point.pointWithCost(current.getRow(), current.getCol(), 0);
+    private static Point sliding(Point<Integer, Integer> current, int drow, int dcol){
+        Point<Integer, Integer> next = Point.pointWithCost(current.getRow(), current.getCol(), 0);
         int cost = 0;
         boolean flag = false;
 
@@ -133,7 +133,7 @@ public class Boj20926 {
         return next;
     }
 
-    private static boolean outOfRange(Point p) {
+    private static boolean outOfRange(Point<Integer, Integer> p) {
         return p.getRow() < 0 || p.getRow() >= H || p.getCol() < 0 || p.getCol() >= W;
     }
 
