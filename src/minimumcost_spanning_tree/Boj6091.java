@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class Boj6091 {
 
-    private static Queue<Node> pq;
+    private static Queue<Node<Integer>> pq;
     private static List<Integer>[] tree;
     private static int[] parent;
 
@@ -27,7 +27,7 @@ public class Boj6091 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        pq = new PriorityQueue<>(Comparator.comparingInt(Node::getCost));
+        pq = new PriorityQueue<>(Comparator.comparing(Node::getCost));
         init(N);
 
         for(int one = 0; one < N - 1; one++) {

@@ -20,7 +20,7 @@ import java.util.StringTokenizer;
  */
 public class Boj22813 {
 
-    private static Queue<Node> pq;
+    private static Queue<Node<Double>> pq;
     private static int[] parent;
     private static final String NEW_LINE = "\n";
 
@@ -32,7 +32,7 @@ public class Boj22813 {
             int N = Integer.parseInt(br.readLine());
             if (N == 0) break;
 
-            pq = new PriorityQueue<>(Comparator.comparingDouble(Node::getDoubleCost));
+            pq = new PriorityQueue<>(Comparator.comparingDouble(Node<Double>::getCost));
             RealCoordinate[] coordinates = new RealCoordinate[N];
             parent = new int[N];
 
@@ -71,7 +71,7 @@ public class Boj22813 {
             Node current = pq.poll();
 
             if(merged(current.getNode(), current.getAnother())) continue;
-            total += current.getDoubleCost();
+            total += current.getCost();
         }
 
         return String.format("%.3f", total);
@@ -83,7 +83,7 @@ public class Boj22813 {
                 double cost = euclideanAdjacent(coordinates[i], coordinates[j]);
 
                 pq.offer(new Node.Builder(i)
-                        .doubleCost(cost)
+                        .cost(cost)
                         .another(j)
                         .build());
             }
