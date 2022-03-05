@@ -47,4 +47,5 @@ public class Node<T> {
     }
 
     public T getCost() { return cost; }
+
 }

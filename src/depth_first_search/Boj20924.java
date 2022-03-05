@@ -43,15 +43,15 @@ public class Boj20924 {
             int node2 = Integer.parseInt(st.nextToken()) - 1;
             int cost = Integer.parseInt(st.nextToken());
 
-            tree[node1].add(new Node.Builder(node2)
+            tree[node1].add(new Node.Builder<Integer>(node2)
                     .cost(cost)
                     .build());
-            tree[node2].add(new Node.Builder(node1)
+            tree[node2].add(new Node.Builder<Integer>(node1)
                     .cost(cost)
                     .build());
         }
 
-        recursion(-1, new Node.Builder(R)
+        recursion(-1, new Node.Builder<Integer>(R)
                 .cost(0)
                 .build());
         costTracker(giga);
@@ -61,7 +61,7 @@ public class Boj20924 {
 
     private static void costTracker(int current) {
 
-        for(Node next: tree[current]) {
+        for(Node<Integer> next: tree[current]) {
             if(cost[next.getNode()] != -1) continue;
             cost[next.getNode()] = cost[current] + next.getCost();
 
@@ -89,7 +89,7 @@ public class Boj20924 {
      * @param prev
      * @param current
      */
-    private static void recursion(int prev, Node current) {
+    private static void recursion(int prev, Node<Integer> current) {
         if(!gigaFound){
             giga = current.getNode();
             stem += current.getCost();

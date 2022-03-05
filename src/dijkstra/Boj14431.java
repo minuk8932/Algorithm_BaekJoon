@@ -51,7 +51,7 @@ public class Boj14431 {
         int[] dist = new int[n + 2];
         Arrays.fill(dist, INF);
 
-        Queue<Node> pq = new PriorityQueue<>(Comparator.comparing(Node::getCost));
+        Queue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(Node<Integer>::getCost));
         pq.offer(new Node.Builder(0).cost(0).build());
 
         dist[0] = 0;
@@ -59,7 +59,7 @@ public class Boj14431 {
         while(!pq.isEmpty()) {
             Node current = pq.poll();
 
-            for(Node next: path[current.getNode()]) {
+            for(Node<Integer> next: path[current.getNode()]) {
                 if(dist[next.getNode()] <= dist[current.getNode()] + next.getCost()) continue;
                 dist[next.getNode()] = dist[current.getNode()] + next.getCost();
 
