@@ -21,7 +21,7 @@ public class Boj21317 {
     private static int K;
     private static int[][] dp;
 
-    private static Pair[] jumps;
+    private static Pair<Integer>[] jumps;
 
     private static final int INF = 1_000_000_000;
 

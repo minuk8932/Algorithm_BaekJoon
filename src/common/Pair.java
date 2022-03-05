@@ -1,17 +1,17 @@
 package common;
 
-public class Pair {
-    private final int first;
-    private final int second;
+public class Pair<T> {
+    private final T first;
+    private final T second;
 
-    public static class Builder {
+    public static class Builder<T> {
         // must
-        private final int first;
-        private final int second;
+        private final T first;
+        private final T second;
 
         // opt
 
-        public Builder(int first, int second) {
+        public Builder(T first, T second) {
             this.first = first;
             this.second = second;
         }
@@ -21,16 +21,16 @@ public class Pair {
         }
     }
 
-    private Pair(Builder builder) {
+    private Pair(Builder<T> builder) {
         first = builder.first;
         second = builder.second;
     }
 
-    public int getFirst() {
+    public T getFirst() {
         return first;
     }
 
-    public int getSecond() {
+    public T getSecond() {
         return second;
     }
 }
