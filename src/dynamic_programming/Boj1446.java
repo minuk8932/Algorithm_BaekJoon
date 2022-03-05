@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
  */
 public class Boj1446 {
 
-    private static Road<Integer>[] roads;
+    private static Road<Integer, Integer>[] roads;
     private static int[] dp;
 
     private static final int INF = 1_000_000_000;
@@ -45,7 +45,7 @@ public class Boj1446 {
         }
 
         Arrays.sort(roads, Comparator
-                .comparingInt(Road<Integer>::getStart)
+                .comparingInt(Road<Integer, Integer>::getStart)
                 .thenComparingInt(Road::getEnd)
                 .thenComparingInt(Road::getCost));
 
@@ -70,7 +70,7 @@ public class Boj1446 {
         if(dp[current] != -1) return dp[current];
         int answer = distance - current;
 
-        for(Road<Integer> road: roads) {
+        for(Road<Integer, Integer> road: roads) {
             if(current > road.getStart()) continue;
 
             int difference = road.getStart() - current;
