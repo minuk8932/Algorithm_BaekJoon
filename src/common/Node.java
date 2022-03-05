@@ -3,7 +3,7 @@ package common;
 public class Node<T> {
     private final int node;
 
-    private T cost;
+    private final T cost;
     private final int another;
 
     public static class Builder<T> {

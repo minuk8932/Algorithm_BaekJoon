@@ -1,7 +1,7 @@
 package minimumcost_spanning_tree;
 
+import common.Coordinate;
 import common.Node;
-import common.RealCoordinate;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -33,7 +33,7 @@ public class Boj22813 {
             if (N == 0) break;
 
             pq = new PriorityQueue<>(Comparator.comparingDouble(Node<Double>::getCost));
-            RealCoordinate[] coordinates = new RealCoordinate[N];
+            Coordinate<Double>[] coordinates = new Coordinate[N];
             parent = new int[N];
 
             for (int i = 0; i < N; i++) {
@@ -43,7 +43,7 @@ public class Boj22813 {
                 double z = Double.parseDouble(st.nextToken());
                 double r = Double.parseDouble(st.nextToken());
 
-                coordinates[i] = new RealCoordinate.Builder(x, y)
+                coordinates[i] = new Coordinate.Builder(x, y)
                         .z(z)
                         .r(r)
                         .build();
@@ -77,7 +77,7 @@ public class Boj22813 {
         return String.format("%.3f", total);
     }
 
-    private static void linkage(RealCoordinate[] coordinates) {
+    private static void linkage(Coordinate<Double>[] coordinates) {
         for(int i = 0; i < coordinates.length; i++) {
             for(int j = i + 1; j < coordinates.length; j++) {
                 double cost = euclideanAdjacent(coordinates[i], coordinates[j]);
@@ -98,7 +98,7 @@ public class Boj22813 {
      * @param c2
      * @return
      */
-    private static double euclideanAdjacent(RealCoordinate c1, RealCoordinate c2) {
+    private static double euclideanAdjacent(Coordinate<Double> c1, Coordinate<Double> c2) {
         double xdiff = c2.getX() - c1.getX();
         double ydiff = c2.getY() - c1.getY();
         double zdiff = c2.getZ() - c1.getZ();

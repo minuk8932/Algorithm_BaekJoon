@@ -5,18 +5,18 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Boj24458 {
-    private static Deque<Coordinate> stack = new ArrayDeque<>();
-    private static List<Coordinate> prison = new ArrayList<>();
+    private static Deque<Coordinate<Long>> stack = new ArrayDeque<>();
+    private static List<Coordinate<Long>> prison = new ArrayList<>();
     
     private static Set<Long> jailer = new HashSet<>();
     private static Set<Long> prisoner = new HashSet<>();
     private static int jailers;
 
-    private static final int INF = 2_000_000_000;
+    private static final long INF = 2_000_000_000;
     private static final long SHIFT = 200_000_000L;
     private static final long CIPHER = 1_000_000_000L;
 
-    private static Coordinate min = new Coordinate.Builder(INF, INF).build();
+    private static Coordinate<Long> min = new Coordinate.Builder(INF, INF).build();
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -56,7 +56,7 @@ public class Boj24458 {
         System.out.println(supervising());
     }
 
-    private static long indexing(int x, int y) {
+    private static long indexing(long x, long y) {
         return CIPHER * (SHIFT + x) + (SHIFT + y);
     }
 
@@ -66,7 +66,7 @@ public class Boj24458 {
         int p = prisoner.size();
 
         while(!stack.isEmpty()) {
-            Coordinate current = stack.poll();
+            Coordinate<Long> current = stack.poll();
             long index = indexing(current.getX(), current.getY());
             System.out.println(index);
 
@@ -88,7 +88,7 @@ public class Boj24458 {
         int size = stack.size();
 
         while(size-- > 0) {
-            Coordinate current = stack.poll();
+            Coordinate<Long> current = stack.poll();
             long index = indexing(current.getX(), current.getY());
 
             if(!jailer.contains(index)) {
@@ -149,7 +149,7 @@ public class Boj24458 {
         });
     }
 
-    private static void minProcessing(int x, int y) {
+    private static void minProcessing(long x, long y) {
         if (y < min.getY()) {
             min = new Coordinate.Builder(x, y).build();
         }
@@ -160,13 +160,13 @@ public class Boj24458 {
         }
     }
 
-    private static long CCW(Coordinate v1, Coordinate v2, Coordinate v3) {
-        return ((long) v1.getX() * v2.getY() + (long) v2.getX() * v3.getY() + (long) v3.getX() * v1.getY()) -
-                ((long) v3.getX() * v2.getY() + (long) v2.getX() * v1.getY() + (long) v1.getX() * v3.getY());
+    private static long CCW(Coordinate<Long> v1, Coordinate<Long> v2, Coordinate<Long> v3) {
+        return (v1.getX() * v2.getY() + v2.getX() * v3.getY() + v3.getX() * v1.getY()) -
+                (v3.getX() * v2.getY() + v2.getX() * v1.getY() + v1.getX() * v3.getY());
     }
 
-    private static long distancePow(Coordinate c1, Coordinate c2) {
-        return (long) (c2.getX() - c1.getX()) * (long) (c2.getX() - c1.getX()) +
-                (long) (c2.getY() - c1.getY()) * (long) (c2.getY() - c1.getY());
+    private static long distancePow(Coordinate<Long> c1, Coordinate<Long> c2) {
+        return (c2.getX() - c1.getX()) * (c2.getX() - c1.getX()) +
+                (c2.getY() - c1.getY()) * (c2.getY() - c1.getY());
     }
 }
