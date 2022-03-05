@@ -57,14 +57,14 @@ public class Boj9025 {
 
     private static int search(int snk) {
         Queue<Node> q = new ArrayDeque<>();
-        q.offer(new Node.Builder<Integer>(snk).cost(dist[snk]).build());
+        q.offer(new Node.Builder<Integer, Integer>(snk).cost(dist[snk]).build());
 
         int min = INF;
 
         while(!q.isEmpty()) {
-            Node<Integer> current = q.poll();
+            Node<Integer, Integer> current = q.poll();
 
-            for (Node<Integer> next: path[current.getNode()]) {
+            for (Node<Integer, Integer> next: path[current.getNode()]) {
                 if(dist[next.getNode()] != dist[current.getNode()] - current.getCost()) continue;
                 min = Math.min(min, -current.getCost());
 
@@ -76,17 +76,17 @@ public class Boj9025 {
     }
 
     private static void dijkstra(int src) {
-        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(Node<Integer>::getCost));
+        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(Node<Integer, Integer>::getCost));
         pq.offer(new Node.Builder(src).cost(0).build());
         Arrays.fill(dist, INF);
 
         dist[src] = 0;
 
         while(!pq.isEmpty()) {
-            Node<Integer> current = pq.poll();
+            Node<Integer, Integer> current = pq.poll();
             if(dist[current.getNode()] < current.getCost()) continue;
 
-            for(Node<Integer> next: path[current.getNode()]) {
+            for(Node<Integer, Integer> next: path[current.getNode()]) {
                 if(dist[next.getNode()] <= dist[current.getNode()] + next.getCost()) continue;
                 dist[next.getNode()] = dist[current.getNode()] + next.getCost();
 

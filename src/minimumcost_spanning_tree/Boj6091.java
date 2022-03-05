@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class Boj6091 {
 
-    private static Queue<Node<Integer>> pq;
+    private static Queue<Node<Integer, Integer>> pq;
     private static List<Integer>[] tree;
     private static int[] parent;
 
@@ -65,7 +65,7 @@ public class Boj6091 {
 
     private static void mst() {
         while(!pq.isEmpty()) {
-            Node current = pq.poll();
+            Node<Integer, Integer> current = pq.poll();
             if(merged(current.getNode(), current.getAnother())) continue;
 
             tree[current.getNode()].add(current.getAnother());

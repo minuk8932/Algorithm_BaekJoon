@@ -18,14 +18,14 @@ import java.util.StringTokenizer;
  */
 public class Boj2141 {
 
-    private static PriorityQueue<Node<Long>> pq;
+    private static PriorityQueue<Node<Integer, Long>> pq;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
         long sum = 0;
-        pq = new PriorityQueue<>(Comparator.comparingLong(Node<Long>::getNode));
+        pq = new PriorityQueue<>(Comparator.comparingLong(Node<Integer, Long>::getNode));
 
         for(int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -54,10 +54,10 @@ public class Boj2141 {
         long accumulate = 0;
 
         while(!pq.isEmpty()) {
-            Node current = pq.poll();
+            Node<Integer, Long> current = pq.poll();
 
             if (accumulate < totalPeople - accumulate) answer = current.getNode();
-            accumulate += (long) current.getCost();
+            accumulate += current.getCost();
         }
 
         return answer;

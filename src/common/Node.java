@@ -1,28 +1,28 @@
 package common;
 
-public class Node<T> {
-    private final int node;
+public class Node<T, E> {
+    private final T node;
 
-    private final T cost;
-    private final int another;
+    private final E cost;
+    private final T another;
 
-    public static class Builder<T> {
+    public static class Builder<T, E> {
         //must
-        private final int node;
+        private final T node;
         // opt
-        private int another;
-        private T cost;
+        private T another;
+        private E cost;
 
-        public Builder(int node) {
+        public Builder(T node) {
             this.node = node;
         }
 
-        public Builder cost(T value) {
+        public Builder cost(E value) {
             cost = value;
             return this;
         }
 
-        public Builder another(int value) {
+        public Builder another(T value) {
             another = value;
             return this;
         }
@@ -32,20 +32,20 @@ public class Node<T> {
         }
     }
 
-    private Node(Builder<T> builder) {
+    private Node(Builder<T, E> builder) {
         node = builder.node;
         cost = builder.cost;
         another = builder.another;
     }
 
-    public int getAnother() {
+    public T getAnother() {
         return another;
     }
 
-    public int getNode() {
+    public T getNode() {
         return node;
     }
 
-    public T getCost() { return cost; }
+    public E getCost() { return cost; }
 
 }
