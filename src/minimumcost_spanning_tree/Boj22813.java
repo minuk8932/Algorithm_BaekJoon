@@ -33,7 +33,7 @@ public class Boj22813 {
             if (N == 0) break;
 
             pq = new PriorityQueue<>(Comparator.comparingDouble(Node<Double>::getCost));
-            Coordinate<Double>[] coordinates = new Coordinate[N];
+            Coordinate<Double, Double>[] coordinates = new Coordinate[N];
             parent = new int[N];
 
             for (int i = 0; i < N; i++) {
@@ -77,7 +77,7 @@ public class Boj22813 {
         return String.format("%.3f", total);
     }
 
-    private static void linkage(Coordinate<Double>[] coordinates) {
+    private static void linkage(Coordinate<Double, Double>[] coordinates) {
         for(int i = 0; i < coordinates.length; i++) {
             for(int j = i + 1; j < coordinates.length; j++) {
                 double cost = euclideanAdjacent(coordinates[i], coordinates[j]);
@@ -98,7 +98,7 @@ public class Boj22813 {
      * @param c2
      * @return
      */
-    private static double euclideanAdjacent(Coordinate<Double> c1, Coordinate<Double> c2) {
+    private static double euclideanAdjacent(Coordinate<Double, Double> c1, Coordinate<Double, Double> c2) {
         double xdiff = c2.getX() - c1.getX();
         double ydiff = c2.getY() - c1.getY();
         double zdiff = c2.getZ() - c1.getZ();

@@ -1,19 +1,19 @@
 package common;
 
-public class Coordinate<T> {
+public class Coordinate<T, E> {
     private final T x;
     private final T y;
     private final T z;
-    private final T r;
+    private final E r;
 
-    public static class Builder<T> {
+    public static class Builder<T, E> {
         // must
         private final T x;
         private final T y;
 
         // opt
         private T z;
-        private T r;
+        private E r;
 
         public Builder(T x, T y) {
             this.x = x;
@@ -25,7 +25,7 @@ public class Coordinate<T> {
             return this;
         }
 
-        public Builder r(T value) {
+        public Builder r(E value) {
             r = value;
             return this;
         }
@@ -35,7 +35,7 @@ public class Coordinate<T> {
         }
     }
 
-    private Coordinate(Builder<T> builder) {
+    private Coordinate(Builder<T, E> builder) {
         x = builder.x;
         y = builder.y;
         z = builder.z;
@@ -54,7 +54,7 @@ public class Coordinate<T> {
         return z;
     }
 
-    public T getR() {
+    public E getR() {
         return r;
     }
 }

@@ -97,7 +97,7 @@ public class Boj14431 {
         }
     }
 
-    private static int euclideanDistance(Coordinate<Integer> c1, Coordinate<Integer> c2) {
+    private static int euclideanDistance(Coordinate<Integer, Integer> c1, Coordinate<Integer, Integer> c2) {
         int xdiff = c1.getX() - c2.getX();
         int ydiff = c1.getY() - c2.getY();
 

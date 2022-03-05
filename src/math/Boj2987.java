@@ -56,7 +56,7 @@ public class Boj2987 {
         return count;
     }
 
-    private static double triangleArea(Coordinate<Double> coor1, Coordinate<Double> coor2, Coordinate<Double> coor3) {
+    private static double triangleArea(Coordinate<Double, Double> coor1, Coordinate<Double, Double> coor2, Coordinate<Double, Double> coor3) {
         return Math.abs(coor1.getX() * (coor2.getY() - coor3.getY()) +
                 coor2.getX() * (coor3.getY() - coor1.getY()) +
                 coor3.getX() * (coor1.getY() - coor2.getY())) / 200.0;

@@ -5,8 +5,8 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Boj24458 {
-    private static Deque<Coordinate<Long>> stack = new ArrayDeque<>();
-    private static List<Coordinate<Long>> prison = new ArrayList<>();
+    private static Deque<Coordinate<Long, Long>> stack = new ArrayDeque<>();
+    private static List<Coordinate<Long, Long>> prison = new ArrayList<>();
     
     private static Set<Long> jailer = new HashSet<>();
     private static Set<Long> prisoner = new HashSet<>();
@@ -16,7 +16,7 @@ public class Boj24458 {
     private static final long SHIFT = 200_000_000L;
     private static final long CIPHER = 1_000_000_000L;
 
-    private static Coordinate<Long> min = new Coordinate.Builder(INF, INF).build();
+    private static Coordinate<Long, Long> min = new Coordinate.Builder(INF, INF).build();
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -66,7 +66,7 @@ public class Boj24458 {
         int p = prisoner.size();
 
         while(!stack.isEmpty()) {
-            Coordinate<Long> current = stack.poll();
+            Coordinate<Long, Long> current = stack.poll();
             long index = indexing(current.getX(), current.getY());
             System.out.println(index);
 
@@ -88,7 +88,7 @@ public class Boj24458 {
         int size = stack.size();
 
         while(size-- > 0) {
-            Coordinate<Long> current = stack.poll();
+            Coordinate<Long, Long> current = stack.poll();
             long index = indexing(current.getX(), current.getY());
 
             if(!jailer.contains(index)) {
@@ -160,12 +160,12 @@ public class Boj24458 {
         }
     }
 
-    private static long CCW(Coordinate<Long> v1, Coordinate<Long> v2, Coordinate<Long> v3) {
+    private static long CCW(Coordinate<Long, Long> v1, Coordinate<Long, Long> v2, Coordinate<Long, Long> v3) {
         return (v1.getX() * v2.getY() + v2.getX() * v3.getY() + v3.getX() * v1.getY()) -
                 (v3.getX() * v2.getY() + v2.getX() * v1.getY() + v1.getX() * v3.getY());
     }
 
-    private static long distancePow(Coordinate<Long> c1, Coordinate<Long> c2) {
+    private static long distancePow(Coordinate<Long, Long> c1, Coordinate<Long, Long> c2) {
         return (c2.getX() - c1.getX()) * (c2.getX() - c1.getX()) +
                 (c2.getY() - c1.getY()) * (c2.getY() - c1.getY());
     }
