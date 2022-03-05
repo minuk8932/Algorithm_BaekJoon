@@ -1,25 +1,25 @@
 package common;
 
-public class Time {
+public class Time<T, E> {
 
-    private final int start;
-    private final int end;
-    private final int cost;
+    private final T start;
+    private final T end;
+    private final E cost;
 
-    public static class Builder {
+    public static class Builder<T, E> {
         //must
-        private final int start;
-        private final int end;
+        private final T start;
+        private final T end;
 
         //opt
-        private int cost;
+        private E cost;
 
-        public Builder(int start, int end) {
+        public Builder(T start, T end) {
             this.start = start;
             this.end = end;
         }
 
-        public Builder cost(int value) {
+        public Builder cost(E value) {
             cost = value;
             return this;
         }
@@ -29,21 +29,21 @@ public class Time {
         }
     }
 
-    private Time(Builder builder) {
+    private Time(Builder<T, E> builder) {
         start = builder.start;
         end = builder.end;
         cost = builder.cost;
     }
 
-    public int getStart() {
+    public T getStart() {
         return start;
     }
 
-    public int getEnd() {
+    public T getEnd() {
         return end;
     }
 
-    public int getCost() {
+    public E getCost() {
         return cost;
     }
 }

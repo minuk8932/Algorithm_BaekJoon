@@ -1,26 +1,26 @@
 package common;
 
-public class Road {
+public class Road<T> {
 
-    private final int start;
-    private final int end;
-    private final int cost;
+    private final T start;
+    private final T end;
+    private final T cost;
 
-    public static class Builder {
+    public static class Builder<T> {
 
         //must
-        private final int start;
-        private final int end;
+        private final T start;
+        private final T end;
 
         // opt
-        private int cost;
+        private T cost;
 
-        public Builder(int start, int end) {
+        public Builder(T start, T end) {
             this.start = start;
             this.end = end;
         }
 
-        public Builder cost(int value) {
+        public Builder cost(T value) {
             cost = value;
             return this;
         }
@@ -30,21 +30,21 @@ public class Road {
         }
     }
 
-    private Road(Builder builder){
+    private Road(Builder<T> builder){
         start = builder.start;
         end = builder.end;
         cost = builder.cost;
     }
 
-    public int getStart() {
+    public T getStart() {
         return start;
     }
 
-    public int getEnd() {
+    public T getEnd() {
         return end;
     }
 
-    public int getCost() {
+    public T getCost() {
         return cost;
     }
 }

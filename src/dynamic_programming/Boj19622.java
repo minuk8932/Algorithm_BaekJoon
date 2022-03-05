@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
 public class Boj19622 {
 
     private static int[] dp;
-    private static Time[] times;
+    private static Time<Integer, Integer>[] times;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

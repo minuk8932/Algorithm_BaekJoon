@@ -53,7 +53,7 @@ public class Boj24465 {
             }
         }
 
-        List<Time> answer = new ArrayList<>();
+        List<Time<Integer, Integer>> answer = new ArrayList<>();
         int N = Integer.parseInt(br.readLine());
 
         while(N-- > 0) {
@@ -83,12 +83,12 @@ public class Boj24465 {
         System.out.println(printer(answer));
     }
 
-    private static String printer(List<Time> answer) {
+    private static String printer(List<Time<Integer, Integer>> answer) {
         if(answer.size() == 0) return NO_DAP;
 
         StringBuilder sb = new StringBuilder();
         Collections.sort(answer, Comparator
-                .comparingInt(Time::getStart)
+                .comparingInt(Time<Integer, Integer>::getStart)
                 .thenComparingInt(Time::getEnd));
 
         for(Time t: answer) {
