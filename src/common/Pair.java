@@ -19,7 +19,7 @@ public class Pair<T> {
             this.second = second;
         }
 
-        public Builder another(T value) {
+        public Builder third(T value) {
             third = value;
             return this;
         }

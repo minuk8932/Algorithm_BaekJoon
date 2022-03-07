@@ -35,7 +35,8 @@ public class Main {
                 .thenComparingInt(Pair::getSecond));
 
         for(int key: map.keySet()){
-
+            pq.offer(new Pair.Builder<Integer>(key, map.get(key))
+                    .another());
         }
 
         StringBuilder sb = new StringBuilder();
