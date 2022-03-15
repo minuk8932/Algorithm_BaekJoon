@@ -1,4 +1,4 @@
-package segment_tree;
+package segment_tree.lazy_propagation;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.InputMismatchException;

@@ -1,4 +1,4 @@
-package segment_tree;
+package segment_tree.lazy_propagation;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,20 +8,21 @@ import java.util.StringTokenizer;
 /**
  *
  * @author exponential-e
- * 백준 15782번: Calculate! 2
+ * 백준 2820번: 자동차 공장
  *
- * @see https://www.acmicpc.net/problem/15782/
+ * @see https://www.acmicpc.net/problem/2820
  *
  */
-public class Boj15782 {
+public class Boj2820 {
     private static ArrayList<Integer>[] link;
     private static long[] tree;
     private static long[] lazy;
-    private static int[] s, e;
+    private static int[] start, end;
 
     private static int N, S = 1;
     private static int count = -1;
 
+    private static final char PAY = 'p';
     private static final String NEW_LINE = "\n";
 
     public static void main(String[] args) throws Exception{
@@ -32,37 +33,36 @@ public class Boj15782 {
 
         init();
 
-        int loop = N - 1;
-        while(loop-- > 0){
-            st = new StringTokenizer(br.readLine());
-            int from = Integer.parseInt(st.nextToken()) - 1;
-            int to = Integer.parseInt(st.nextToken()) - 1;
+        long[] cost = new long[N];
+        cost[0] = Long.parseLong(br.readLine());
 
-            link[from].add(to);
-            link[to].add(from);
+        for(int i = 1; i < N; i++){
+            st = new StringTokenizer(br.readLine());
+            long pay = Long.parseLong(st.nextToken());
+            int node = Integer.parseInt(st.nextToken()) - 1;
+
+            link[node].add(i);
+            cost[i] = pay;
         }
 
         dfs(0);
-
-        st = new StringTokenizer(br.readLine());
-        for(int i = 0; i < N; i++){
-            int value = Integer.parseInt(st.nextToken());
-            update(s[i], s[i], value, 1, 0, N - 1);
+        for(int i = 0; i < N; i++){             // cost positioning in tree
+            update(start[i], start[i], cost[i], 1, 0, N - 1);
         }
 
         StringBuilder sb = new StringBuilder();
 
         while(M-- > 0){
             st = new StringTokenizer(br.readLine());
-            int cmd = Integer.parseInt(st.nextToken());
-            int x = Integer.parseInt(st.nextToken()) - 1;
+            char cmd = st.nextToken().charAt(0);
+            int a = Integer.parseInt(st.nextToken()) - 1;
 
-            if(cmd == 1){
-                sb.append(xor(s[x], e[x], 1, 0, N - 1)).append(NEW_LINE);
+            if(cmd == PAY){
+                long x = Long.parseLong(st.nextToken());
+                update(start[a] + 1, end[a], x, 1, 0, N - 1);
             }
             else{
-                long y = Long.parseLong(st.nextToken());
-                update(s[x], e[x], y, 1, 0, N - 1);
+                sb.append(sum(start[a], start[a], 1, 0, N - 1)).append(NEW_LINE);
             }
         }
 
@@ -74,26 +74,23 @@ public class Boj15782 {
 
         tree = new long[S * 2];
         lazy = new long[S * 2];
-        s = new int[N];
-        e = new int[N];
+        start = new int[N];
+        end = new int[N];
 
         link = new ArrayList[N];
-
         for(int i = 0; i < N; i++){
             link[i] = new ArrayList<>();
-            s[i] = -1;
         }
     }
 
     private static void dfs(int current){
-        s[current] = ++count;
+        start[current] = ++count;
 
         for(int next: link[current]){
-            if(s[next] != -1) continue;
             dfs(next);
         }
 
-        e[current] = count;
+        end[current] = count;
     }
 
     private static int[] makeSon(int node){
@@ -101,17 +98,17 @@ public class Boj15782 {
         return new int[]{son, ++son};
     }
 
-    private static void propagation(int node, int start, int end){
-        if (lazy[node] == 0) return;
+    private static void propagation(int node, int s, int e){
+        if(lazy[node] == 0) return;
 
-        if(start != end){
+        if(s != e){
             int[] son = makeSon(node);
 
-            lazy[son[0]] ^= lazy[node];         // push lazy
-            lazy[son[1]] ^= lazy[node];
+            lazy[son[0]] += lazy[node];             // push lazy
+            lazy[son[1]] += lazy[node];
         }
 
-        if((end - start) % 2 == 0) tree[node] ^= lazy[node];        // need parenthesis!!
+        tree[node] += lazy[node] * (e - s + 1);
         lazy[node] = 0;
     }
 
@@ -119,8 +116,8 @@ public class Boj15782 {
         propagation(node, start, end);
 
         if(right < start || end < left) return;
-        if(left <= start && end <= right){
-            lazy[node] ^= val;
+        if(left <= start && end <= right) {         // in range
+            lazy[node] += val;
             propagation(node, start, end);
 
             return;
@@ -132,18 +129,18 @@ public class Boj15782 {
         update(left, right, val, son[0], start, mid);
         update(left, right, val, son[1], mid + 1, end);
 
-        tree[node] = tree[son[0]] ^ tree[son[1]];               // update
+        tree[node] = tree[son[0]] + tree[son[1]];   // total update
     }
 
-    private static long xor(int left, int right, int node, int start, int end){
+    private static long sum(int left, int right, int node, int start, int end){
         propagation(node, start, end);
 
         if(right < start || end < left) return 0;
-        if(left <= start && end <= right) return tree[node];
+        if(left <= start && end <= right) return tree[node];        // sum
 
         int[] son = makeSon(node);
         int mid = (start + end) / 2;
 
-        return xor(left, right, son[0], start, mid) ^ xor(left, right, son[1], mid + 1, end);
+        return sum(left, right, son[0], start, mid) + sum(left, right, son[1], mid + 1, end);
     }
 }

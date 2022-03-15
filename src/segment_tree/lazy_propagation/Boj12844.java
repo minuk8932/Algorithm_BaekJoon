@@ -1,4 +1,4 @@
-package segment_tree;
+package segment_tree.lazy_propagation;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
