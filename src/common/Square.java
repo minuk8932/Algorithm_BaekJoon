@@ -1,23 +1,20 @@
 package common;
 
-public class Square<T, E> {
-    private final T x;
-    private final T y;
+public class Square<Coordinate, E> {
+    private final Coordinate coordinate;
     private final E width;
     private final E height;
 
-    public static class Builder<T, E> {
+    public static class Builder<Coordinate, E> {
         // must
-        private final T x;
-        private final T y;
+        private final Coordinate coordinate;
 
         // opt
         private E width;
         private E height;
 
-        public Builder(T x, T y) {
-            this.x = x;
-            this.y = y;
+        public Builder(Coordinate coordinate) {
+            this.coordinate = coordinate;
         }
 
         public Builder width(E value) {
@@ -35,19 +32,14 @@ public class Square<T, E> {
         }
     }
 
-    private Square(Builder<T, E> builder) {
-        x = builder.x;
-        y = builder.y;
+    private Square(Builder<Coordinate, E> builder) {
+        this.coordinate = builder.coordinate;
         width = builder.width;
         height = builder.height;
     }
 
-    public T getX() {
-        return x;
-    }
-
-    public T getY() {
-        return y;
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
     public E getWidth() {
