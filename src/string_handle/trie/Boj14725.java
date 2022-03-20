@@ -1,3 +1,5 @@
+package string_handle.trie;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -5,6 +7,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 14725번: 개미굴
+ *
+ * @see https://www.acmicpc.net/problem/14725
+ *
+ */
 public class Boj14725 {
 
     private static final String LEVEL = "--";
@@ -14,7 +24,7 @@ public class Boj14725 {
     private static StringBuilder sb = new StringBuilder();
     private static Trie node;
 
-    public static class Trie {
+    private static class Trie {
         private ArrayList<Trie> list;
         private String name;
 
@@ -71,7 +81,7 @@ public class Boj14725 {
         }
     }
 
-    public static void recursion(Trie trie, int depth) {
+    private static void recursion(Trie trie, int depth) {
         Collections.sort(trie.list, Comparator.comparing(Trie::getName));
 
         if (depth != -1) {
