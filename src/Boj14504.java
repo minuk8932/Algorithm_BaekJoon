@@ -1,31 +1,30 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class Boj14504 {
-	private static int[] tree;
-	private static int[] lazy;
+	private static List<Integer>[] bucket;
+	private static int[] components;
 
-	private static int N, K, S = 1;
+	private static int N;
+	private static int size;
+
 	private static final String NEW_LINE = "\n";
 
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+
+		components = new int[N];
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		K = Integer.parseInt(st.nextToken());
+		for(int i = 0; i < N; i++){
+			components[i] = Integer.parseInt(st.nextToken());
+		}
 
 		init();
-
-		st = new StringTokenizer(br.readLine());
-		for(int i = S; i < S + N; i++){
-			tree[i] = Integer.parseInt(st.nextToken());
-		}
-
-		for(int i = S - 1; i > 0; i--){
-			int[] son = makeSon(i);
-			tree[i] = tree[son[0]] | tree[son[1]];
-		}
 
 		StringBuilder sb = new StringBuilder();
 		int M = Integer.parseInt(br.readLine());
@@ -34,14 +33,17 @@ public class Boj14504 {
 			st = new StringTokenizer(br.readLine());
 			int cmd = Integer.parseInt(st.nextToken());
 			int i = Integer.parseInt(st.nextToken()) - 1;
-			int j = Integer.parseInt(st.nextToken()) - 1;
-			int k = Integer.parseInt(st.nextToken());
+			int j;
+			int k;
 
 			if(cmd == 2){
-				update(i, i, k, 1, 0, N - 1);
+				k = Integer.parseInt(st.nextToken());
+				update(i, k);
 			}
 			else{
-				sb.append(compare(i, j, 1, 0, N - 1)).append(NEW_LINE);
+				j = Integer.parseInt(st.nextToken()) - 1;
+				k = Integer.parseInt(st.nextToken());
+				sb.append(query(i, j, k)).append(NEW_LINE);
 			}
 		}
 
@@ -49,61 +51,78 @@ public class Boj14504 {
 	}
 
 	private static void init(){
-		while(S <= N) S <<= 1;
+		size = (int) Math.sqrt(N);
 
-		tree = new int[S * 2];
-		lazy = new int[S * 2];
-	}
-
-	private static int[] makeSon(int node){
-		int son = node * 2;
-		return new int[]{son, ++son};
-	}
-
-	private static void propagation(int node, int start, int end, boolean flag){
-		if(lazy[node] == 0) return;
-
-		if(start != end){
-			int[] son = makeSon(node);
-			lazy[son[0]] = Math.max(lazy[node], lazy[son[0]]);
-			lazy[son[1]] = Math.max(lazy[node], lazy[son[1]]);
+		bucket = new ArrayList[N / size + 1];
+		for(int i = 0; i < bucket.length; i++) {
+			bucket[i] = new ArrayList<>();
 		}
 
-		if(flag) {
-			tree[node] = lazy[node];
-			lazy[node] = 0;
+		for (int i = 0; i < N; i++) {
+			bucket[i / size].add(components[i]);
+		}
+
+		for (int i = 0; i < bucket.length; i++) {
+			Collections.sort(bucket[i]);
 		}
 	}
 
-	private static void update(int left, int right, int val, int node, int start, int end){
-		propagation(node, start ,end, false);
+	private static void update(int position, int value) {
+		int key = lowerBound(bucket[position / size], components[position]);
 
-		if(right < start || end < left) return;
-		if(left <= start && end < right){
-			lazy[node] = val;
-			propagation(node, start, end, false);
+		components[position] = value;
+		bucket[position / size].set(key, value);
 
-			return;
-		}
-
-		int[] son = makeSon(node);
-		int mid = (start + end) / 2;
-
-		update(left, right, val, son[0], start, mid);
-		update(left, right, val, son[1], mid + 1, end);
-
-		tree[node] = val;
+		Collections.sort(bucket[position / size]);
 	}
 
-	private static int compare(int left, int right, int node, int start, int end){
-		propagation(node, start, end, true);
+	private static int query(int start, int end, int k) {
+		int result = 0;
 
-		if(right < start || end < left) return 0;
-		if(left <= start && end < right) return tree[node];
+		while (start % size > 0 && start <= end) {
+			if (components[start++] <= k) continue;
+			result++;
+		}
 
-		int[] son = makeSon(node);
-		int mid = (start + end) / 2;
+		while ((end + 1) % size > 0 && start <= end) {
+			if (components[end--] <= k) continue;
+			result++;
+		}
 
-		return compare(left, right, son[0], start, mid) | compare(left, right, son[1], mid + 1, end);
+		while (start <= end) {
+			int total = bucket[start / size].size();
+			result += total - upperBound(bucket[start / size], k);
+			start += size;
+		}
+
+		return result;
+	}
+
+	private static int upperBound(List<Integer> bucket, int target) {
+		int start = 0;
+		int end = bucket.size();
+
+		while(start < end) {
+			int mid = (start + end) >> 1;
+
+			if(bucket.get(mid) <= target) start = mid + 1;
+			else end = mid;
+		}
+
+		return end;
+	}
+
+	private static int lowerBound(List<Integer> bucket, int target) {
+		int start = 0;
+		int end = bucket.size();
+
+		while(start < end) {
+			int mid = (start + end) >> 1;
+
+			if(bucket.get(mid) >= target) end = mid;
+			else start = mid + 1;
+		}
+
+		return end;
 	}
 }
