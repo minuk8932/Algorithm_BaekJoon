@@ -1,3 +1,5 @@
+package sqrt_decomposition;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -5,6 +7,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 14504번: 수열과 쿼리 18
+ *
+ * @see https://www.acmicpc.net/problem/14504
+ *
+ */
 public class Boj14504 {
 	private static List<Integer>[] bucket;
 	private static int[] components;
@@ -50,6 +60,15 @@ public class Boj14504 {
 		System.out.println(sb.toString());
 	}
 
+	/**
+	 *
+	 * Initialize
+	 *
+	 * line 71: set bucket size
+	 * line 79: bucket components settings
+	 * line 83: sort each buckets
+	 *
+	 */
 	private static void init(){
 		size = (int) Math.sqrt(N);
 
@@ -67,6 +86,16 @@ public class Boj14504 {
 		}
 	}
 
+	/**
+	 *
+	 * Update
+	 *
+	 * line 98: find component's index by lowerBound
+	 * line 100 ~ 101: data update
+	 *
+	 * @param position
+	 * @param value
+	 */
 	private static void update(int position, int value) {
 		int key = lowerBound(bucket[position / size], components[position]);
 
@@ -76,6 +105,19 @@ public class Boj14504 {
 		Collections.sort(bucket[position / size]);
 	}
 
+	/**
+	 *
+	 * Query
+	 *
+	 * line 122 ~ 125: traversal left side and count components which is smaller than k
+	 * line 127 ~ 130: traversal right side and count components which is smaller than k
+	 * line 132 ~ 136: traversal all buckets and count components which is smaller than k
+	 *
+	 * @param start
+	 * @param end
+	 * @param k
+	 * @return
+	 */
 	private static int query(int start, int end, int k) {
 		int result = 0;
 
