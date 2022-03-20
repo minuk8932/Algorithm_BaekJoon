@@ -1,28 +1,25 @@
 package common;
 
-public class Query<T, E, R> {
-    private final T cmd;
-    private final E i;
-    private final E j;
+public class Query<T, E> {
+    private final T i;
+    private final T j;
 
-    private final R k;
+    private final E k;
 
-    public static class Builder<T, E, R> {
+    public static class Builder<T, E> {
         //must
-        private final T cmd;
-        private final E i;
-        private final E j;
+        private final T i;
+        private final T j;
 
         // opt
-        private R k;
+        private E k;
 
-        public Builder(T cmd, E i, E j) {
-            this.cmd = cmd;
+        public Builder(T i, T j) {
             this.i = i;
             this.j = j;
         }
 
-        public Builder k(R value) {
+        public Builder k(E value) {
             k = value;
             return this;
         }
@@ -32,26 +29,21 @@ public class Query<T, E, R> {
         }
     }
 
-    private Query(Builder<T, E, R> builder) {
-        cmd = builder.cmd;
+    private Query(Builder<T, E> builder) {
         i = builder.i;
         j = builder.j;
         k = builder.k;
     }
 
-    public T getCmd() {
-        return cmd;
-    }
-
-    public E getI() {
+    public T getI() {
         return i;
     }
 
-    public E getJ() {
+    public T getJ() {
         return j;
     }
 
-    public R getK() {
+    public E getK() {
         return k;
     }
 }
