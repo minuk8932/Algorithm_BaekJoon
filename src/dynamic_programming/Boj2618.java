@@ -6,6 +6,14 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 2618번: 경찰차
+ *
+ * @see https://www.acmicpc.net/problem/2618
+ *
+ */
 public class Boj2618 {
 
     private static final String NEW_LINE = "\n";
@@ -60,6 +68,16 @@ public class Boj2618 {
         trace(left, next);
     }
 
+    /**
+     *
+     * Recursion
+     *
+     * line 85: find next event
+     *
+     * @param left
+     * @param right
+     * @return
+     */
     private static int recursion(int left, int right) {
         if(right == W || left == W) return 0;
 
