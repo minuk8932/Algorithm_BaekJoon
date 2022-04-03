@@ -3,8 +3,9 @@ package common;
 public class Query<T, E> {
     private final T from;
     private final T to;
-    private final E value;
     private final T index;
+    private final T sequence;
+    private final E cost;
 
     public static class Builder<T, E> {
         //must
@@ -13,6 +14,7 @@ public class Query<T, E> {
         //opt
         private T to;
         private T index;
+        private T sequence;
         private E cost;
 
         public Builder(T from) {
@@ -29,7 +31,12 @@ public class Query<T, E> {
             return this;
         }
 
-        public Builder value(E value) {
+        public Builder sequence(T value) {
+            sequence = value;
+            return this;
+        }
+
+        public Builder cost(E value) {
             cost = value;
             return this;
         }
@@ -42,8 +49,9 @@ public class Query<T, E> {
     private Query(Builder<T, E> builder) {
         from = builder.from;
         to = builder.to;
-        value = builder.cost;
         index = builder.index;
+        sequence = builder.sequence;
+        cost = builder.cost;
     }
 
     public T getFrom() {
@@ -54,8 +62,12 @@ public class Query<T, E> {
         return to;
     }
 
-    public E getValue() {
-        return value;
+    public E getCost() {
+        return cost;
+    }
+
+    public T getSequence() {
+        return sequence;
     }
 
     public T getIndex() {
