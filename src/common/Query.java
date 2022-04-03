@@ -1,26 +1,29 @@
 package common;
 
 public class Query<T, E> {
-    private final T i;
-    private final T j;
-
-    private final E k;
+    private final T from;
+    private final T to;
+    private final E value;
 
     public static class Builder<T, E> {
         //must
-        private final T i;
-        private final T j;
+        private final T from;
 
-        // opt
-        private E k;
+        //opt
+        private T to;
+        private E value;
 
-        public Builder(T i, T j) {
-            this.i = i;
-            this.j = j;
+        public Builder(T from) {
+            this.from = from;
         }
 
-        public Builder k(E value) {
-            k = value;
+        public Builder to(T value) {
+            to = value;
+            return this;
+        }
+
+        public Builder value(E value) {
+            value = value;
             return this;
         }
 
@@ -30,20 +33,20 @@ public class Query<T, E> {
     }
 
     private Query(Builder<T, E> builder) {
-        i = builder.i;
-        j = builder.j;
-        k = builder.k;
+        from = builder.from;
+        to = builder.to;
+        value = builder.value;
     }
 
-    public T getI() {
-        return i;
+    public T getFrom() {
+        return from;
     }
 
-    public T getJ() {
-        return j;
+    public T getTo() {
+        return to;
     }
 
-    public E getK() {
-        return k;
+    public E getValue() {
+        return value;
     }
 }
