@@ -4,6 +4,7 @@ public class Query<T, E> {
     private final T from;
     private final T to;
     private final E value;
+    private final T index;
 
     public static class Builder<T, E> {
         //must
@@ -11,7 +12,8 @@ public class Query<T, E> {
 
         //opt
         private T to;
-        private E value;
+        private T index;
+        private E cost;
 
         public Builder(T from) {
             this.from = from;
@@ -22,8 +24,13 @@ public class Query<T, E> {
             return this;
         }
 
+        public Builder index(T value) {
+            index = value;
+            return this;
+        }
+
         public Builder value(E value) {
-            value = value;
+            cost = value;
             return this;
         }
 
@@ -35,7 +42,8 @@ public class Query<T, E> {
     private Query(Builder<T, E> builder) {
         from = builder.from;
         to = builder.to;
-        value = builder.value;
+        value = builder.cost;
+        index = builder.index;
     }
 
     public T getFrom() {
@@ -48,5 +56,9 @@ public class Query<T, E> {
 
     public E getValue() {
         return value;
+    }
+
+    public T getIndex() {
+        return index;
     }
 }

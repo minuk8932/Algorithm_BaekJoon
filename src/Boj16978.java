@@ -33,10 +33,15 @@ public class Boj16978 {
             int cmd = Integer.parseInt(st.nextToken());
 
             if(cmd == 1) {
-                UPDATE_QUERY.add(new Query.Builder());
+                int i = Integer.parseInt(st.nextToken());
+                long v = Long.parseLong(st.nextToken());
+                UPDATE_QUERY.add(new Query.Builder(i).value(v).build());
             }
             else {
-
+                int k = Integer.parseInt(st.nextToken());
+                int i = Integer.parseInt(st.nextToken());
+                int j = Integer.parseInt(st.nextToken());
+                PRINT_QUERY.add(new Query.Builder());
             }
         }
     }
