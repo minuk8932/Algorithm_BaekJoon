@@ -1,3 +1,5 @@
+package segment_tree.lazy_propagation;
+
 import common.Query;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -7,8 +9,15 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 16978번: 수열과 쿼리 22
+ *
+ * @see https://www.acmicpc.net/problem/16978
+ *
+ */
 public class Boj16978 {
-
 
     private static final List<Query<Integer, Long>> UPDATE_QUERY = new ArrayList<>();
     private static final PriorityQueue<Query<Integer, Long>> PRINT_QUERY = new PriorityQueue<>(
@@ -48,7 +57,7 @@ public class Boj16978 {
                 int i = Integer.parseInt(st.nextToken());
                 long v = Long.parseLong(st.nextToken());
 
-                UPDATE_QUERY.add(new Query.Builder(i).cost(v).build());
+                UPDATE_QUERY.add(new Query.Builder(i).to(i).cost(v).build());
             }
             else {
                 int k = Integer.parseInt(st.nextToken());
@@ -72,27 +81,33 @@ public class Boj16978 {
     private static void queryProcess() {
         result = new long[PRINT_QUERY.size()];
 
-        Query<Integer, Long> current = PRINT_QUERY.peek();
+        Query<Integer, Long> current;
 
-        while(current.getIndex() == 0) {
-            current = PRINT_QUERY.poll();
+        while(!PRINT_QUERY.isEmpty()) {
+            current = PRINT_QUERY.peek();
+            if(current.getIndex() != 0) break;
 
             result[current.getSequence()] = add(current.getFrom(), current.getTo(),1
-                , 1, size);
+                , 1, size - 1);
+
+            PRINT_QUERY.poll();
         }
 
         int len = UPDATE_QUERY.size();
-        for(int seq = 1; seq < len; seq++) {
+        for(int seq = 1; seq <= len; seq++) {
 
-            Query<Integer, Long> updateCurrent = UPDATE_QUERY.get(seq);
-            update(updateCurrent.getFrom(), updateCurrent.getFrom(), 1
-                , updateCurrent.getCost(), 1, size);
+            Query<Integer, Long> updateCurrent = UPDATE_QUERY.get(seq - 1);
+            update(updateCurrent.getFrom(), updateCurrent.getTo(), 1
+                , updateCurrent.getCost(), 1, size - 1);
 
-            while(current.getIndex() == seq) {
-                current = PRINT_QUERY.poll();
+            while(!PRINT_QUERY.isEmpty()) {
+                current = PRINT_QUERY.peek();
+                if(current.getIndex() != seq) break;
 
                 result[current.getSequence()] = add(current.getFrom(), current.getTo(),1
-                    , 1, size);
+                    , 1, size - 1);
+
+                PRINT_QUERY.poll();
             }
         }
     }
@@ -106,7 +121,7 @@ public class Boj16978 {
         int mid = (currentEnd + currentStart) >> 1;
         int[] son = getSon(node);
 
-        return add(left, right, son[0], currentStart, mid) |
+        return add(left, right, son[0], currentStart, mid) +
             add(left, right, son[1], mid + 1, currentEnd);
     }
 
@@ -131,12 +146,12 @@ public class Boj16978 {
     }
 
     private static void propagation(int node, int currentStart, int currentEnd) {
-        if (lazy[node] == 0) return;
+        if(lazy[node] == 0) return;
 
-        if(currentStart != currentEnd) {
+        if(node < size){
             int[] son = getSon(node);
-            lazy[son[0]] = lazy[node];
-            lazy[son[1]] = lazy[node];
+            lazy[son[0]] += lazy[node];
+            lazy[son[1]] += lazy[node];
         }
 
         tree[node] = lazy[node] * (currentEnd - currentStart + 1);
@@ -153,7 +168,8 @@ public class Boj16978 {
             size <<= 1;
         }
 
-        tree = new long[size << 1];
-        lazy = new long[size << 1];
+        int shift = size << 2;
+        tree = new long[shift];
+        lazy = new long[shift];
     }
 }
