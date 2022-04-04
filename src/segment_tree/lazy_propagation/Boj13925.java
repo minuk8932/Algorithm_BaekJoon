@@ -96,15 +96,15 @@ public class Boj13925 {
         if(node < S) {
             int[] son = getSon(node);
 
-            for(int i = son[0]; i <= son[1]; i++){
-                long a = lazy[0][i];
-                long b = lazy[1][i];
+            lazy[0][son[0]] = lazy[0][node] * lazy[0][son[0]];
+            lazy[0][son[0]] %= MOD;
+            lazy[1][son[0]] = lazy[0][node] * lazy[1][son[0]] + lazy[1][node];
+            lazy[1][son[0]] %= MOD;
 
-                lazy[0][i] = lazy[0][node] * a;
-                lazy[0][i] %= MOD;
-                lazy[1][i] = lazy[0][node] * b + lazy[1][node];
-                lazy[1][i] %= MOD;
-            }
+            lazy[0][son[1]] = lazy[0][node] * lazy[0][son[1]];
+            lazy[0][son[1]] %= MOD;
+            lazy[1][son[1]] = lazy[0][node] * lazy[1][son[1]] + lazy[1][node];
+            lazy[1][son[1]] %= MOD;
         }
 
         tree[node] = (tree[node] * lazy[0][node]) % MOD
