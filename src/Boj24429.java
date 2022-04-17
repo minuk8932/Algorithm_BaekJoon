@@ -56,11 +56,10 @@ public class Boj24429 {
         checkPoint.get(last).add(new Point.Builder(1, 1).build());
         points.put(last, 1);
 
-        System.out.println(process(n));
+        System.out.println(process());
     }
 
-    private static int process(int n) {
-        checkPoint.get((n - 1) << 1).add(new Point.Builder(1, 1).build());
+    private static int process() {
         Point<Integer, Integer> start = checkPoint.get(0).get(0);
         int answer = map[start.getRow()][start.getCol()];
         dp[start.getRow()][start.getCol()] = answer;
