@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
  * @see https://www.acmicpc.net.problem/15182
  *
  */
-public class Boj15182 {
+public class Boj25182 {
 
     private static final long MOD = 1_000_000_007L;
 
