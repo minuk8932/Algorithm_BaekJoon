@@ -1,8 +1,10 @@
 package disjoint_set;
 
+import common.Pair;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.StringTokenizer;
 
 /**
@@ -15,25 +17,8 @@ import java.util.StringTokenizer;
  */
 public class Boj20930 {
 
-    private static int[] parent;
     private static final String NEW_LINE = "\n";
-
-    private static class Coordinate implements Comparable<Coordinate>{
-        int idx;
-        int p1;
-        int p2;
-
-        public Coordinate(int idx, int p1, int p2) {
-            this.idx = idx;
-            this.p1 = p1;
-            this.p2 = p2;
-        }
-
-        @Override
-        public int compareTo(Coordinate c) {
-            return this.p1 - c.p1;
-        }
-    }
+    private static int[] parent;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -42,8 +27,8 @@ public class Boj20930 {
         int M = Integer.parseInt(st.nextToken());
 
         init(N);
-        Coordinate[] x = new Coordinate[N];
-        Coordinate[] y = new Coordinate[N];
+        Pair<Integer>[] x = new Pair[N];
+        Pair<Integer>[] y = new Pair[N];
 
         for(int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
@@ -52,15 +37,19 @@ public class Boj20930 {
             int x2 = Integer.parseInt(st.nextToken());
             int y2 = Integer.parseInt(st.nextToken());
 
-            x[i] = new Coordinate(i, Math.min(x1, x2), Math.max(x1, x2));
-            y[i] = new Coordinate(i, Math.min(y1, y2), Math.max(y1, y2));
+            x[i] = new Pair.Builder(Math.min(x1, x2)
+                , Math.max(x1, x2)).third(i)
+                .build();
+
+            y[i] = new Pair.Builder(Math.min(y1, y2)
+                , Math.max(y1, y2)).third(i)
+                .build();
         }
 
-        setting(x);
-        setting(y);
+        sortAndSweeping(x);
+        sortAndSweeping(y);
 
         StringBuilder sb = new StringBuilder();
-
         while(M-- > 0) {
             st = new StringTokenizer(br.readLine());
             int p1 = Integer.parseInt(st.nextToken()) - 1;
@@ -69,26 +58,28 @@ public class Boj20930 {
             sb.append(find(p1) == find(p2) ? 1: 0).append(NEW_LINE);
         }
 
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
     /**
      *
-     * Follow the problem, the line is represented by rectangle.
-     *      For example if input is 'x1 y1 x2 y2'
-     *      then, rectangle's left-bottom point is Math.min(x1, x2), Math.min(y1, y2)
-     *      and, reectangle's right-top point is Math.max(x1, x2), Math.max(y1, y2).
+     * Sort and sweeping
      *
-     *      then just sweep by ith & (i - 1)th index by merge.
+     * line 81 ~ 82: sweeping
      *
-     * @param c
+     * @param coors
      */
-    private static void setting(Coordinate[] c) {
-        Arrays.sort(c);
+    private static void sortAndSweeping(Pair<Integer>[] coors) {
+        Arrays.sort(coors, Comparator.comparingInt(Pair::getFirst));
 
-        for(int i = 1; i < c.length; i++) {
-            if(c[i].p1 > c[i - 1].p2 || c[i].p2 < c[i - 1].p1) continue;
-            merge(c[i].idx, c[i - 1].idx);
+        Pair<Integer> target = coors[0];
+        for(int i = 1; i < coors.length; i++) {
+            if(target.getSecond() >= coors[i].getFirst()) {
+                merge(target.getThird(), coors[i].getThird());
+            }
+
+            if(target.getSecond() >= coors[i].getSecond()) continue;
+            target = coors[i];
         }
     }
 

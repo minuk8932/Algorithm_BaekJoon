@@ -1,21 +1,24 @@
 import common.Coordinate;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 public class Boj24458 {
-    private static Deque<Coordinate<Long, Long>> stack = new ArrayDeque<>();
-    private static List<Coordinate<Long, Long>> prison = new ArrayList<>();
-    
-    private static Set<Long> jailer = new HashSet<>();
-    private static Set<Long> prisoner = new HashSet<>();
-    private static int jailers;
-
     private static final long INF = 2_000_000_000;
     private static final long SHIFT = 200_000_000L;
     private static final long CIPHER = 1_000_000_000L;
-
+    private static Deque<Coordinate<Long, Long>> stack = new ArrayDeque<>();
+    private static List<Coordinate<Long, Long>> prison = new ArrayList<>();
+    private static Set<Long> jailer = new HashSet<>();
+    private static Set<Long> prisoner = new HashSet<>();
+    private static int jailers;
     private static Coordinate<Long, Long> min = new Coordinate.Builder(INF, INF).build();
 
     public static void main(String[] args) throws Exception {
@@ -24,8 +27,8 @@ public class Boj24458 {
 
         for (int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int x = Integer.parseInt(st.nextToken());
-            int y = Integer.parseInt(st.nextToken());
+            long x = Long.parseLong(st.nextToken());
+            long y = Long.parseLong(st.nextToken());
 
             minProcessing(x, y);
             prison.add(new Coordinate.Builder(x, y).build());
@@ -38,8 +41,8 @@ public class Boj24458 {
 
         for(int i = 0; i < M; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int x = Integer.parseInt(st.nextToken());
-            int y = Integer.parseInt(st.nextToken());
+            long x = Long.parseLong(st.nextToken());
+            long y = Long.parseLong(st.nextToken());
 
             minProcessing(x, y);
             prison.add(new Coordinate.Builder(x, y).build());
@@ -68,7 +71,6 @@ public class Boj24458 {
         while(!stack.isEmpty()) {
             Coordinate<Long, Long> current = stack.poll();
             long index = indexing(current.getX(), current.getY());
-            System.out.println(index);
 
             if(jailer.contains(index)){
                 jailers++;
@@ -86,6 +88,7 @@ public class Boj24458 {
 
     private static void rearranging() {
         int size = stack.size();
+        System.out.println(size);
 
         while(size-- > 0) {
             Coordinate<Long, Long> current = stack.poll();
@@ -106,22 +109,13 @@ public class Boj24458 {
         stack.push(prison.get(1));
 
         for (int idx = 2; idx < N; idx++) {
-            Coordinate next = prison.get(idx);
-            System.out.println(next.getX() + " " + next.getY());
+            Coordinate<Long, Long> next = prison.get(idx);
 
             while (stack.size() >= 2) {
-                Coordinate second = stack.pop();
-                Coordinate first = stack.peek();
+                Coordinate<Long, Long> second = stack.pop();
+                Coordinate<Long, Long> first = stack.peek();
 
-                if (CCW(first, second, next) < 0){
-                    System.out.println("----");
-                    System.out.println(CCW(first, second, next));
-                    System.out.println(first.getX() + " " + first.getY());
-                    System.out.println(second.getX() + " " + second.getY());
-                    System.out.println(next.getX() + " " + next.getY());
-                    continue;
-                }
-
+                if (CCW(first, second, next) < 0) continue;
                 stack.push(second);
                 break;
             }
