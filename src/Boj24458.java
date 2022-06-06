@@ -11,8 +11,8 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Boj24458 {
-    private static final long INF = 2_000_000_000;
     private static final long SHIFT = 200_000_000L;
+    private static final long INF = 2_000_000_000;
     private static final long CIPHER = 1_000_000_000L;
     private static Deque<Coordinate<Long, Long>> stack = new ArrayDeque<>();
     private static List<Coordinate<Long, Long>> prison = new ArrayList<>();
