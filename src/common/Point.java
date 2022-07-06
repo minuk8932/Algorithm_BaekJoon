@@ -13,12 +13,6 @@ public class Point<T, E> {
         cost = builder.cost;
     }
 
-    public static Point pointWithCost(int row, int col, int cost) {
-        return new Point.Builder<Integer, Integer>(row, col)
-                .cost(cost)
-                .build();
-    }
-
     public T getRow() {
         return row;
     }
@@ -62,13 +56,13 @@ public class Point<T, E> {
             this.col = col;
         }
 
-        public Builder cost(E value) {
+        public Builder<T, E> cost(E value) {
             cost = value;
             return this;
         }
 
-        public Point build() {
-            return new Point(this);
+        public Point<T, E> build() {
+            return new Point<>(this);
         }
     }
 }

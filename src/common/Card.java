@@ -27,8 +27,8 @@ public class Card<T, E> {
             this.word = word;
         }
 
-        public Card build() {
-            return new Card(this);
+        public Card<T, E> build() {
+            return new Card<>(this);
         }
     }
 }

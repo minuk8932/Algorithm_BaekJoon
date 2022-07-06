@@ -7,45 +7,6 @@ public class Query<T, E> {
     private final T sequence;
     private final E cost;
 
-    public static class Builder<T, E> {
-        //must
-        private final T from;
-
-        //opt
-        private T to;
-        private T index;
-        private T sequence;
-        private E cost;
-
-        public Builder(T from) {
-            this.from = from;
-        }
-
-        public Builder to(T value) {
-            to = value;
-            return this;
-        }
-
-        public Builder index(T value) {
-            index = value;
-            return this;
-        }
-
-        public Builder sequence(T value) {
-            sequence = value;
-            return this;
-        }
-
-        public Builder cost(E value) {
-            cost = value;
-            return this;
-        }
-
-        public Query build() {
-            return new Query(this);
-        }
-    }
-
     private Query(Builder<T, E> builder) {
         from = builder.from;
         to = builder.to;
@@ -72,5 +33,44 @@ public class Query<T, E> {
 
     public T getIndex() {
         return index;
+    }
+
+    public static class Builder<T, E> {
+        //must
+        private final T from;
+
+        //opt
+        private T to;
+        private T index;
+        private T sequence;
+        private E cost;
+
+        public Builder(T from) {
+            this.from = from;
+        }
+
+        public Builder<T, E> to(T value) {
+            to = value;
+            return this;
+        }
+
+        public Builder<T, E> index(T value) {
+            index = value;
+            return this;
+        }
+
+        public Builder<T, E> sequence(T value) {
+            sequence = value;
+            return this;
+        }
+
+        public Builder<T, E> cost(E value) {
+            cost = value;
+            return this;
+        }
+
+        public Query<T, E> build() {
+            return new Query<>(this);
+        }
     }
 }
