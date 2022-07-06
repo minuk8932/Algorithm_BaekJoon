@@ -1,10 +1,12 @@
 package dijkstra;
 
 import common.Point;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -50,7 +52,8 @@ public class Boj20926 {
 
             for(int j = 0; j < W; j++) {
                 char component = input.charAt(j);
-                Point<Integer, Integer> p = Point.pointWithCost(i, j, 0);
+                Point<Integer, Integer> p
+                    = new Point.Builder<Integer, Integer>(i, j).cost(0).build();
 
                 if(TERRA == component) {
                     start = p;
@@ -95,7 +98,10 @@ public class Boj20926 {
             visit[current.getRow()][current.getCol()] = true;
 
             for(final int[] DIRECTION: DIRECTIONS) {
-                Point<Integer, Integer> next = sliding(Point.pointWithCost(current.getRow(), current.getCol(), current.getCost())
+                Point<Integer, Integer> next
+                    = sliding(new Point
+                        .Builder<Integer, Integer>(current.getRow(), current.getCol())
+                        .cost(current.getCost()).build()
                         , DIRECTION[ROW]
                         , DIRECTION[COL]);
                 if(next == null) continue;
@@ -106,12 +112,16 @@ public class Boj20926 {
     }
 
     private static Point sliding(Point<Integer, Integer> current, int drow, int dcol){
-        Point<Integer, Integer> next = Point.pointWithCost(current.getRow(), current.getCol(), 0);
+        Point<Integer, Integer> next = new Point
+            .Builder<Integer, Integer>(current.getRow(), current.getCol())
+            .cost(0).build();
         int cost = 0;
         boolean flag = false;
 
         while(true) {
-            next = Point.pointWithCost(next.getRow() + drow, next.getCol() + dcol, 0);
+            next = new Point
+                .Builder<Integer, Integer>(next.getRow() + drow, next.getCol() + dcol)
+                .cost(0).build();
 
             if(outOfRange(next)) break;
             if(map[next.getRow()][next.getCol()] == HOLE_INT) break;
@@ -124,10 +134,10 @@ public class Boj20926 {
             cost += map[next.getRow()][next.getCol()];
         }
 
-        next = Point.pointWithCost(
+        next = new Point.Builder<Integer, Integer>(
                 next.getRow() - drow,
-                next.getCol() - dcol,
-                cost + current.getCost());
+                next.getCol() - dcol)
+            .cost(cost + current.getCost()).build();
 
         if(!flag || (current.getRow() == next.getRow() && current.getCol() == next.getCol())) return null;
         return next;
