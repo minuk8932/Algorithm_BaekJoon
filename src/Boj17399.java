@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class Boj17399 {
+    private static final String NEW_LINE = "\n";
     private static ArrayList<Integer>[] tree;
     private static int[][] parent;
     private static int[] depth;
-    private static boolean[] visit;
-
     private static int N;
-    private static final String NEW_LINE = "\n";
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -46,28 +44,27 @@ public class Boj17399 {
 
 //            sb.append().append(NEW_LINE);
         }
+
+        System.out.println(sb);
     }
 
     private static void init() {
         tree = new ArrayList[N];
         parent = new int[N][21];
         depth = new int[N];
-        visit = new boolean[N];
 
         for(int i = 0; i < N; i++){
             tree[i] = new ArrayList<>();
         }
     }
 
-    private static void dfs(int current, int deep){
-        visit[current] = true;
-        depth[current] = deep;
-
+    private static void dfs(int current, int prev){
         for(int next: tree[current]) {
-            if(visit[next]) continue;
+            if(next == prev) continue;
+            depth[next] = depth[current] + 1;
 
             parent[next][0] = current;
-            dfs(next, deep + 1);
+            dfs(next, current);
         }
     }
 
