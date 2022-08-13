@@ -9,6 +9,14 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 import java.util.function.Predicate;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 25417번: 고속의 숫자 탐색
+ *
+ * @see https://www.acmicpc.net/problem/25417
+ *
+ */
 public class Boj25417 {
 
     private static final int[][] DIRECTIONS = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
