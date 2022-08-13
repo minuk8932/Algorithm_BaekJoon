@@ -6,6 +6,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 25421번: 조건에 맞는 정수의 개수
+ *
+ * @see https://www.acmicpc.net/problem/25421
+ *
+ */
 public class Boj25421 {
 
     private static final int MOD = 987_654_321;
