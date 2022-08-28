@@ -1,16 +1,18 @@
 package breadth_first_search;
 
 import common.Point;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 import java.util.function.BiPredicate;
 
+/**
+ *
+ * @author exponential-e
+ * 백준 22513번: 빠른 오름차순 숫자 탐색
+ *
+ * @see https://www.acmicpc.net/problem/22513
+ *
+ */
 public class Boj22513 {
 
     private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
